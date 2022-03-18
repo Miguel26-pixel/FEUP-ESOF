@@ -21,13 +21,13 @@ Our product proposes to address these problems by providing a collaborative plat
 
 ## Features
 
-- View map with points of interest
-- Search and filter through points of interest and alerts
-- View page of a selected point of interest and its current alerts
-- Validate alerts
-- Create new alerts in the nearby points of interest
-- Subscribe to notifications on some points of interest and specific alerts
-- Analyse alerts over time
+- **Alert map** - Map with the points of interest
+- **Search** - Search and filter through various points of interest and alerts
+- **View point of interest** - View the information of a point of interest and its current alerts
+- **Create alerts** - Create alerts in the nearby points of interest
+- **Validate alerts** - Confirm or reject an alert submited by another student
+- **Notifications** - Subscribe to notifications on some points of interest and specific alerts, allowing the student to receive only the relevant information
+- **Alerts analytics** - Analyse alerts over time, allowing the student to schedule their life beforehand
 
 
 ## Assumptions and dependencies
