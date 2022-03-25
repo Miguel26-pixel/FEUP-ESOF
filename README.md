@@ -1,36 +1,39 @@
 # 3LEIC09T2
 
-## Members
+## Live@UP Development Report
 
-| **Member** | **Student Number**|
-|-|-|
-| André Moreira | up201904721 |
-| Marta Mariz | up201907020 |
-| Miguel Amorim | up201907756 |
-| Nuno Alves | up201908250 |
-| Sofia Germer | up201907461 | 
+Welcome to the documentation pages of the Live@UP!
 
-## Project Vision
+You can find here detailed about the product, from a high-level vision to low-level implementation decisions, a kind of Software Development Report, organized by discipline (as of RUP):
 
-The Live@UP app is a service that aims to simplify the life of every student of the University of Porto who constantly uses university services. Every day, students can't make an informed choice on where and when to go to a specific place, such as the canteen, coffee machine or the library. Various unpredictable factors influence this choice, and students don't have immediate access to these problems. 
+- Business modeling
+  - [Product Vision](docs/ProductVision.md)
+  - [Elevator Pitch](docs/ElevatorPitch.md)
+- [Requirements](docs/requirements.md)
+  - [Use Case Model](docs/requirements.md#Use-case-model)
+  - [User stories](docs/requirements.md#User-stories)
+  - [Domain model](docs/requirements.md#Domain-model)
+- [Architecture and Design](docs/ArchitectureAndDesign.md)
+  - [Logical architecture]
+  - [Physical architecture]
+  - [Prototype]
+- [Implementation]
+- [Test]
+- [Configuration and change management]
+- [Project management]
 
-Our product proposes to address these problems by providing a collaborative platform for the student community with the ability to warn others about the availability of certain places or other relevant events. It will help the student make an informed choice on where and when to go. With this, students won't be losing any more time looking for a place to study or lunch, helping them plan their life schedule to the minute!
+So far, contributions are exclusively made by the initial team, but we hope to open them to the community, in all areas and topics: requirements, technologies, development, experimentation, testing, etc.
 
+Please contact us!
 
-# Live@UP
+Thank you!
 
-## Features
+---
 
-- **Alert map** - Map with the points of interest
-- **Search** - Search and filter through various points of interest and alerts
-- **View point of interest** - View the information of a point of interest and its current alerts
-- **Create alerts** - Create alerts in the nearby points of interest
-- **Validate alerts** - Confirm or reject an alert submited by another student
-- **Notifications** - Subscribe to notifications on some points of interest and specific alerts, allowing the student to receive only the relevant information
-- **Alerts analytics** - Analyse alerts over time, allowing the student to schedule their life beforehand
-
-
-## Assumptions and dependencies
-
-- Google Maps API
-- Locations of the points of interest
+| **Member**    | **Student Number** |
+| ------------- | ------------------ |
+| André Moreira | up201904721        |
+| Marta Mariz   | up201907020        |
+| Miguel Amorim | up201907756        |
+| Nuno Alves    | up201908250        |
+| Sofia Germer  | up201907461        |
