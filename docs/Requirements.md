@@ -5,7 +5,7 @@
 
 
 <p align="center" justify="center">
-  <img src="https://github.com/LEIC-ES-2021-22/3LEIC09T2/images/usecase.png"/>
+  <img src="https://github.com/LEIC-ES-2021-22/3LEIC09T2/blob/main/images/usecase.png"/>
 </p>
 
 |     |     |
