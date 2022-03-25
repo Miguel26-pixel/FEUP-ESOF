@@ -9,10 +9,10 @@ You can find here detailed about the product, from a high-level vision to low-le
 - Business modeling
   - [Product Vision](docs/ProductVision.md)
   - [Elevator Pitch](docs/ElevatorPitch.md)
-- [Requirements](docs/requirements.md)
-  - [Use Case Model](docs/requirements.md#Use-case-model)
-  - [User stories](docs/requirements.md#User-stories)
-  - [Domain model](docs/requirements.md#Domain-model)
+- [Requirements](docs/Requirements.md)
+  - [Use Case Model](docs/Requirements.md#Use-case-model)
+  - [User stories](docs/Requirements.md#User-stories)
+  - [Domain model](docs/Requirements.md#Domain-model)
 - [Architecture and Design](docs/ArchitectureAndDesign.md)
   - [Logical architecture]
   - [Physical architecture]
