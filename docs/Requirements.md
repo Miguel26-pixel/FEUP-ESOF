@@ -72,10 +72,10 @@
 
 |     |     |
 | --- | --- |
-| *Name* | Manage Alert Types |
+| *Name* | Manage Alert or Point of Interest Types |
 | *Actor* |  Admin | 
-| *Description* | The app administrator creates, edits or deletes types of alerts. |
+| *Description* | The app administrator creates, edits or deletes types of alerts or points of interest. |
 | *Preconditions* | - None. |
-| *Postconditions* | - A type of alert is updated, created or deleted. |
-| *Normal flow* | 1. The administrator opens the administration dashboard.<br> 2. The dashboard contains information of existing alert types and how to create new ones.<br> 3. The admin chooses an alert type or creates a new one.<br> 4. The admin confirms their choice and completes the action.<br> 5. The system shows the updated information. |
-| *Alternative flows and exceptions* | 1. [Edit Alert Type] If, in step 3, the admin chooses an alert type , they can edit the alert type's information, such as name and category, and continue to step 4. <br> 2. [Create Alert Type] If, in step 3, the admin creates an alert type, they can supply information about the new alert type, such as name and category, and continue to step 4. <br> 3. [Delete Alert Type] If, in step 3, the admin chooses an alert type, they can delete that alert type and continue to step 4.|
+| *Postconditions* | - A type of alert or point of interest is updated, created or deleted. |
+| *Normal flow* | 1. The administrator opens the administration dashboard.<br> 2. The dashboard contains information of existing alert types and point of interest types and how to create new ones.<br> 3. The admin chooses a type or creates a new one.<br> 4. The admin confirms their choice and completes the action.<br> 5. The system shows the updated information. |
+| *Alternative flows and exceptions* | 1. [Edit Alert Type] If, in step 3, the admin chooses an alert type , they can edit the alert type's information, such as name and category, and continue to step 4. <br> 2. [Create Alert Type] If, in step 3, the admin creates an alert type, they can supply information about the new alert type, such as name and category, and continue to step 4. <br> 3. [Delete Alert Type] If, in step 3, the admin chooses an alert type, they can delete that alert type and continue to step 4. <br> 4. [Edit POI Type]  If, in step 3, the admin chooses a point of interest type, they can edit the alert type's information, such as name and associated alert types, and continue to step 4. <br> 5. [Create POI Type] If, in step 3, the admin creates a point of interest type, they can supply information about the new type, such as name and associated alert types, and continue to step 4. <br> 6. [Delete POI Type] If, in step 3, the admin chooses a point of interest type, they can delete that type and continue to step 4. |
