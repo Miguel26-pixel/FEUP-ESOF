@@ -9,8 +9,6 @@ assignees: ''
 
 ### User Story
 
-As an unauthenticated user, I want to login so I can use the app.
-
 ### User Interface Mockup
 
 ### Acceptance tests
