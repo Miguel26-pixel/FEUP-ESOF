@@ -13,4 +13,17 @@ assignees: ''
 
 ### Acceptance tests
 
+```gherkin
+Feature: [FEATURE NAME]
+    Background:
+        Given [GIVEN]
+
+    Scenario: [SCENARIO NAME]
+        Given [GIVEN]
+        And [AND GIVEN]
+        But [BUT Given]
+        When [WHEN]
+        Then [THEN]
+```
+
 ### Value and Effort
