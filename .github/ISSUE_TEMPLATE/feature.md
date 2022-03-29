@@ -1,8 +1,8 @@
 ---
-name: Feature
+name: User Story
 about: Suggest an idea for this project
 title: "[USER STORY NAME]"
-labels: feature
+labels: user story
 assignees: ''
 
 ---
