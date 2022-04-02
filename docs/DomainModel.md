@@ -6,12 +6,11 @@
 
 **Student** - saves the general information of the student and their reputation that will influence what they are able to do in the app. 
 
-**Admin** - saves the general login information of the admin.
+**Administrator** - saves the general login information of the admin.
 
 **Point of interest type** - defines groups of points of interest according to their purpose, for example study, food, printers etc. 
 
 **Point of interest** - defines the point of interest, the attributes are name, position and floor so it can be properly shown in the map.
-
 
 **Alert type** - defines a type of alert, it has a predefined message and duration. Different alert types are associated with different point of interest types. 
 
