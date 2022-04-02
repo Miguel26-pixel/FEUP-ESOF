@@ -12,7 +12,7 @@ You can find here detailed about the product, from a high-level vision to low-le
 - [Requirements](docs/Requirements.md)
   - [Use Case Model](docs/Requirements.md#Use-case-model)
   - [User stories](docs/Requirements.md#User-stories)
-  - [Domain model](docs/Requirements.md#Domain-model)
+  - [Domain model](docs/DomainModel.md)
 - [Architecture and Design](docs/ArchitectureAndDesign.md)
   - [Logical architecture]
   - [Physical architecture]
