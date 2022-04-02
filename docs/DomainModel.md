@@ -18,7 +18,7 @@
 
 **Spontaneous Alert** - saves the custom message and inherits the attributes of general alert. 
 
-**Alert** - inherits the attributes of the geral alert and it has a type of point of interest associated. 
+**Alert** - inherits the attributes of the general alert and it has a type of point of interest associated and it's allocated to a point of interest. 
 
 **Notification** - only saves the time it was created and the student and alerts associated. 
 
