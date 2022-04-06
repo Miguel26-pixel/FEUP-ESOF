@@ -11,7 +11,7 @@ const Color _mildBlack = Color.fromARGB(255, 0x30, 0x30, 0x30);
 ThemeData applicationLightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: Colors.white,
-    accentColor: _darkRed,
+    colorScheme: ColorScheme.fromSwatch().copyWith(secondary: _darkRed),
     dividerColor: _lightGrey,
     hintColor: _lightGrey,
     backgroundColor: _mildWhite,
