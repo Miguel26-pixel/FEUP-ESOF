@@ -26,6 +26,16 @@ class _MapState extends State<Map> {
             loaded = value != null;
           })
         });
+
+    currentLocationController.subscribeLocationUpdate((value) => setState(
+          () {
+            currentLocation = value;
+            if (value != null) {
+              loaded = true;
+            }
+          },
+        ));
+
     super.initState();
   }
 
@@ -35,7 +45,7 @@ class _MapState extends State<Map> {
         ? FlutterMap(
             options: MapOptions(
               center: currentLocation,
-              zoom: 17.0,
+              zoom: 18.0,
             ),
             layers: [
               TileLayerOptions(
@@ -43,8 +53,25 @@ class _MapState extends State<Map> {
                     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 subdomains: ['a', 'b', 'c'],
               ),
+              MarkerLayerOptions(
+                markers: [
+                  Marker(
+                    width: 15.0,
+                    height: 15.0,
+                    point: currentLocation!,
+                    builder: (ctx) => Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
           )
-        : CircularProgressIndicator();
+        : const Center(
+            child: CircularProgressIndicator(),
+          );
   }
 }
