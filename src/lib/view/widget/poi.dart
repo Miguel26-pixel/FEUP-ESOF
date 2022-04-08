@@ -5,13 +5,40 @@ import 'package:src/model/point.dart';
 
 class PointOfInterestPage extends StatefulWidget {
   final PointOfInterest _poi;
-  const PointOfInterestPage(this._poi, {Key? key}) : super(key: key);
+  const PointOfInterestPage(final this._poi, {Key? key}) : super(key: key);
 
   @override
   State<PointOfInterestPage> createState() => _PointOfInterestPageState();
 }
 
 class _PointOfInterestPageState extends State<PointOfInterestPage> {
+  Widget buildAlertList(BuildContext context, int i) {
+    return Container(
+        padding: EdgeInsets.all(20),
+        margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(50, 0, 0, 0),
+                offset: Offset(0, 2),
+                blurRadius: 1,
+                spreadRadius: 0,
+              )
+            ]),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                widget._poi.getAlerts()[i].getGeneralAlert().getName(),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
@@ -27,10 +54,12 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(12),
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 128, 128, 128),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+                  color: Colors.transparent,
+                  border: Border(
+                      bottom: BorderSide(
+                          color: Color.fromARGB(255, 220, 220, 220), width: 1)),
                 ),
                 child: Row(
                   children: [
@@ -39,12 +68,18 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                         widget._poi.getName().toUpperCase(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
+                            fontSize: 18,
+                            color: Colors.black,
                             fontWeight: FontWeight.w800),
                       ),
                     ),
                   ],
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: buildAlertList,
+                  itemCount: widget._poi.getAlerts().length,
                 ),
               )
             ],
