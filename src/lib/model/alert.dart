@@ -1,5 +1,5 @@
 import 'package:src/model/general_alert.dart';
-import 'package:src/view/widget/alert_type%20copy.dart';
+import 'package:src/model/alert_type.dart';
 
 class Alert extends GeneralAlert {
   final AlertType _alertType;
