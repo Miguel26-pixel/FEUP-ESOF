@@ -20,6 +20,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
       ),
       body: Map(),
       floatingActionButton: FloatingActionButton(
@@ -28,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
             backgroundColor: Colors.transparent,
             enableDrag: false,
             builder: (context) {
-              PointOfInterest poi = PointOfInterest("cool", LatLng(1, 1), 1);
+              PointOfInterest poi = PointOfInterest("B103", LatLng(1, 1), 1);
               return PointOfInterestPage(poi);
             }),
         tooltip: 'Increment',
