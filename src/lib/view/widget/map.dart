@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
@@ -8,7 +7,7 @@ import 'package:src/model/point.dart';
 import 'package:src/view/widget/poi.dart';
 
 class Map extends StatefulWidget {
-  Map({Key? key}) : super(key: key);
+  const Map({Key? key}) : super(key: key);
 
   @override
   State<Map> createState() => _MapState();
@@ -60,7 +59,7 @@ class _MapState extends State<Map> {
               builder: (ctx) => IconButton(
                 padding: EdgeInsets.zero,
                 iconSize: 35,
-                icon: Icon(
+                icon: const Icon(
                   Icons.room,
                 ),
                 onPressed: () => showModalBottomSheet(

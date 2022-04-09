@@ -9,18 +9,18 @@ class AlertType {
   AlertType(this._name, this._message, this._baseTime, this._iconData);
 
   String getName() {
-    return this._name;
+    return _name;
   }
 
   String getMessage() {
-    return this._message;
+    return _message;
   }
 
   Duration getBaseTime() {
-    return this._baseTime;
+    return _baseTime;
   }
 
   IconData getIconData() {
-    return this._iconData;
+    return _iconData;
   }
 }

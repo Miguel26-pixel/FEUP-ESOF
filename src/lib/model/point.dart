@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:src/model/alert.dart';
 
@@ -11,22 +10,22 @@ class PointOfInterest {
   PointOfInterest(this._name, this._position, this._floor);
 
   List<Alert> getAlerts() {
-    return this._alerts;
+    return _alerts;
   }
 
   void addAlert(Alert alert) {
-    this._alerts.add(alert);
+    _alerts.add(alert);
   }
 
   String getName() {
-    return this._name;
+    return _name;
   }
 
   LatLng getPosition() {
-    return this._position;
+    return _position;
   }
 
   int getFloor() {
-    return this._floor;
+    return _floor;
   }
 }

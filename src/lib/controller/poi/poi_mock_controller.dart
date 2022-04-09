@@ -20,18 +20,18 @@ class MockPointOfInterestController
 
   MockPointOfInterestController() {
     AlertType type1 = AlertType("Full", "This Location is Full",
-        Duration(days: 1), Icons.people_outline);
+        const Duration(days: 1), Icons.people_outline);
     AlertType type2 = AlertType("Noisy", "This Location is Noisy",
-        Duration(days: 1), Icons.volume_up_outlined);
+        const Duration(days: 1), Icons.volume_up_outlined);
 
-    Alert alert1 =
-        Alert(DateTime.now(), DateTime.now().add(Duration(days: 1)), type1);
+    Alert alert1 = Alert(
+        DateTime.now(), DateTime.now().add(const Duration(days: 1)), type1);
 
-    Alert alert2 = Alert(DateTime.now().subtract(Duration(minutes: 1)),
-        DateTime.now().add(Duration(hours: 1)), type2);
+    Alert alert2 = Alert(DateTime.now().subtract(const Duration(minutes: 1)),
+        DateTime.now().add(const Duration(hours: 1)), type2);
 
-    this.elements[0].addAlert(alert1);
-    this.elements[0].addAlert(alert2);
+    elements[0].addAlert(alert1);
+    elements[0].addAlert(alert2);
   }
 
   @override

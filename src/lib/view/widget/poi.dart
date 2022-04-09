@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:src/model/point.dart';
 
@@ -14,9 +15,9 @@ class PointOfInterestPage extends StatefulWidget {
 class _PointOfInterestPageState extends State<PointOfInterestPage> {
   Widget buildAlertItem(BuildContext context, int i) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-        margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+        margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
+        decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(5)),
             color: Colors.white,
             boxShadow: [
@@ -38,7 +39,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                   IconButton(
                     iconSize: 30,
                     onPressed: () {},
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.check_circle,
                       color: Colors.green,
                     ),
@@ -46,7 +47,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                   IconButton(
                     onPressed: () {},
                     iconSize: 30,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.cancel,
                       color: Colors.red,
                     ),
@@ -58,7 +59,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
               alignment: Alignment.center,
               child: Text(
                 widget._poi.getAlerts()[i].getGeneralAlert().getName(),
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
             Align(
@@ -77,21 +78,34 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
 
   @override
   Widget build(BuildContext context) {
+    String titleString = widget._poi.getName();
+
+    Widget _title = AutoSizeText(
+      titleString.toUpperCase(),
+      textAlign: TextAlign.center,
+      maxLines: 2,
+      style: const TextStyle(
+        fontSize: 17,
+        color: Colors.black,
+        fontWeight: FontWeight.w800,
+      ),
+    );
+
     return ConstrainedBox(
         constraints: BoxConstraints.tightFor(
-            height: max(400, MediaQuery.of(context).size.height)),
+            height: min(400, MediaQuery.of(context).size.height)),
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               color: Colors.white),
           height: 120,
           // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-          margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
                   color: Colors.transparent,
                   border: Border(
                     bottom: BorderSide(
@@ -100,43 +114,41 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                     ),
                   ),
                 ),
-                child: Stack(
-                  alignment: Alignment.center,
+                child: Row(
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(
-                        icon: Icon(Icons.notification_add),
-                        onPressed: () {},
-                      ),
+                    IconButton(
+                      icon: const Icon(Icons.notification_add),
+                      onPressed: () {},
                     ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        widget._poi.getName().toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
+                    Expanded(
+                      child: _title,
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                        iconSize: 30,
-                        icon: Icon(Icons.bar_chart),
-                        onPressed: () {},
-                      ),
+                    IconButton(
+                      iconSize: 30,
+                      icon: const Icon(Icons.bar_chart),
+                      onPressed: () {},
                     ),
                   ],
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemBuilder: buildAlertItem,
-                  itemCount: widget._poi.getAlerts().length,
-                ),
+                child: widget._poi.getAlerts().isEmpty
+                    ? const Center(
+                        child: SizedBox(
+                          width: 200,
+                          child: Text(
+                            "There are no active alerts here at this moment.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemBuilder: buildAlertItem,
+                        itemCount: widget._poi.getAlerts().length,
+                      ),
               )
             ],
           ),

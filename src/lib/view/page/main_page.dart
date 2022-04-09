@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:src/view/widget/map.dart';
 
@@ -20,7 +19,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
-      body: Map(),
+      body: const Map(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         tooltip: 'Increment',

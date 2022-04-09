@@ -5,10 +5,10 @@ class GeneralAlert {
   GeneralAlert(this._startTime, this._finishTime);
 
   DateTime getStartTime() {
-    return this._startTime;
+    return _startTime;
   }
 
   DateTime getFinishTime() {
-    return this._finishTime;
+    return _finishTime;
   }
 }

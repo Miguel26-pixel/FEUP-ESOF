@@ -38,6 +38,7 @@ dependencies:
   location: ^4.3.0
   latlong2: ^0.8.1
   flutter_iconpicker: ^3.1.2
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
