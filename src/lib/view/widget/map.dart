@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:src/controller/current_location.dart';
 import 'package:src/controller/poi/poi_mock_controller.dart';
 import 'package:src/model/point.dart';
+import 'package:src/view/widget/poi.dart';
 
 class Map extends StatefulWidget {
   Map({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _MapState extends State<Map> {
 
   LatLng? _currentLocation;
   bool _loaded = false;
-  late List<PointOfInterest> _pointsOfInterest;
+  List<PointOfInterest> _pointsOfInterest = [];
 
   @override
   void initState() {
@@ -52,10 +53,23 @@ class _MapState extends State<Map> {
   Widget build(BuildContext context) {
     List<Marker> poiMarkers = _pointsOfInterest
         .map((e) => Marker(
-              point: e.position,
-              builder: (ctx) => const Icon(
-                Icons.room,
-                size: 35.0,
+              point: e.getPosition(),
+              width: 45,
+              height: 45,
+              builder: (ctx) => IconButton(
+                padding: EdgeInsets.zero,
+                iconSize: 35,
+                icon: Icon(
+                  Icons.room,
+                ),
+                onPressed: () => showModalBottomSheet(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  enableDrag: false,
+                  builder: (context) {
+                    return PointOfInterestPage(e);
+                  },
+                ),
               ),
             ))
         .toList();

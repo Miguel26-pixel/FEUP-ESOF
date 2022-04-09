@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:src/view/page/main_page.dart';
 import 'package:src/view/theme.dart';
-import 'package:src/view/widget/map.dart';
 
 void main() {
   runApp(const MyApp());

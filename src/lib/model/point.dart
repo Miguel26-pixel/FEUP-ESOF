@@ -1,6 +1,5 @@
 import 'package:latlong2/latlong.dart';
 import 'package:src/model/alert.dart';
-import 'package:src/model/general_alert.dart';
 
 class PointOfInterest {
   final String _name;
