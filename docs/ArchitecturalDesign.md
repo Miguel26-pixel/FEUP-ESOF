@@ -29,6 +29,10 @@ The technology chosen for the server was Node.js because it has a lot of availab
 
 Since there are not a lot of relevant relations between different models, and we need a fast and reliable database, MongoDB was chosen due to the characteristics of NoSQL databases.
 
+### Sigarra Server Machine
+
+This is the machine where the Sigarra application and database exists. The login services will be used to authenticate a student so that they can use the application.
+
 ## Vertical Prototype
 
 ### Map
