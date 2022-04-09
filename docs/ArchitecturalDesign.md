@@ -37,7 +37,7 @@ Every alert on this page is displayed on a list with its name and icon, along wi
 
 This page also has icon buttons to subscribe to alerts on the point of interest and to access the statistics page, both of which are not yet implemented.
 
-<img src="https://github.com/LEIC-ES-2021-22/3LEIC09T2/blob/main/images/bar_da_biblioteca.jpg"/>
+<img src="https://user-images.githubusercontent.com/64407719/162593110-9e7be32a-8962-4d55-b687-b247220711db.jpg"/>
 
 <img src="https://github.com/LEIC-ES-2021-22/3LEIC09T2/blob/main/images/biblioteca.jpg"/>
 
