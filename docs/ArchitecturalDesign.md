@@ -39,5 +39,5 @@ This page also has icon buttons to subscribe to alerts on the point of interest 
 
 <img src="https://user-images.githubusercontent.com/64407719/162593122-ffd843c2-771d-4b0d-889d-3ca33ae3cbb3.jpg" width=300 />
 
-![ezgifcom-gif-maker](https://user-images.githubusercontent.com/13765599/162593280-4a1c2be2-616a-444f-99e9-a6954caad125.gif)
+<img src="https://user-images.githubusercontent.com/13765599/162593280-4a1c2be2-616a-444f-99e9-a6954caad125.gif" alt="drawing" width="300"/>
 
