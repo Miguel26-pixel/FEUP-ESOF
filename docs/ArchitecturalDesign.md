@@ -27,6 +27,9 @@ This was implemented using the [Flutter Map Package](https://pub.dev/packages/fl
 
 The current points of interest are currently being mocked.
 
+<img src="https://user-images.githubusercontent.com/13765599/162593383-b8023562-0e55-45dd-abd0-cf83a966a962.jpg" width=300 />
+
+
 ### Point of Interest Page UI
 
 The application allows to see a point of interest's page by clicking on its icon on the map. Clicking on the point of interest shows a modal with information about the point of interest like current alerts, and name.
