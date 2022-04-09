@@ -8,14 +8,26 @@ The MVC pattern was chosen to the app development because it is a simple and eff
 
 In this system there is present both a horizontal and vertical decomposition, since the horizontal decomposition can define layers and implementatin concept and the vertical decomposition can define a hierarchy of subsystems that cover all layers of implementation.
 
+![image](https://user-images.githubusercontent.com/13765599/162593488-7c86ac08-c3da-46d5-9f1c-2ef67a4d89fe.png)
+
+
 ## Physical Architecture
+
+![image](https://user-images.githubusercontent.com/13765599/162593506-5087449c-c08d-46c3-9750-95219f74d4e4.png)
+
+### User Mobile Device
+
+This is the device where the student will access the Live@UP app. This is the application where the student can access and create alerts for various points of interest.
 
 For the app development Flutter was the technology chosen due to it's out of the box components, allowing for a fast prototyping. It is also the technology used by Uni. 
 
+### API Server Machine
+
+This is the machine where the API for this project will be stored in and executed from. The API presents an interface to create, update and erase data on the database stored on the server. The database will store data like points of interest, alerts, alert types and point of interest types.
+
 The technology chosen for the server was Node.js because it has a lot of available frameworks, allowing a fast development, and it's a widely supported technology. 
 
-Since there are not a lot of relevant relations between diferent models, and we need a fast and reliable database, MongoDB was chosen due to the characteristics of NoSQL databases.
-
+Since there are not a lot of relevant relations between different models, and we need a fast and reliable database, MongoDB was chosen due to the characteristics of NoSQL databases.
 
 ## Vertical Prototype
 
