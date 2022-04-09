@@ -13,10 +13,10 @@ You can find here detailed about the product, from a high-level vision to low-le
   - [Use Case Model](docs/Requirements.md#Use-case-model)
   - [User stories](docs/Requirements.md#User-stories)
   - [Domain model](docs/DomainModel.md)
-- [Architecture and Design](docs/ArchitectureAndDesign.md)
-  - [Logical architecture](docs/ArchitectureAndDesign.md#logical-architecture)
-  - [Physical architecture](docs/ArchitectureAndDesign.md#physical-architecture)
-  - [Prototype](docs/ArchitectureAndDesign.md#vertical-prototype)
+- [Architecture and Design](docs/ArchitecturalDesign.md)
+  - [Logical architecture](docs/ArchitecturalDesign.md#logical-architecture)
+  - [Physical architecture](docs/ArchitecturalDesign.md#physical-architecture)
+  - [Prototype](docs/ArchitecturalDesign.md#vertical-prototype)
 - [Implementation]
 - [Test]
 - [Configuration and change management]
