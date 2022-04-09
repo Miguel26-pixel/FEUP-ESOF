@@ -11,7 +11,6 @@ You can find here detailed about the product, from a high-level vision to low-le
   - [Elevator Pitch](docs/ElevatorPitch.md)
 - [Requirements](docs/Requirements.md)
   - [Use Case Model](docs/Requirements.md#Use-case-model)
-  - [User stories](docs/Requirements.md#User-stories)
   - [Domain model](docs/DomainModel.md)
 - [Architecture and Design](docs/ArchitecturalDesign.md)
   - [Logical architecture](docs/ArchitecturalDesign.md#logical-architecture)
