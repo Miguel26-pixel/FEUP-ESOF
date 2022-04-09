@@ -36,12 +36,20 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
+                    iconSize: 30,
                     onPressed: () {},
-                    icon: Icon(Icons.check),
+                    icon: Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                    ),
                   ),
                   IconButton(
                     onPressed: () {},
-                    icon: Icon(Icons.cancel_outlined),
+                    iconSize: 30,
+                    icon: Icon(
+                      Icons.cancel,
+                      color: Colors.red,
+                    ),
                   ),
                 ],
               ),
@@ -82,7 +90,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   border: Border(
@@ -92,17 +100,33 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                     ),
                   ),
                 ),
-                child: Row(
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Expanded(
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        icon: Icon(Icons.notification_add),
+                        onPressed: () {},
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
                       child: Text(
                         widget._poi.getName().toUpperCase(),
-                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.black,
                           fontWeight: FontWeight.w800,
                         ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        iconSize: 30,
+                        icon: Icon(Icons.bar_chart),
+                        onPressed: () {},
                       ),
                     ),
                   ],
