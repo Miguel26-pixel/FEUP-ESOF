@@ -36,3 +36,9 @@ The application allows to see a point of interest's page by clicking on its icon
 Every alert on this page is displayed on a list with its name and icon, along with icon buttons to corroborate or reject it, which effect is not yet implemented.
 
 This page also has icon buttons to subscribe to alerts on the point of interest and to access the statistics page, both of which are not yet implemented.
+
+<img src="https://github.com/LEIC-ES-2021-22/3LEIC09T2/blob/main/images/bar_da_biblioteca.jpg"/>
+
+<img src="https://github.com/LEIC-ES-2021-22/3LEIC09T2/blob/main/images/biblioteca.jpg"/>
+
+<video src="https://github.com/LEIC-ES-2021-22/3LEIC09T2/blob/main/video/video_1.mp4"/>
