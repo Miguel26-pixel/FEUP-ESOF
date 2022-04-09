@@ -41,4 +41,7 @@ This page also has icon buttons to subscribe to alerts on the point of interest 
 
 <img src="https://user-images.githubusercontent.com/64407719/162593122-ffd843c2-771d-4b0d-889d-3ca33ae3cbb3.jpg"/>
 
-<video src="https://github.com/LEIC-ES-2021-22/3LEIC09T2/blob/main/video/video_1.mp4"/>
+https://user-images.githubusercontent.com/13765599/162593168-f1056f73-d169-434e-aca8-5dd1c95cefa1.mp4
+
+
+
