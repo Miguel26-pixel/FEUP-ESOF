@@ -14,9 +14,9 @@ You can find here detailed about the product, from a high-level vision to low-le
   - [User stories](docs/Requirements.md#User-stories)
   - [Domain model](docs/DomainModel.md)
 - [Architecture and Design](docs/ArchitectureAndDesign.md)
-  - [Logical architecture]
-  - [Physical architecture]
-  - [Prototype]
+  - [Logical architecture](docs/ArchitectureAndDesign.md#logical-architecture)
+  - [Physical architecture](docs/ArchitectureAndDesign.md#physical-architecture)
+  - [Prototype](docs/ArchitectureAndDesign.md#vertical-prototype)
 - [Implementation]
 - [Test]
 - [Configuration and change management]
