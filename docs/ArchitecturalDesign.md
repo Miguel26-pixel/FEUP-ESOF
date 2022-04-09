@@ -1,12 +1,12 @@
 # Architectural Design
 
-The client-server pattern was chosen to implement the product because the system allows multiple clients interacting with each other and one of the most feasible ways to allow this is to have a common server. 
+The client-server pattern was chosen to implement the product because the system allows multiple clients to interact with each other and one of the most feasible ways to allow this is to have a common server. 
 
-The MVC pattern was chosen to the app development because it is a simple and effective way to develop software, allowing easy planning and maintenece.
+The MVC pattern was chosen for the app development because it is a simple and effective way to develop software, allowing easy planning and maintenance.
 
 ## Logical Architecture
 
-In this system there is present both a horizontal and vertical decomposition, since the horizontal decomposition can define layers and implementatin concept and the vertical decomposition can define a hierarchy of subsystems that cover all layers of implementation.
+In this system, there is present both a horizontal and vertical decomposition, since the horizontal decomposition can define layers and implementation concept and the vertical decomposition can define a hierarchy of subsystems that cover all layers of implementation.
 
 ![image](https://user-images.githubusercontent.com/13765599/162593488-7c86ac08-c3da-46d5-9f1c-2ef67a4d89fe.png)
 
@@ -19,11 +19,11 @@ In this system there is present both a horizontal and vertical decomposition, si
 
 This is the device where the student will access the Live@UP app. This is the application where the student can access and create alerts for various points of interest.
 
-For the app development Flutter was the technology chosen due to it's out of the box components, allowing for a fast prototyping. It is also the technology used by Uni. 
+For the app development Flutter was the technology chosen due to its out-of-the-box components, allowing for fast prototyping. It is also the technology used by Uni. 
 
 ### API Server Machine
 
-This is the machine where the API for this project will be stored in and executed from. The API presents an interface to create, update and erase data on the database stored on the server. The database will store data like points of interest, alerts, alert types and point of interest types.
+This is the machine which the API for this project will be stored and executed from. The API presents an interface to create, update and erase data on the database stored on the server. The database will store data like points of interest, alerts, alert types, and point of interest types.
 
 The technology chosen for the server was Node.js because it has a lot of available frameworks, allowing a fast development, and it's a widely supported technology. 
 
@@ -31,7 +31,7 @@ Since there are not a lot of relevant relations between different models, and we
 
 ### Sigarra Server Machine
 
-This is the machine where the Sigarra application and database exists. The login services will be used to authenticate a student so that they can use the application.
+This is the machine where the Sigarra application and database exist. The login services will be used to authenticate a student so that they can use the application.
 
 ## Vertical Prototype
 
@@ -48,7 +48,7 @@ The current points of interest are currently being mocked.
 
 ### Point of Interest Page UI
 
-The application allows to see a point of interest's page by clicking on its icon on the map. Clicking on the point of interest shows a modal with information about the point of interest like current alerts, and name.
+The application allows one to see a point of interest's page by clicking on its icon on the map. Clicking on the point of interest shows a modal with information about the point of interest like current alerts and name.
 
 Every alert on this page is displayed on a list with its name and icon, along with icon buttons to corroborate or reject it, which effect is not yet implemented.
 
