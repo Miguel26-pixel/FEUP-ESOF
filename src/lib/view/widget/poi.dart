@@ -53,6 +53,16 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                 style: TextStyle(fontSize: 16),
               ),
             ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: SizedBox(
+                width: 60,
+                child: Icon(
+                  widget._poi.getAlerts()[i].getGeneralAlert().getIconData(),
+                  size: 35,
+                ),
+              ),
+            ),
           ],
         ));
   }
@@ -76,8 +86,11 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   border: Border(
-                      bottom: BorderSide(
-                          color: Color.fromARGB(255, 220, 220, 220), width: 1)),
+                    bottom: BorderSide(
+                      color: Color.fromARGB(255, 220, 220, 220),
+                      width: 1,
+                    ),
+                  ),
                 ),
                 child: Row(
                   children: [
@@ -86,9 +99,10 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                         widget._poi.getName().toUpperCase(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w800),
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ),
                   ],

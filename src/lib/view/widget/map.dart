@@ -56,6 +56,7 @@ class _MapState extends State<Map> {
               point: e.getPosition(),
               width: 45,
               height: 45,
+              anchorPos: AnchorPos.align(AnchorAlign.top),
               builder: (ctx) => IconButton(
                 padding: EdgeInsets.zero,
                 iconSize: 35,

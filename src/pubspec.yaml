@@ -37,6 +37,7 @@ dependencies:
   flutter_map: ^0.14.0
   location: ^4.3.0
   latlong2: ^0.8.1
+  flutter_iconpicker: ^3.1.2
 
 dev_dependencies:
   flutter_test:

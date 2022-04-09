@@ -4,9 +4,9 @@ class AlertType {
   final String _name;
   final String _message;
   final Duration _baseTime;
-  ImageIcon? _icon;
+  final IconData _iconData;
 
-  AlertType(this._name, this._message, this._baseTime);
+  AlertType(this._name, this._message, this._baseTime, this._iconData);
 
   String getName() {
     return this._name;
@@ -20,7 +20,7 @@ class AlertType {
     return this._baseTime;
   }
 
-  ImageIcon? getIcon() {
-    return this._icon;
+  IconData getIconData() {
+    return this._iconData;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:src/controller/poi/poi_controller_interface.dart';
 import 'package:src/model/alert.dart';
@@ -18,10 +19,10 @@ class MockPointOfInterestController
   ];
 
   MockPointOfInterestController() {
-    AlertType type1 =
-        AlertType("Full", "This Location is Full", Duration(days: 1));
-    AlertType type2 =
-        AlertType("Noisy", "This Location is Noisy", Duration(days: 1));
+    AlertType type1 = AlertType("Full", "This Location is Full",
+        Duration(days: 1), Icons.people_outline);
+    AlertType type2 = AlertType("Noisy", "This Location is Noisy",
+        Duration(days: 1), Icons.volume_up_outlined);
 
     Alert alert1 =
         Alert(DateTime.now(), DateTime.now().add(Duration(days: 1)), type1);
