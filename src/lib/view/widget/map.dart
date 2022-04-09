@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:src/controller/current_location.dart';
+import 'package:src/controller/poi/poi_mock_controller.dart';
+import 'package:src/model/point.dart';
 
 class Map extends StatefulWidget {
   Map({Key? key}) : super(key: key);
@@ -14,37 +16,54 @@ class Map extends StatefulWidget {
 class _MapState extends State<Map> {
   CurrentLocationController currentLocationController =
       CurrentLocationController();
+  MockPointOfInterestController pointOfInterestController =
+      MockPointOfInterestController();
 
-  LatLng? currentLocation;
-  bool loaded = false;
+  LatLng? _currentLocation;
+  bool _loaded = false;
+  late List<PointOfInterest> _pointsOfInterest;
 
   @override
   void initState() {
     currentLocationController.getCurrentLocation().then((value) => {
           setState(() {
-            currentLocation = value;
-            loaded = value != null;
+            _currentLocation = value;
+            _loaded = value != null;
           })
         });
 
     currentLocationController.subscribeLocationUpdate((value) => setState(
           () {
-            currentLocation = value;
+            _currentLocation = value;
             if (value != null) {
-              loaded = true;
+              _loaded = true;
             }
           },
         ));
+
+    pointOfInterestController.getNearbyPOI().then((value) => setState(() {
+          _pointsOfInterest = value;
+        }));
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return loaded
+    List<Marker> poiMarkers = _pointsOfInterest
+        .map((e) => Marker(
+              point: e.position,
+              builder: (ctx) => const Icon(
+                Icons.room,
+                size: 35.0,
+              ),
+            ))
+        .toList();
+
+    return _loaded
         ? FlutterMap(
             options: MapOptions(
-              center: currentLocation,
+              center: _currentLocation,
               zoom: 18.0,
             ),
             layers: [
@@ -58,7 +77,7 @@ class _MapState extends State<Map> {
                   Marker(
                     width: 15.0,
                     height: 15.0,
-                    point: currentLocation!,
+                    point: _currentLocation!,
                     builder: (ctx) => Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,
@@ -67,6 +86,9 @@ class _MapState extends State<Map> {
                     ),
                   ),
                 ],
+              ),
+              MarkerLayerOptions(
+                markers: poiMarkers,
               )
             ],
           )
