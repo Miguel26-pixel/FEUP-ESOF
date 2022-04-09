@@ -12,9 +12,9 @@ class PointOfInterestPage extends StatefulWidget {
 }
 
 class _PointOfInterestPageState extends State<PointOfInterestPage> {
-  Widget buildAlertList(BuildContext context, int i) {
+  Widget buildAlertItem(BuildContext context, int i) {
     return Container(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
         margin: EdgeInsets.only(top: 20, left: 20, right: 20),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -22,17 +22,35 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
             boxShadow: [
               BoxShadow(
                 color: Color.fromARGB(50, 0, 0, 0),
-                offset: Offset(0, 2),
+                offset: Offset(0, 1),
                 blurRadius: 1,
                 spreadRadius: 0,
               )
             ]),
-        child: Row(
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            Expanded(
+            Align(
+              alignment: Alignment.centerRight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.check),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.cancel_outlined),
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
               child: Text(
                 widget._poi.getAlerts()[i].getGeneralAlert().getName(),
-                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
               ),
             ),
           ],
@@ -78,7 +96,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemBuilder: buildAlertList,
+                  itemBuilder: buildAlertItem,
                   itemCount: widget._poi.getAlerts().length,
                 ),
               )
