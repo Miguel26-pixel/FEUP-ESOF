@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:src/assets/constants/map.dart';
 import 'package:src/controller/current_location.dart';
 import 'package:src/controller/poi/poi_mock_controller.dart';
 import 'package:src/model/point.dart';
@@ -21,6 +22,7 @@ class _MapState extends State<Map> {
 
   LatLng? _currentLocation;
   bool _loaded = false;
+  bool _followingCurrentPosition = false;
   List<PointOfInterest> _pointsOfInterest = [];
 
   @override
@@ -74,20 +76,19 @@ class _MapState extends State<Map> {
             ))
         .toList();
 
-    return _loaded
-        ? FlutterMap(
-            options: MapOptions(
-              center: _currentLocation,
-              zoom: 18.0,
-            ),
-            layers: [
-              TileLayerOptions(
-                urlTemplate:
-                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                subdomains: ['a', 'b', 'c'],
-              ),
-              MarkerLayerOptions(
-                markers: [
+    Widget mapComponent = FlutterMap(
+      options: MapOptions(
+        center: FEUP_POS,
+        zoom: 18.0,
+      ),
+      layers: [
+        TileLayerOptions(
+          urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          subdomains: ['a', 'b', 'c'],
+        ),
+        MarkerLayerOptions(
+          markers: _loaded
+              ? [
                   Marker(
                     width: 15.0,
                     height: 15.0,
@@ -99,15 +100,55 @@ class _MapState extends State<Map> {
                       ),
                     ),
                   ),
-                ],
+                ]
+              : [],
+        ),
+        MarkerLayerOptions(
+          markers: poiMarkers,
+        )
+      ],
+    );
+
+    Widget mapButtons = Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.all(10),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+          child: Column(
+            children: [
+              IconButton(
+                onPressed: () => {},
+                icon: const Icon(Icons.arrow_upward),
               ),
-              MarkerLayerOptions(
-                markers: poiMarkers,
-              )
+              Text("1"),
+              IconButton(
+                onPressed: () => {},
+                icon: const Icon(Icons.arrow_downward),
+              ),
+              IconButton(
+                onPressed: () => {},
+                icon: const Icon(Icons.my_location),
+              ),
             ],
-          )
-        : const Center(
-            child: CircularProgressIndicator(),
-          );
+          ),
+        ),
+        Expanded(
+          child: Container(
+            width: 0,
+          ),
+        )
+      ],
+    );
+
+    return Stack(
+      alignment: Alignment.topRight,
+      children: [
+        mapComponent,
+        mapButtons,
+      ],
+    );
   }
 }
