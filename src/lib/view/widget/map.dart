@@ -23,6 +23,11 @@ class _MapState extends State<Map> {
   final double _initialZoom = 18.3;
 
   LatLng? _currentLocation;
+
+  int _currentFloor = 0;
+  int _maxFloor = 4;
+  int _minFloor = -1;
+
   late bool _loaded;
   late bool _followingCurrentPosition;
   List<PointOfInterest> _pointsOfInterest = [];
@@ -46,6 +51,22 @@ class _MapState extends State<Map> {
     if (_loaded) {
       setState(() {
         _followingCurrentPosition = !hasGesture;
+      });
+    }
+  }
+
+  void incrementFloor() {
+    if (_currentFloor != _maxFloor) {
+      setState(() {
+        _currentFloor++;
+      });
+    }
+  }
+
+  void decrementFloor() {
+    if (_currentFloor != _minFloor) {
+      setState(() {
+        _currentFloor--;
       });
     }
   }
@@ -161,17 +182,17 @@ class _MapState extends State<Map> {
                 child: IconButton(
                   splashRadius: 200,
                   splashColor: Colors.grey,
-                  onPressed: () => {},
+                  onPressed: incrementFloor,
                   icon: const Icon(Icons.arrow_upward),
                 ),
               ),
-              Text("1"),
+              Text(_currentFloor.toString()),
               Material(
                 color: Colors.transparent,
                 child: IconButton(
                   splashRadius: 200,
                   splashColor: Colors.grey,
-                  onPressed: () => {},
+                  onPressed: decrementFloor,
                   icon: const Icon(Icons.arrow_downward),
                 ),
               ),
