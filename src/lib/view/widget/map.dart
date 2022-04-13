@@ -60,6 +60,7 @@ class _MapState extends State<Map> {
       setState(() {
         _currentFloor++;
       });
+      searchPOI();
     }
   }
 
@@ -68,7 +69,16 @@ class _MapState extends State<Map> {
       setState(() {
         _currentFloor--;
       });
+      searchPOI();
     }
+  }
+
+  void searchPOI() {
+    pointOfInterestController
+        .getNearbyPOI(_currentFloor)
+        .then((value) => setState(() {
+              _pointsOfInterest = value;
+            }));
   }
 
   @override
@@ -97,9 +107,7 @@ class _MapState extends State<Map> {
       }
     });
 
-    pointOfInterestController.getNearbyPOI().then((value) => setState(() {
-          _pointsOfInterest = value;
-        }));
+    searchPOI();
 
     super.initState();
   }
