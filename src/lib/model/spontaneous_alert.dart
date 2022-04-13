@@ -11,4 +11,12 @@ class SpontaneousAlert extends GeneralAlert {
     this._message,
     this._position,
   ) : super(startTime, finishTime);
+
+  String getMessage() {
+    return _message;
+  }
+
+  LatLng getPosition() {
+    return _position;
+  }
 }

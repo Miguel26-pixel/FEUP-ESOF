@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:src/controller/alert/alert_controller_interface.dart';
+import 'package:src/controller/alert/alert_mock_controller.dart';
 import 'package:src/controller/current_location.dart';
+import 'package:src/controller/poi/poi_controller_interface.dart';
 import 'package:src/controller/poi/poi_mock_controller.dart';
 import 'package:src/model/point.dart';
+import 'package:src/model/spontaneous_alert.dart';
+import 'package:src/view/widget/alert_poi_marker.dart';
 import 'package:src/view/widget/poi.dart';
 
 class Map extends StatefulWidget {
@@ -16,12 +21,14 @@ class Map extends StatefulWidget {
 class _MapState extends State<Map> {
   CurrentLocationController currentLocationController =
       CurrentLocationController();
-  MockPointOfInterestController pointOfInterestController =
+  PointOfInterestControllerInterface pointOfInterestController =
       MockPointOfInterestController();
+  AlertControllerInterface alertController = AlertMockController();
 
   LatLng? _currentLocation;
   bool _loaded = false;
   List<PointOfInterest> _pointsOfInterest = [];
+  List<SpontaneousAlert> _spontaneousAlerts = [];
 
   @override
   void initState() {
@@ -45,34 +52,37 @@ class _MapState extends State<Map> {
           _pointsOfInterest = value;
         }));
 
+    alertController.getNearbySpontaneousAlerts().then((value) => setState(() {
+          _spontaneousAlerts = value;
+        }));
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Marker> poiMarkers = _pointsOfInterest
-        .map((e) => Marker(
+    List<Marker> markers = _pointsOfInterest
+        .map(
+          (e) => AlertPoiMarker(
+            context: context,
+            point: e.getPosition(),
+            pressedBuilder: ((context) => PointOfInterestPage(e)),
+            iconData: Icons.room,
+          ),
+        )
+        .toList();
+
+    List<Marker> alertMarkers = _spontaneousAlerts
+        .map((e) => AlertPoiMarker(
+              context: context,
+              size: 40,
               point: e.getPosition(),
-              width: 45,
-              height: 45,
-              anchorPos: AnchorPos.align(AnchorAlign.top),
-              builder: (ctx) => IconButton(
-                padding: EdgeInsets.zero,
-                iconSize: 35,
-                icon: const Icon(
-                  Icons.room,
-                ),
-                onPressed: () => showModalBottomSheet(
-                  context: context,
-                  backgroundColor: Colors.transparent,
-                  enableDrag: false,
-                  builder: (context) {
-                    return PointOfInterestPage(e);
-                  },
-                ),
-              ),
+              pressedBuilder: ((context) => const SizedBox()),
+              iconData: Icons.warning_rounded,
             ))
         .toList();
+
+    markers.addAll(alertMarkers);
 
     return _loaded
         ? FlutterMap(
@@ -102,7 +112,7 @@ class _MapState extends State<Map> {
                 ],
               ),
               MarkerLayerOptions(
-                markers: poiMarkers,
+                markers: markers,
               )
             ],
           )
