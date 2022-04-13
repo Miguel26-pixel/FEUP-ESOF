@@ -20,13 +20,41 @@ class _MapState extends State<Map> {
   MockPointOfInterestController pointOfInterestController =
       MockPointOfInterestController();
 
+  final double _initialZoom = 18.3;
+
   LatLng? _currentLocation;
-  bool _loaded = false;
-  bool _followingCurrentPosition = false;
+  late bool _loaded;
+  late bool _followingCurrentPosition;
   List<PointOfInterest> _pointsOfInterest = [];
+
+  MapController? _mapController;
+
+  void setMapCenter(LatLng? center) {
+    _mapController?.move(center!, _initialZoom);
+  }
+
+  void followLocation() {
+    if (_loaded) {
+      setState(() {
+        _followingCurrentPosition = true;
+      });
+      setMapCenter(_currentLocation);
+    }
+  }
+
+  void unfollowLocation(MapPosition _, bool hasGesture) {
+    if (_loaded) {
+      setState(() {
+        _followingCurrentPosition = !hasGesture;
+      });
+    }
+  }
 
   @override
   void initState() {
+    _followingCurrentPosition = false;
+    _loaded = false;
+
     currentLocationController.getCurrentLocation().then((value) => {
           setState(() {
             _currentLocation = value;
@@ -34,14 +62,19 @@ class _MapState extends State<Map> {
           })
         });
 
-    currentLocationController.subscribeLocationUpdate((value) => setState(
-          () {
-            _currentLocation = value;
-            if (value != null) {
-              _loaded = true;
-            }
-          },
-        ));
+    currentLocationController.subscribeLocationUpdate((value) {
+      setState(
+        () {
+          _currentLocation = value;
+          if (value != null) {
+            _loaded = true;
+          }
+        },
+      );
+      if (_loaded && _followingCurrentPosition) {
+        setMapCenter(_currentLocation);
+      }
+    });
 
     pointOfInterestController.getNearbyPOI().then((value) => setState(() {
           _pointsOfInterest = value;
@@ -78,8 +111,12 @@ class _MapState extends State<Map> {
 
     Widget mapComponent = FlutterMap(
       options: MapOptions(
+        onMapCreated: ((mapController) => _mapController = mapController),
+        onPositionChanged: unfollowLocation,
+        controller: _mapController,
         center: FEUP_POS,
-        zoom: 18.0,
+        zoom: _initialZoom,
+        maxZoom: _initialZoom,
       ),
       layers: [
         TileLayerOptions(
@@ -119,18 +156,30 @@ class _MapState extends State<Map> {
           ),
           child: Column(
             children: [
-              IconButton(
-                onPressed: () => {},
-                icon: const Icon(Icons.arrow_upward),
+              Material(
+                child: IconButton(
+                  splashRadius: 200,
+                  splashColor: Colors.grey,
+                  onPressed: () => {},
+                  icon: const Icon(Icons.arrow_upward),
+                ),
               ),
               Text("1"),
-              IconButton(
-                onPressed: () => {},
-                icon: const Icon(Icons.arrow_downward),
+              Material(
+                child: IconButton(
+                  splashRadius: 200,
+                  splashColor: Colors.grey,
+                  onPressed: () => {},
+                  icon: const Icon(Icons.arrow_downward),
+                ),
               ),
-              IconButton(
-                onPressed: () => {},
-                icon: const Icon(Icons.my_location),
+              Material(
+                child: IconButton(
+                  splashRadius: 200,
+                  splashColor: Colors.grey,
+                  onPressed: followLocation,
+                  icon: const Icon(Icons.my_location),
+                ),
               ),
             ],
           ),
