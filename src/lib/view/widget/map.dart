@@ -157,6 +157,7 @@ class _MapState extends State<Map> {
           child: Column(
             children: [
               Material(
+                color: Colors.transparent,
                 child: IconButton(
                   splashRadius: 200,
                   splashColor: Colors.grey,
@@ -166,6 +167,7 @@ class _MapState extends State<Map> {
               ),
               Text("1"),
               Material(
+                color: Colors.transparent,
                 child: IconButton(
                   splashRadius: 200,
                   splashColor: Colors.grey,
@@ -174,6 +176,7 @@ class _MapState extends State<Map> {
                 ),
               ),
               Material(
+                color: Colors.transparent,
                 child: IconButton(
                   splashRadius: 200,
                   splashColor: Colors.grey,
