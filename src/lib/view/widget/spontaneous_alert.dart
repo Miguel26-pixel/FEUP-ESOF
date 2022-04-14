@@ -54,6 +54,30 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
     }
   }
 
+  String durationToString(Duration duration) {
+    String output = "";
+    int value = 0;
+    if (duration.inDays > 0) {
+      output += "${duration.inDays} day";
+      value = duration.inDays;
+    } else if (duration.inHours > 0) {
+      output += "${duration.inHours} hour";
+      value = duration.inDays;
+    } else if (duration.inMinutes > 0) {
+      output += "${duration.inMinutes} minute";
+      value = duration.inMinutes;
+    } else {
+      output += "${duration.inSeconds} second";
+      value = duration.inSeconds;
+    }
+
+    if (value > 1) {
+      output += "s";
+    }
+
+    return output + " ago";
+  }
+
   @override
   Widget build(BuildContext context) {
     return RoundedBottomModal(
@@ -62,9 +86,10 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
         children: [
           Expanded(
             child: Container(
-              margin: const EdgeInsets.only(left: 20),
+              margin: const EdgeInsets.only(left: 20, right: 15),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -75,6 +100,10 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),
+                  Text(
+                      durationToString(DateTime.now()
+                          .difference(widget._spontaneousAlert.getStartTime())),
+                      style: TextStyle(color: Theme.of(context).hintColor)),
                   _distanceToAlert == -1
                       ? const SizedBox()
                       : Text(

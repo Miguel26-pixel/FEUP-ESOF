@@ -11,7 +11,7 @@ class AlertMockController implements AlertControllerInterface {
       LatLng(41.1775666, -8.5955153),
     ),
     SpontaneousAlert(
-      DateTime.now().subtract(const Duration(hours: 1)),
+      DateTime.now().subtract(const Duration(minutes: 10)),
       DateTime.now().add(const Duration(hours: 1)),
       "Really Long Message, Yeah you should probably look into this now :)",
       LatLng(41.1779666, -8.5955153),
