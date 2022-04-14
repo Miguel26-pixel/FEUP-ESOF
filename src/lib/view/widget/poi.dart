@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:src/model/point.dart';
 import 'package:src/view/widget/titled_bottom_modal.dart';
 import 'package:src/view/widget/validation_buttons.dart';
@@ -93,14 +92,14 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
       children: [
         Expanded(
           child: widget._poi.getAlerts().isEmpty
-              ? const Center(
+              ? Center(
                   child: SizedBox(
                     width: 200,
                     child: Text(
                       "There are no active alerts here at this moment.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.grey,
+                        color: Theme.of(context).hintColor,
                       ),
                     ),
                   ),

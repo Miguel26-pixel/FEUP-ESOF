@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:src/controller/current_location.dart';
@@ -74,12 +73,20 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  Text("hey"),
+                  _distanceToAlert == -1
+                      ? const SizedBox()
+                      : Text(
+                          "in $_distanceToAlert meters",
+                          style: TextStyle(color: Theme.of(context).hintColor),
+                        ),
                 ],
               ),
             ),
           ),
-          const ValidationButtons(),
+          Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: const ValidationButtons(),
+          ),
         ],
       ),
     );
