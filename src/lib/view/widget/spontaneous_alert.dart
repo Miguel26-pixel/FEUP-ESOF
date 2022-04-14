@@ -57,7 +57,7 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
   @override
   Widget build(BuildContext context) {
     return RoundedBottomModal(
-      minWidth: 130,
+      minHeight: 130,
       child: Row(
         children: [
           Expanded(

@@ -4,17 +4,17 @@ import 'package:src/view/widget/rounded_bottom_modal.dart';
 class TitledBottomModal extends StatelessWidget {
   final Widget? _header;
   final List<Widget> _children;
-  final double _minWidth;
+  final double _minHeight;
   final double _headerHeight;
   const TitledBottomModal(
       {Key? key,
       Widget? header,
       required List<Widget> children,
-      double minWidth = 400,
+      double minHeight = 400,
       double headerHeight = 62})
       : _header = header,
         _children = children,
-        _minWidth = minWidth,
+        _minHeight = minHeight,
         _headerHeight = headerHeight,
         super(key: key);
 
@@ -40,7 +40,7 @@ class TitledBottomModal extends StatelessWidget {
     children.addAll(_children);
 
     return RoundedBottomModal(
-      minWidth: _minWidth,
+      minHeight: _minHeight,
       child: Column(
         children: children,
       ),
