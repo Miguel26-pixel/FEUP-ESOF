@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
@@ -27,11 +29,14 @@ class CurrentLocationController {
   }
 
   LatLng? parseLocation(LocationData data) {
-    if (data.latitude == null) {
-      return null;
+    var lat = data.latitude;
+    var long = data.longitude;
+
+    if (lat != null && long != null) {
+      return LatLng(lat, long);
     }
 
-    return LatLng(data.latitude!, data.longitude!);
+    return null;
   }
 
   Future<LatLng?> getCurrentLocation() async {
@@ -46,13 +51,15 @@ class CurrentLocationController {
     return parseLocation(data);
   }
 
-  void subscribeLocationUpdate(Function(LatLng?) callback) async {
+  Future<StreamSubscription<LocationData>?> subscribeLocationUpdate(
+      Function(LatLng?) callback) async {
     bool authorized = await verifySetup();
 
     if (!authorized) {
-      return;
+      return null;
     }
 
-    location.onLocationChanged.listen((data) => callback(parseLocation(data)));
+    return location.onLocationChanged
+        .listen((data) => callback(parseLocation(data)));
   }
 }

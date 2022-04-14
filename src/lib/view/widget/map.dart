@@ -10,6 +10,7 @@ import 'package:src/model/point.dart';
 import 'package:src/model/spontaneous_alert.dart';
 import 'package:src/view/widget/alert_poi_marker.dart';
 import 'package:src/view/widget/poi.dart';
+import 'package:src/view/widget/spontaneous_alert.dart';
 
 class Map extends StatefulWidget {
   const Map({Key? key}) : super(key: key);
@@ -77,7 +78,8 @@ class _MapState extends State<Map> {
               context: context,
               size: 40,
               point: e.getPosition(),
-              pressedBuilder: ((context) => const SizedBox()),
+              pressedBuilder: ((context) =>
+                  SpontaneousAlertPage(e, currentLocationController)),
               iconData: Icons.warning_rounded,
             ))
         .toList();

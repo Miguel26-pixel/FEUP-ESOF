@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:src/model/point.dart';
-import 'package:src/view/widget/rounded_bottom_modal.dart';
 import 'package:src/view/widget/titled_bottom_modal.dart';
 
 class PointOfInterestPage extends StatefulWidget {
