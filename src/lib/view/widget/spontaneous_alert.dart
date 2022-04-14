@@ -69,6 +69,8 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
                 children: [
                   Text(
                     widget._spontaneousAlert.getMessage(),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),

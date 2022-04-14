@@ -54,7 +54,12 @@ class _MapState extends State<Map> {
         }));
 
     alertController.getNearbySpontaneousAlerts().then((value) => setState(() {
-          _spontaneousAlerts = value;
+          _spontaneousAlerts = [];
+          for (var alert in value) {
+            if (alert.getFinishTime().isAfter(DateTime.now())) {
+              _spontaneousAlerts.add(alert);
+            }
+          }
         }));
 
     super.initState();
