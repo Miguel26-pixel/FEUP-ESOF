@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:src/model/point.dart';
 import 'package:src/view/widget/titled_bottom_modal.dart';
+import 'package:src/view/widget/validation_buttons.dart';
 
 class PointOfInterestPage extends StatefulWidget {
   final PointOfInterest _poi;
@@ -31,30 +32,11 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    iconSize: 30,
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.check_circle,
-                      color: Colors.green,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    iconSize: 30,
-                    icon: const Icon(
-                      Icons.cancel,
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            const Align(
+                alignment: Alignment.centerRight,
+                child: ValidationButtons(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                )),
             Align(
               alignment: Alignment.center,
               child: Text(

@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:src/controller/current_location.dart';
 import 'package:src/model/spontaneous_alert.dart';
 import 'package:src/view/widget/rounded_bottom_modal.dart';
+import 'package:src/view/widget/validation_buttons.dart';
 
 class SpontaneousAlertPage extends StatefulWidget {
   final SpontaneousAlert _spontaneousAlert;
@@ -56,8 +58,30 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
   @override
   Widget build(BuildContext context) {
     return RoundedBottomModal(
-      minWidth: 200,
-      child: Text("Distance $_distanceToAlert"),
+      minWidth: 130,
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(left: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget._spontaneousAlert.getMessage(),
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  Text("hey"),
+                ],
+              ),
+            ),
+          ),
+          const ValidationButtons(),
+        ],
+      ),
     );
   }
 }
