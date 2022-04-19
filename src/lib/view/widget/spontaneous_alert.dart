@@ -11,9 +11,10 @@ import 'package:src/view/widget/validation_buttons.dart';
 class SpontaneousAlertPage extends StatefulWidget {
   final SpontaneousAlert _spontaneousAlert;
   final CurrentLocationController _currentLocationController;
+  final LatLng? _position;
 
-  const SpontaneousAlertPage(
-      final this._spontaneousAlert, final this._currentLocationController,
+  const SpontaneousAlertPage(final this._spontaneousAlert,
+      final this._currentLocationController, final this._position,
       {Key? key})
       : super(key: key);
 
@@ -29,6 +30,13 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
   @override
   void initState() {
     super.initState();
+    var initPosition = widget._position;
+
+    if (initPosition != null) {
+      _distanceToAlert =
+          _distance(widget._spontaneousAlert.getPosition(), initPosition)
+              .floor();
+    }
 
     widget._currentLocationController
         .subscribeLocationUpdate((p0) => setState(() {
