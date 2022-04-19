@@ -137,7 +137,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                         child: SizedBox(
                           width: 200,
                           child: Text(
-                            "There are no active alerts here at this moment.",
+                            'There are no active alerts here at this moment.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.grey,
