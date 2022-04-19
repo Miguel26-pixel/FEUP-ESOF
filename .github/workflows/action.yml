@@ -15,6 +15,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '2.10.4'
+          flutter-version: '2.0.6'
           channel: 'stable'
-      - run: cd src && flutter test
+      - run: cd src && flutter pub get && sh test.sh
