@@ -25,10 +25,11 @@ class _MapState extends State<Map> {
   LatLng? _currentLocation;
 
   int _currentFloor = 0;
-  int _maxFloor = 4;
-  int _minFloor = -1;
+  late int _maxFloor;
+  late int _minFloor;
 
-  late bool _loaded;
+  late bool _locationLoaded;
+  late bool _floorsLoaded;
   late bool _followingCurrentPosition;
   List<PointOfInterest> _pointsOfInterest = [];
 
@@ -39,7 +40,7 @@ class _MapState extends State<Map> {
   }
 
   void followLocation() {
-    if (_loaded) {
+    if (_locationLoaded) {
       setState(() {
         _followingCurrentPosition = true;
       });
@@ -48,7 +49,7 @@ class _MapState extends State<Map> {
   }
 
   void unfollowLocation(MapPosition _, bool hasGesture) {
-    if (_loaded) {
+    if (_locationLoaded) {
       setState(() {
         _followingCurrentPosition = !hasGesture;
       });
@@ -84,12 +85,19 @@ class _MapState extends State<Map> {
   @override
   void initState() {
     _followingCurrentPosition = false;
-    _loaded = false;
+    _locationLoaded = false;
+    _floorsLoaded = false;
+
+    pointOfInterestController.getFloorLimits().then((value) {
+      _minFloor = value[0];
+      _maxFloor = value[1];
+      _floorsLoaded = true;
+    });
 
     currentLocationController.getCurrentLocation().then((value) => {
           setState(() {
             _currentLocation = value;
-            _loaded = value != null;
+            _locationLoaded = value != null;
           })
         });
 
@@ -98,11 +106,11 @@ class _MapState extends State<Map> {
         () {
           _currentLocation = value;
           if (value != null) {
-            _loaded = true;
+            _locationLoaded = true;
           }
         },
       );
-      if (_loaded && _followingCurrentPosition) {
+      if (_locationLoaded && _followingCurrentPosition) {
         setMapCenter(_currentLocation);
       }
     });
@@ -153,7 +161,7 @@ class _MapState extends State<Map> {
           subdomains: ['a', 'b', 'c'],
         ),
         MarkerLayerOptions(
-          markers: _loaded
+          markers: _locationLoaded
               ? [
                   Marker(
                     width: 15.0,
@@ -224,12 +232,14 @@ class _MapState extends State<Map> {
       ],
     );
 
-    return Stack(
-      alignment: Alignment.topRight,
-      children: [
-        mapComponent,
-        mapButtons,
-      ],
-    );
+    return _floorsLoaded
+        ? Stack(
+            alignment: Alignment.topRight,
+            children: [
+              mapComponent,
+              mapButtons,
+            ],
+          )
+        : const CircularProgressIndicator();
   }
 }

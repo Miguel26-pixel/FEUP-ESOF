@@ -67,4 +67,9 @@ class MockPointOfInterestController
     return Future.value(
         elements.where((element) => element.getFloor() == floor).toList());
   }
+
+  @override
+  Future<List<int>> getFloorLimits() {
+    return Future.value([-1, 4]);
+  }
 }
