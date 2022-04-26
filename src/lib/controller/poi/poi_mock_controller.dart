@@ -16,6 +16,34 @@ class MockPointOfInterestController
     PointOfInterest("AEFEUP", LatLng(41.176159, -8.596887), 0),
     PointOfInterest("Bar de minas", LatLng(41.1784362, -8.5972663), 0),
     PointOfInterest("Biblioteca", LatLng(41.177546, -8.594634), 0),
+    PointOfInterest(
+        "Máquina de Café",
+        LatLng(
+          41.17727714163054,
+          -8.595256805419924,
+        ),
+        1),
+    PointOfInterest(
+        "Vending",
+        LatLng(
+          41.17727714163054,
+          -8.595256805419924,
+        ),
+        1),
+    PointOfInterest(
+        "Máquina de Café",
+        LatLng(
+          41.17727714163054,
+          -8.595256805419924,
+        ),
+        2),
+    PointOfInterest(
+        "Vending",
+        LatLng(
+          41.17727714163054,
+          -8.595256805419924,
+        ),
+        2),
   ];
 
   MockPointOfInterestController() {
@@ -35,7 +63,13 @@ class MockPointOfInterestController
   }
 
   @override
-  Future<List<PointOfInterest>> getNearbyPOI() {
-    return Future.value(elements);
+  Future<List<PointOfInterest>> getNearbyPOI(int floor) {
+    return Future.value(
+        elements.where((element) => element.getFloor() == floor).toList());
+  }
+
+  @override
+  Future<List<int>> getFloorLimits() {
+    return Future.value([-1, 4]);
   }
 }

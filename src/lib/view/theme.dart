@@ -38,7 +38,7 @@ ThemeData applicationLightTheme = ThemeData(
       caption:
           TextStyle(fontSize: 12.0, color: _grey, fontWeight: FontWeight.w500),
     ),
-    iconTheme: const IconThemeData(color: _strongGrey),
+    iconTheme: const IconThemeData(color: _strongGrey, size: 25),
     unselectedWidgetColor: _grey,
     toggleableActiveColor: _darkRed,
     tabBarTheme: const TabBarTheme(

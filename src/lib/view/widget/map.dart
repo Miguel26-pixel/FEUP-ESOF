@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:src/assets/constants/map.dart';
 import 'package:src/controller/current_location.dart';
 import 'package:src/controller/poi/poi_mock_controller.dart';
 import 'package:src/model/point.dart';
@@ -19,31 +20,102 @@ class _MapState extends State<Map> {
   MockPointOfInterestController pointOfInterestController =
       MockPointOfInterestController();
 
+  final double _initialZoom = 18.3;
+
   LatLng? _currentLocation;
-  bool _loaded = false;
+
+  int _currentFloor = 0;
+  late int _maxFloor;
+  late int _minFloor;
+
+  late bool _locationLoaded;
+  late bool _floorsLoaded;
+  late bool _followingCurrentPosition;
   List<PointOfInterest> _pointsOfInterest = [];
+
+  MapController? _mapController;
+
+  void setMapCenter(LatLng? center) {
+    _mapController?.move(center!, _initialZoom);
+  }
+
+  void followLocation() {
+    if (_locationLoaded) {
+      setState(() {
+        _followingCurrentPosition = true;
+      });
+      setMapCenter(_currentLocation);
+    }
+  }
+
+  void unfollowLocation(MapPosition _, bool hasGesture) {
+    if (_locationLoaded) {
+      setState(() {
+        _followingCurrentPosition = !hasGesture;
+      });
+    }
+  }
+
+  void incrementFloor() {
+    if (_currentFloor != _maxFloor) {
+      setState(() {
+        _currentFloor++;
+      });
+      searchPOI();
+    }
+  }
+
+  void decrementFloor() {
+    if (_currentFloor != _minFloor) {
+      setState(() {
+        _currentFloor--;
+      });
+      searchPOI();
+    }
+  }
+
+  void searchPOI() {
+    pointOfInterestController
+        .getNearbyPOI(_currentFloor)
+        .then((value) => setState(() {
+              _pointsOfInterest = value;
+            }));
+  }
 
   @override
   void initState() {
+    _followingCurrentPosition = false;
+    _locationLoaded = false;
+    _floorsLoaded = false;
+
+    pointOfInterestController.getFloorLimits().then((value) {
+      _minFloor = value[0];
+      _maxFloor = value[1];
+      _floorsLoaded = true;
+    });
+
     currentLocationController.getCurrentLocation().then((value) => {
           setState(() {
             _currentLocation = value;
-            _loaded = value != null;
+            _locationLoaded = value != null;
           })
         });
 
-    currentLocationController.subscribeLocationUpdate((value) => setState(
-          () {
-            _currentLocation = value;
-            if (value != null) {
-              _loaded = true;
-            }
-          },
-        ));
+    currentLocationController.subscribeLocationUpdate((value) {
+      setState(
+        () {
+          _currentLocation = value;
+          if (value != null) {
+            _locationLoaded = true;
+          }
+        },
+      );
+      if (_locationLoaded && _followingCurrentPosition) {
+        setMapCenter(_currentLocation);
+      }
+    });
 
-    pointOfInterestController.getNearbyPOI().then((value) => setState(() {
-          _pointsOfInterest = value;
-        }));
+    searchPOI();
 
     super.initState();
   }
@@ -74,20 +146,23 @@ class _MapState extends State<Map> {
             ))
         .toList();
 
-    return _loaded
-        ? FlutterMap(
-            options: MapOptions(
-              center: _currentLocation,
-              zoom: 18.0,
-            ),
-            layers: [
-              TileLayerOptions(
-                urlTemplate:
-                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                subdomains: ['a', 'b', 'c'],
-              ),
-              MarkerLayerOptions(
-                markers: [
+    Widget mapComponent = FlutterMap(
+      options: MapOptions(
+        onMapCreated: ((mapController) => _mapController = mapController),
+        onPositionChanged: unfollowLocation,
+        controller: _mapController,
+        center: FEUP_POS,
+        zoom: _initialZoom,
+        maxZoom: _initialZoom,
+      ),
+      layers: [
+        TileLayerOptions(
+          urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          subdomains: ['a', 'b', 'c'],
+        ),
+        MarkerLayerOptions(
+          markers: _locationLoaded
+              ? [
                   Marker(
                     width: 15.0,
                     height: 15.0,
@@ -99,15 +174,72 @@ class _MapState extends State<Map> {
                       ),
                     ),
                   ),
-                ],
+                ]
+              : [],
+        ),
+        MarkerLayerOptions(
+          markers: poiMarkers,
+        )
+      ],
+    );
+
+    Widget mapButtons = Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.all(10),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+          child: Column(
+            children: [
+              Material(
+                color: Colors.transparent,
+                child: IconButton(
+                  splashRadius: 200,
+                  splashColor: Colors.grey,
+                  onPressed: incrementFloor,
+                  icon: const Icon(Icons.arrow_upward),
+                ),
               ),
-              MarkerLayerOptions(
-                markers: poiMarkers,
-              )
+              Text(_currentFloor.toString()),
+              Material(
+                color: Colors.transparent,
+                child: IconButton(
+                  splashRadius: 200,
+                  splashColor: Colors.grey,
+                  onPressed: decrementFloor,
+                  icon: const Icon(Icons.arrow_downward),
+                ),
+              ),
+              Material(
+                color: Colors.transparent,
+                child: IconButton(
+                  splashRadius: 200,
+                  splashColor: Colors.grey,
+                  onPressed: followLocation,
+                  icon: const Icon(Icons.my_location),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Container(
+            width: 0,
+          ),
+        )
+      ],
+    );
+
+    return _floorsLoaded
+        ? Stack(
+            alignment: Alignment.topRight,
+            children: [
+              mapComponent,
+              mapButtons,
             ],
           )
-        : const Center(
-            child: CircularProgressIndicator(),
-          );
+        : const CircularProgressIndicator();
   }
 }
