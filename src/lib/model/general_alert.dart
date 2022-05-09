@@ -1,6 +1,6 @@
 class GeneralAlert {
   final DateTime _startTime;
-  DateTime _finishTime;
+  final DateTime _finishTime;
 
   GeneralAlert(this._startTime, this._finishTime);
 

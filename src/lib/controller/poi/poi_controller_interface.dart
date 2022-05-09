@@ -1,4 +1,4 @@
-import 'package:src/model/point.dart';
+import 'package:uni/model/entities/live/point.dart';
 
 abstract class PointOfInterestControllerInterface {
   Future<List<PointOfInterest>> getNearbyPOI(int floor);
