@@ -1,20 +1,28 @@
 import 'package:latlong2/latlong.dart';
 import 'package:uni/model/entities/live/alert.dart';
+import 'package:uni/model/entities/live/poi_type.dart';
+
 
 class PointOfInterest {
   final String _name;
   final LatLng _position;
   final int _floor;
+  final PointOfInterestType _type;
   final List<Alert> _alerts = [];
 
-  PointOfInterest(this._name, this._position, this._floor);
+  PointOfInterest(this._name, this._position, this._floor, this._type);
 
   List<Alert> getAlerts() {
     return _alerts;
   }
 
-  void addAlert(Alert alert) {
-    _alerts.add(alert);
+  bool addAlert(Alert alert) {
+    if ( _type.checkValidAlert(alert.getType())){
+      _alerts.add(alert);
+      return true;
+    }
+    return false;
+    
   }
 
   String getName() {

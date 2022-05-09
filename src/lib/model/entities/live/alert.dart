@@ -7,7 +7,7 @@ class Alert extends GeneralAlert {
   Alert(DateTime startTime, DateTime finishTime, this._alertType)
       : super(startTime, finishTime);
 
-  AlertType getGeneralAlert() {
+  AlertType getType() {
     return _alertType;
   }
 }

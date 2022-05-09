@@ -58,7 +58,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                widget._poi.getAlerts()[i].getGeneralAlert().getName(),
+                widget._poi.getAlerts()[i].getType().getName(),
                 style: const TextStyle(fontSize: 16),
               ),
             ),
@@ -67,7 +67,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
               child: SizedBox(
                 width: 60,
                 child: Icon(
-                  widget._poi.getAlerts()[i].getGeneralAlert().getIconData(),
+                  widget._poi.getAlerts()[i].getType().getIconData(),
                   size: 35,
                 ),
               ),
