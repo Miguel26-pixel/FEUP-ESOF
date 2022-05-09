@@ -18,6 +18,7 @@ import 'package:uni/view/Pages/exams_page_view.dart';
 import 'package:uni/view/Pages/home_page_view.dart';
 import 'package:uni/view/Pages/logout_route.dart';
 import 'package:uni/view/Pages/map_view.dart';
+import 'package:uni/view/Pages/admin_dashboard_view.dart';
 import 'package:uni/view/Pages/splash_page_view.dart';
 import 'package:uni/view/Pages/useful_contacts_card_page_view.dart';
 import 'package:uni/view/Widgets/page_transition.dart';
@@ -99,6 +100,12 @@ class MyAppState extends State<MyApp> {
               case '/' + Constants.navLive:
                 return PageTransition.makePageTransition(
                     page: MapPage(), settings: settings);
+              case '/' + Constants.navAdmin:
+                return PageTransition.makePageTransition(
+                    page: AdminDashboardPage(), settings: settings);
+              case '/' + Constants.navCreatePoi:
+                return PageTransition.makePageTransition(
+                    page: UsefulContactsCardView(), settings: settings);
               case '/' + Constants.navUsefulContacts:
                 return PageTransition.makePageTransition(
                     page: UsefulContactsCardView(), settings: settings);

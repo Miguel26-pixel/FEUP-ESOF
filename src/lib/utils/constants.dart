@@ -9,6 +9,10 @@ const navBugReport = 'Bugs e Sugestões';
 const navLogOut = 'Terminar sessão';
 const navUsefulContacts = 'Contactos Úteis';
 const navLive = 'Live@UP';
+const navAdmin = 'Admin Dashboard';
+const navCreatePoi = 'Create POI';
+const navCreatePoiType = 'Create POI type';
+const navCreateAlertType = 'Create Alert type';
 const faculties = [
   'faup',
   'fbaup',

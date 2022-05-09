@@ -67,6 +67,8 @@ class MockPointOfInterestController
     elements[0].addAlert(alert2);
   }
 
+  
+
   @override
   Future<List<PointOfInterest>> getNearbyPOI(int floor) {
     return Future.value(
