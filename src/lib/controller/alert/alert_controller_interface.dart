@@ -1,5 +1,5 @@
-import 'package:src/model/spontaneous_alert.dart';
+import 'package:uni/model/entities/live/spontaneous_alert.dart';
 
 abstract class AlertControllerInterface {
-  Future<List<SpontaneousAlert>> getNearbySpontaneousAlerts();
+  Future<List<SpontaneousAlert>> getNearbySpontaneousAlerts(int floor);
 }

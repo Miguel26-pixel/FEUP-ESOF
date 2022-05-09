@@ -6,7 +6,7 @@ import 'package:location/location.dart';
 class CurrentLocationController {
   Location location = Location();
   bool serviceEnabled = false;
-  late PermissionStatus permissionGranted;
+  PermissionStatus permissionGranted;
 
   Future<bool> verifySetup() async {
     serviceEnabled = await location.serviceEnabled();
@@ -28,32 +28,29 @@ class CurrentLocationController {
     return true;
   }
 
-  LatLng? parseLocation(LocationData data) {
-    var lat = data.latitude;
-    var long = data.longitude;
-
-    if (lat != null && long != null) {
-      return LatLng(lat, long);
+  LatLng parseLocation(LocationData data) {
+    if (data.latitude == null) {
+      return null;
     }
 
-    return null;
+    return LatLng(data.latitude, data.longitude);
   }
 
-  Future<LatLng?> getCurrentLocation() async {
-    bool authorized = await verifySetup();
+  Future<LatLng> getCurrentLocation() async {
+    final bool authorized = await verifySetup();
 
     if (!authorized) {
       return null;
     }
 
-    LocationData data = await location.getLocation();
+    final LocationData data = await location.getLocation();
 
     return parseLocation(data);
   }
 
-  Future<StreamSubscription<LocationData>?> subscribeLocationUpdate(
-      Function(LatLng?) callback) async {
-    bool authorized = await verifySetup();
+  Future<StreamSubscription<LocationData>> subscribeLocationUpdate(
+      Function(LatLng) callback) async {
+    final bool authorized = await verifySetup();
 
     if (!authorized) {
       return null;
