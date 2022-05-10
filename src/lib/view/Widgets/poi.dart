@@ -77,7 +77,8 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
         ));
   }
 
-  Widget buildPointOfInterest(BuildContext context, PointOfInterest poi) {
+  Widget buildPointOfInterest(
+      BuildContext context, PointOfInterest poi, bool multiple) {
     final String titleString = poi.getName();
 
     final Widget _title = AutoSizeText(
@@ -96,7 +97,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.white),
       height: 120,
-      width: MediaQuery.of(context).size.width - 20,
+      width: MediaQuery.of(context).size.width - (multiple ? 40 : 20),
       // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
@@ -176,8 +177,9 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
       child: ListView(
         // This next line does the trick.
         scrollDirection: Axis.horizontal,
-        children:
-            pois.map((poi) => buildPointOfInterest(context, poi)).toList(),
+        children: pois
+            .map((poi) => buildPointOfInterest(context, poi, pois.length > 1))
+            .toList(),
       ),
     );
   }
