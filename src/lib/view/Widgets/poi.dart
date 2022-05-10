@@ -2,10 +2,8 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/point_group.dart';
-import 'package:uni/view/Widgets/poi_group.dart';
 
 class PointOfInterestPage extends StatefulWidget {
   final PointOfInterest _poi;

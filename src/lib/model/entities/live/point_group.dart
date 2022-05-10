@@ -1,4 +1,3 @@
-import 'package:latlong2/latlong.dart';
 import 'package:uni/model/entities/live/point.dart';
 
 class PointOfInterestGroup extends PointOfInterest {
