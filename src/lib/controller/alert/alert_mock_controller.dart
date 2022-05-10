@@ -21,7 +21,8 @@ class AlertMockController implements AlertControllerInterface {
     SpontaneousAlert(
       DateTime.now().subtract(const Duration(hours: 1)),
       DateTime.now().subtract(const Duration(minutes: 10)),
-      "This alert shouldn't appear!", // maybe this filtering should be done by the controller
+      """
+This alert shouldn't appear!""", // maybe this filtering should be done by the controller
       LatLng(41.1784666, -8.5955153),
       0,
     )
