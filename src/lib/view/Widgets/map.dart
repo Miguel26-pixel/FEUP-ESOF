@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:uni/assets/constants/map.dart';
+import 'package:uni/controller/alert/alert_controller_interface.dart';
+import 'package:uni/controller/alert/alert_mock_controller.dart';
 import 'package:uni/controller/current_location.dart';
 import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:uni/model/entities/live/point.dart';
+import 'package:uni/model/entities/live/spontaneous_alert.dart';
 import 'package:uni/view/Widgets/poi.dart';
+import 'package:uni/view/Widgets/alert_poi_marker.dart';
+import 'package:uni/view/Widgets/spontaneous_alert.dart';
 
 class Map extends StatefulWidget {
   const Map({Key key}) : super(key: key);
@@ -19,6 +24,7 @@ class _MapState extends State<Map> {
       CurrentLocationController();
   MockPointOfInterestController pointOfInterestController =
       MockPointOfInterestController();
+  AlertControllerInterface alertController = AlertMockController();
 
   final double _initialZoom = 18.3;
 
@@ -31,6 +37,7 @@ class _MapState extends State<Map> {
   bool _floorsLoaded;
   bool _followingCurrentPosition;
   List<PointOfInterest> _pointsOfInterest = [];
+  List<SpontaneousAlert> _spontaneousAlerts = [];
 
   MapController _mapController;
 
@@ -61,6 +68,7 @@ class _MapState extends State<Map> {
         _currentFloor++;
       });
       searchPOI();
+      searchAlerts();
     }
   }
 
@@ -70,6 +78,7 @@ class _MapState extends State<Map> {
         _currentFloor--;
       });
       searchPOI();
+      searchAlerts();
     }
   }
 
@@ -78,6 +87,19 @@ class _MapState extends State<Map> {
         .getNearbyPOI(_currentFloor)
         .then((value) => setState(() {
               _pointsOfInterest = value;
+            }));
+  }
+
+  void searchAlerts() {
+    alertController
+        .getNearbySpontaneousAlerts(_currentFloor)
+        .then((value) => setState(() {
+              _spontaneousAlerts = [];
+              for (var alert in value) {
+                if (alert.getFinishTime().isAfter(DateTime.now())) {
+                  _spontaneousAlerts.add(alert);
+                }
+              }
             }));
   }
 
@@ -115,35 +137,36 @@ class _MapState extends State<Map> {
     });
 
     searchPOI();
+    searchAlerts();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Marker> poiMarkers = _pointsOfInterest
-        .map((e) => Marker(
+    final List<Marker> markers = _pointsOfInterest
+        .map(
+          (e) => AlertPoiMarker(
+            context: context,
+            point: e.getPosition(),
+            pressedBuilder: ((context) => PointOfInterestPage(e)),
+            iconData: Icons.room,
+          ),
+        )
+        .toList();
+
+    final List<Marker> alertMarkers = _spontaneousAlerts
+        .map((e) => AlertPoiMarker(
+              context: context,
+              size: 40,
               point: e.getPosition(),
-              width: 45,
-              height: 45,
-              anchorPos: AnchorPos.align(AnchorAlign.top),
-              builder: (ctx) => IconButton(
-                padding: EdgeInsets.zero,
-                iconSize: 35,
-                icon: const Icon(
-                  Icons.room,
-                ),
-                onPressed: () => showModalBottomSheet(
-                  context: context,
-                  backgroundColor: Colors.transparent,
-                  enableDrag: false,
-                  builder: (context) {
-                    return PointOfInterestPage(e);
-                  },
-                ),
-              ),
+              pressedBuilder: ((context) => SpontaneousAlertPage(
+                  e, currentLocationController, _currentLocation)),
+              iconData: Icons.warning_rounded,
             ))
         .toList();
+
+    markers.addAll(alertMarkers);
 
     final Widget mapComponent = FlutterMap(
       options: MapOptions(
@@ -177,7 +200,7 @@ class _MapState extends State<Map> {
               : [],
         ),
         MarkerLayerOptions(
-          markers: poiMarkers,
+          markers: markers,
         )
       ],
     );
