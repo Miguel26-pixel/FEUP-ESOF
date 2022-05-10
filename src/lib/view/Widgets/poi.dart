@@ -1,7 +1,7 @@
-import 'dart:math';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:uni/view/Widgets/titled_bottom_modal.dart';
+import 'package:uni/view/Widgets/validation_buttons.dart';
 import 'package:uni/model/entities/live/point.dart';
 
 class PointOfInterestPage extends StatefulWidget {
@@ -31,30 +31,11 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    iconSize: 30,
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.check_circle,
-                      color: Colors.green,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    iconSize: 30,
-                    icon: const Icon(
-                      Icons.cancel,
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            const Align(
+                alignment: Alignment.centerRight,
+                child: ValidationButtons(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                )),
             Align(
               alignment: Alignment.center,
               child: Text(
@@ -91,67 +72,44 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
       ),
     );
 
-    return ConstrainedBox(
-        constraints: BoxConstraints.tightFor(
-            height: min(400, MediaQuery.of(context).size.height)),
-        child: Container(
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.white),
-          height: 120,
-          // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Color.fromARGB(255, 220, 220, 220),
-                      width: 1,
+    return TitledBottomModal(
+      header: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.notifications_on),
+            onPressed: () {},
+          ),
+          Expanded(
+            child: _title,
+          ),
+          IconButton(
+            iconSize: 30,
+            icon: const Icon(Icons.bar_chart),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      children: [
+        Expanded(
+          child: widget._poi.getAlerts().isEmpty
+              ? Center(
+                  child: SizedBox(
+                    width: 200,
+                    child: Text(
+                      'There are no active alerts here at this moment.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Theme.of(context).hintColor,
+                      ),
                     ),
                   ),
+                )
+              : ListView.builder(
+                  itemBuilder: buildAlertItem,
+                  itemCount: widget._poi.getAlerts().length,
                 ),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.notifications_on),
-                      onPressed: () {},
-                    ),
-                    Expanded(
-                      child: _title,
-                    ),
-                    IconButton(
-                      iconSize: 30,
-                      icon: const Icon(Icons.bar_chart),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: widget._poi.getAlerts().isEmpty
-                    ? const Center(
-                        child: SizedBox(
-                          width: 200,
-                          child: Text(
-                            'There are no active alerts here at this moment.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      )
-                    : ListView.builder(
-                        itemBuilder: buildAlertItem,
-                        itemCount: widget._poi.getAlerts().length,
-                      ),
-              )
-            ],
-          ),
-        ));
+        ),
+      ],
+    );
   }
 }

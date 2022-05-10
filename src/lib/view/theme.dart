@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 const Color _darkRed = Color.fromARGB(255, 0x75, 0x17, 0x1e);
 const Color _lightRed = Color.fromARGB(255, 190, 40, 40);
 const Color _mildWhite = Color.fromARGB(255, 0xfa, 0xfa, 0xfa);
-const Color _lightGrey = Color.fromARGB(255, 215, 215, 215);
+const Color _lightGrey = Color.fromARGB(255, 185, 185, 185);
 const Color _grey = Color.fromARGB(255, 0x7f, 0x7f, 0x7f);
 const Color _strongGrey = Color.fromARGB(255, 90, 90, 90);
 const Color _mildBlack = Color.fromARGB(255, 0x30, 0x30, 0x30);
