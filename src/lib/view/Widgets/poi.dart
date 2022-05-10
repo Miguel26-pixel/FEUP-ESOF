@@ -2,7 +2,10 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:uni/model/entities/live/point.dart';
+import 'package:uni/model/entities/live/point_group.dart';
+import 'package:uni/view/Widgets/poi_group.dart';
 
 class PointOfInterestPage extends StatefulWidget {
   final PointOfInterest _poi;
@@ -13,7 +16,7 @@ class PointOfInterestPage extends StatefulWidget {
 }
 
 class _PointOfInterestPageState extends State<PointOfInterestPage> {
-  Widget buildAlertItem(BuildContext context, int i) {
+  Widget buildAlertItem(BuildContext context, PointOfInterest poi, int i) {
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
         margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -58,7 +61,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                widget._poi.getAlerts()[i].getGeneralAlert().getName(),
+                poi.getAlerts()[i].getGeneralAlert().getName(),
                 style: const TextStyle(fontSize: 16),
               ),
             ),
@@ -67,7 +70,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
               child: SizedBox(
                 width: 60,
                 child: Icon(
-                  widget._poi.getAlerts()[i].getGeneralAlert().getIconData(),
+                  poi.getAlerts()[i].getGeneralAlert().getIconData(),
                   size: 35,
                 ),
               ),
@@ -76,9 +79,8 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
         ));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final String titleString = widget._poi.getName();
+  Widget buildPointOfInterest(BuildContext context, PointOfInterest poi) {
+    final String titleString = poi.getName();
 
     final Widget _title = AutoSizeText(
       titleString.toUpperCase(),
@@ -91,67 +93,94 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
       ),
     );
 
-    return ConstrainedBox(
-        constraints: BoxConstraints.tightFor(
-            height: min(400, MediaQuery.of(context).size.height)),
-        child: Container(
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.white),
-          height: 120,
-          // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Color.fromARGB(255, 220, 220, 220),
-                      width: 1,
-                    ),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.notifications_on),
-                      onPressed: () {},
-                    ),
-                    Expanded(
-                      child: _title,
-                    ),
-                    IconButton(
-                      iconSize: 30,
-                      icon: const Icon(Icons.bar_chart),
-                      onPressed: () {},
-                    ),
-                  ],
+    return Container(
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: Colors.white),
+      height: 120,
+      width: MediaQuery.of(context).size.width - 20,
+      // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width - 20,
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+            decoration: const BoxDecoration(
+              color: Colors.transparent,
+              border: Border(
+                bottom: BorderSide(
+                  color: Color.fromARGB(255, 220, 220, 220),
+                  width: 1,
                 ),
               ),
-              Expanded(
-                child: widget._poi.getAlerts().isEmpty
-                    ? const Center(
-                        child: SizedBox(
-                          width: 200,
-                          child: Text(
-                            'There are no active alerts here at this moment.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
+            ),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.notifications_on),
+                  onPressed: () {},
+                ),
+                Expanded(
+                  child: _title,
+                ),
+                IconButton(
+                  iconSize: 30,
+                  icon: const Icon(Icons.bar_chart),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+              child: poi.getAlerts().isEmpty
+                  ? const Center(
+                      child: SizedBox(
+                        width: 200,
+                        child: Text(
+                          'There are no active alerts here at this moment.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.grey,
                           ),
                         ),
-                      )
-                    : ListView.builder(
-                        itemBuilder: buildAlertItem,
-                        itemCount: widget._poi.getAlerts().length,
                       ),
-              )
-            ],
-          ),
-        ));
+                    )
+                  : ListView(
+                      children: poi
+                          .getAlerts()
+                          .asMap()
+                          .map((i, a) =>
+                              MapEntry(i, buildAlertItem(context, poi, i)))
+                          .values
+                          .toList(),
+                    )),
+        ],
+      ),
+    );
+  }
+
+  List<PointOfInterest> pois = [];
+
+  @override
+  Widget build(BuildContext context) {
+    final List<PointOfInterest> pois = [];
+
+    if (widget._poi is PointOfInterestGroup) {
+      pois.addAll((widget._poi as PointOfInterestGroup).getPoints());
+    } else {
+      pois.add(widget._poi);
+    }
+
+    return ConstrainedBox(
+      constraints: BoxConstraints.tightFor(
+          height: min(400, MediaQuery.of(context).size.height)),
+      child: ListView(
+        // This next line does the trick.
+        scrollDirection: Axis.horizontal,
+        children:
+            pois.map((poi) => buildPointOfInterest(context, poi)).toList(),
+      ),
+    );
   }
 }

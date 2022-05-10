@@ -6,6 +6,7 @@ import 'package:uni/controller/current_location.dart';
 import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/view/Widgets/poi.dart';
+import 'package:uni/view/Widgets/poi_group.dart';
 
 class Map extends StatefulWidget {
   const Map({Key key}) : super(key: key);
