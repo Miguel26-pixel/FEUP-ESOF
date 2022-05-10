@@ -160,7 +160,8 @@ class _MapState extends State<Map> {
               context: context,
               size: 40,
               point: e.getPosition(),
-              pressedBuilder: ((context) => SpontaneousAlertPage(
+              pressedBuilder: ((context) =>
+                  SpontaneousAlertPage(alertController,
                   e, currentLocationController, _currentLocation)),
               iconData: Icons.warning_rounded,
             ))

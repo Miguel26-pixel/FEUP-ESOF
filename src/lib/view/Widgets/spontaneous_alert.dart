@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
+import 'package:uni/controller/alert/alert_controller_interface.dart';
+import 'package:uni/controller/alert/alert_mock_controller.dart';
 import 'package:uni/controller/current_location.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
 import 'package:uni/view/Widgets/rounded_bottom_modal.dart';
@@ -10,10 +12,12 @@ import 'package:uni/view/Widgets/validation_buttons.dart';
 
 class SpontaneousAlertPage extends StatefulWidget {
   final SpontaneousAlert _spontaneousAlert;
+  final AlertControllerInterface alertController;
   final CurrentLocationController _currentLocationController;
   final LatLng _position;
 
-  const SpontaneousAlertPage(final this._spontaneousAlert,
+  const SpontaneousAlertPage(final this.alertController,
+      final this._spontaneousAlert,
       final this._currentLocationController, final this._position,
       {Key key})
       : super(key: key);
@@ -124,7 +128,9 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
           ),
           Container(
             margin: const EdgeInsets.only(right: 10),
-            child: const ValidationButtons(),
+            child: ValidationButtons(alertController:
+            widget.alertController,
+                spontaneousAlertId: widget._spontaneousAlert.getId()),
           ),
         ],
       ),

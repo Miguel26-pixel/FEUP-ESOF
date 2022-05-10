@@ -53,10 +53,10 @@ class MockPointOfInterestController
     final AlertType type2 = AlertType('Noisy', 'This Location is Noisy',
         const Duration(days: 1), Icons.volume_up_outlined);
 
-    final Alert alert1 = Alert(
+    final Alert alert1 = Alert(2,
         DateTime.now(), DateTime.now().add(const Duration(days: 1)), type1);
 
-    final Alert alert2 = Alert(
+    final Alert alert2 = Alert(3,
         DateTime.now().subtract(
           const Duration(minutes: 1),
         ),

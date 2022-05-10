@@ -5,14 +5,17 @@ class SpontaneousAlert extends GeneralAlert {
   final String _message;
   final LatLng _position;
   final int _floor;
+  DateTime startTime;
+  DateTime finishTime;
 
   SpontaneousAlert(
+      int id,
     DateTime startTime,
     DateTime finishTime,
     this._message,
     this._position,
     this._floor,
-  ) : super(startTime, finishTime);
+  ) : super(id, startTime, finishTime);
 
   String getMessage() {
     return _message;
