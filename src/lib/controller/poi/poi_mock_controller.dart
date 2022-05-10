@@ -5,6 +5,7 @@ import 'package:uni/controller/poi/poi_controller_interface.dart';
 import 'package:uni/model/entities/live/alert.dart';
 import 'package:uni/model/entities/live/alert_type.dart';
 import 'package:uni/model/entities/live/point.dart';
+import 'package:uni/model/entities/live/point_group.dart';
 
 class MockPointOfInterestController
     implements PointOfInterestControllerInterface {
@@ -17,20 +18,28 @@ class MockPointOfInterestController
     PointOfInterest('AEFEUP', LatLng(41.176159, -8.596887), 0),
     PointOfInterest('Bar de minas', LatLng(41.1784362, -8.5972663), 0),
     PointOfInterest('Biblioteca', LatLng(41.177546, -8.594634), 0),
-    PointOfInterest(
-        'Máquina de Café',
+    PointOfInterestGroup(
         LatLng(
           41.17727714163054,
           -8.595256805419924,
         ),
-        1),
-    PointOfInterest(
-        'Vending',
-        LatLng(
-          41.17727714163054,
-          -8.595256805419924,
-        ),
-        1),
+        1,
+        [
+          PointOfInterest(
+              'Máquina de Café',
+              LatLng(
+                41.17727714163054,
+                -8.595256805419924,
+              ),
+              1),
+          PointOfInterest(
+              'Vending',
+              LatLng(
+                41.17727714163054,
+                -8.595256805419924,
+              ),
+              1),
+        ]),
     PointOfInterest(
         'Máquina de Café',
         LatLng(

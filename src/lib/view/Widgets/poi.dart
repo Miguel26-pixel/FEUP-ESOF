@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:uni/view/Widgets/titled_bottom_modal.dart';
 import 'package:uni/view/Widgets/validation_buttons.dart';
 import 'package:uni/model/entities/live/point.dart';
+import 'package:uni/model/entities/live/point_group.dart';
 
 class PointOfInterestPage extends StatefulWidget {
   final PointOfInterest _poi;
@@ -13,9 +14,10 @@ class PointOfInterestPage extends StatefulWidget {
 }
 
 class _PointOfInterestPageState extends State<PointOfInterestPage> {
-  Widget buildAlertItem(BuildContext context, int i) {
+  Widget buildAlertItem(BuildContext context, PointOfInterest poi, int i) {
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+        width: 200,
         margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
         decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -39,7 +41,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                widget._poi.getAlerts()[i].getGeneralAlert().getName(),
+                poi.getAlerts()[i].getGeneralAlert().getName(),
                 style: const TextStyle(fontSize: 16),
               ),
             ),
@@ -48,7 +50,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
               child: SizedBox(
                 width: 60,
                 child: Icon(
-                  widget._poi.getAlerts()[i].getGeneralAlert().getIconData(),
+                  poi.getAlerts()[i].getGeneralAlert().getIconData(),
                   size: 35,
                 ),
               ),
@@ -57,9 +59,9 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
         ));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final String titleString = widget._poi.getName();
+  Widget buildPointOfInterest(
+      BuildContext context, PointOfInterest poi, bool multiple) {
+    final String titleString = poi.getName();
 
     final Widget _title = AutoSizeText(
       titleString.toUpperCase(),
@@ -73,6 +75,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
     );
 
     return TitledBottomModal(
+      multiple: multiple,
       header: Row(
         children: [
           IconButton(
@@ -104,12 +107,38 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                     ),
                   ),
                 )
-              : ListView.builder(
-                  itemBuilder: buildAlertItem,
-                  itemCount: widget._poi.getAlerts().length,
+              : ListView(
+                  children: poi
+                      .getAlerts()
+                      .asMap()
+                      .map((i, a) =>
+                          MapEntry(i, buildAlertItem(context, poi, i)))
+                      .values
+                      .toList(),
                 ),
         ),
       ],
+    );
+  }
+
+  List<PointOfInterest> pois = [];
+
+  @override
+  Widget build(BuildContext context) {
+    final List<PointOfInterest> pois = [];
+
+    if (widget._poi is PointOfInterestGroup) {
+      pois.addAll((widget._poi as PointOfInterestGroup).getPoints());
+    } else {
+      pois.add(widget._poi);
+    }
+
+    return ListView(
+      // This next line does the trick.
+      scrollDirection: Axis.horizontal,
+      children: pois
+          .map((poi) => buildPointOfInterest(context, poi, pois.length > 1))
+          .toList(),
     );
   }
 }

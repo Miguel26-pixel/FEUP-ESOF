@@ -39,13 +39,7 @@ SentryEvent beforeSend(SentryEvent event) {
 
 Future<void> main() async {
   OnStartUp.onStart(state);
-  await SentryFlutter.init(
-    (options) {
-      options.dsn =
-          'https://a2661645df1c4992b24161010c5e0ecb@o553498.ingest.sentry.io/5680848';
-    },
-    appRunner: () => {runApp(MyApp())},
-  );
+  runApp(MyApp());
 }
 
 /// Manages the state of the app
