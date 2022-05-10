@@ -67,27 +67,27 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
   }
 
   String durationToString(Duration duration) {
-    String output = "";
+    String output = '';
     int value = 0;
     if (duration.inDays > 0) {
-      output += "${duration.inDays} day";
+      output += '${duration.inDays} day';
       value = duration.inDays;
     } else if (duration.inHours > 0) {
-      output += "${duration.inHours} hour";
+      output += '${duration.inHours} hour';
       value = duration.inDays;
     } else if (duration.inMinutes > 0) {
-      output += "${duration.inMinutes} minute";
+      output += '${duration.inMinutes} minute';
       value = duration.inMinutes;
     } else {
-      output += "${duration.inSeconds} second";
+      output += '${duration.inSeconds} second';
       value = duration.inSeconds;
     }
 
     if (value > 1) {
-      output += "s";
+      output += 's';
     }
 
-    return output + " ago";
+    return output + ' ago';
   }
 
   @override
@@ -119,7 +119,7 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
                   _distanceToAlert == -1
                       ? const SizedBox()
                       : Text(
-                          "in $_distanceToAlert meters",
+                          'in $_distanceToAlert meters',
                           style: TextStyle(color: Theme.of(context).hintColor),
                         ),
                 ],

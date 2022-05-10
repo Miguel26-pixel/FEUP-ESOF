@@ -155,7 +155,7 @@ class _MapState extends State<Map> {
         )
         .toList();
 
-    List<Marker> alertMarkers = _spontaneousAlerts
+    final List<Marker> alertMarkers = _spontaneousAlerts
         .map((e) => AlertPoiMarker(
               context: context,
               size: 40,
