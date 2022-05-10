@@ -1,12 +1,20 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:uni/controller/alert/alert_controller_interface.dart';
+import 'package:uni/model/entities/live/alert.dart';
+import 'package:uni/model/entities/live/alert_type.dart';
+import 'package:uni/model/entities/live/general_alert.dart';
 import 'package:uni/view/Widgets/titled_bottom_modal.dart';
 import 'package:uni/view/Widgets/validation_buttons.dart';
 import 'package:uni/model/entities/live/point.dart';
 
 class PointOfInterestPage extends StatefulWidget {
   final PointOfInterest _poi;
-  const PointOfInterestPage(final this._poi, {Key key}) : super(key: key);
+  final AlertControllerInterface _alertControllerInterface;
+  const PointOfInterestPage(
+      final this._poi, final this._alertControllerInterface,
+      {Key key})
+      : super(key: key);
 
   @override
   State<PointOfInterestPage> createState() => _PointOfInterestPageState();
@@ -14,6 +22,13 @@ class PointOfInterestPage extends StatefulWidget {
 
 class _PointOfInterestPageState extends State<PointOfInterestPage> {
   Widget buildAlertItem(BuildContext context, int i) {
+    final List<AlertType> alerts = widget._poi.getAlertIds().map((int e) {
+      final Alert alert =
+          (widget._alertControllerInterface.getAlert(e)) as Alert;
+      return widget._alertControllerInterface
+          .getAlertType(alert.getAlertTypeId());
+    }).toList();
+
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
         margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -39,7 +54,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                widget._poi.getAlerts()[i].getGeneralAlert().getName(),
+                alerts[i].getName(),
                 style: const TextStyle(fontSize: 16),
               ),
             ),
@@ -48,7 +63,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
               child: SizedBox(
                 width: 60,
                 child: Icon(
-                  widget._poi.getAlerts()[i].getGeneralAlert().getIconData(),
+                  alerts[i].getIconData(),
                   size: 35,
                 ),
               ),
@@ -60,6 +75,11 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
   @override
   Widget build(BuildContext context) {
     final String titleString = widget._poi.getName();
+    final List<Alert> alerts = widget._poi
+        .getAlertIds()
+        .map((e) => widget._alertControllerInterface.getAlert(e))
+        .toList()
+        .cast<Alert>();
 
     final Widget _title = AutoSizeText(
       titleString.toUpperCase(),
@@ -91,7 +111,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
       ),
       children: [
         Expanded(
-          child: widget._poi.getAlerts().isEmpty
+          child: alerts.isEmpty
               ? Center(
                   child: SizedBox(
                     width: 200,
@@ -106,7 +126,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                 )
               : ListView.builder(
                   itemBuilder: buildAlertItem,
-                  itemCount: widget._poi.getAlerts().length,
+                  itemCount: alerts.length,
                 ),
         ),
       ],

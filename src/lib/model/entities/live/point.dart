@@ -1,20 +1,19 @@
 import 'package:latlong2/latlong.dart';
-import 'package:uni/model/entities/live/alert.dart';
 
 class PointOfInterest {
   final String _name;
   final LatLng _position;
   final int _floor;
-  final List<Alert> _alerts = [];
+  final List<int> _alertIds = [];
 
   PointOfInterest(this._name, this._position, this._floor);
 
-  List<Alert> getAlerts() {
-    return _alerts;
+  List<int> getAlertIds() {
+    return _alertIds;
   }
 
-  void addAlert(Alert alert) {
-    _alerts.add(alert);
+  void addAlert(int alertId) {
+    _alertIds.add(alertId);
   }
 
   String getName() {
