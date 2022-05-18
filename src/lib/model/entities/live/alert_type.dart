@@ -5,7 +5,7 @@ class AlertType {
   final String _message;
   final Duration _baseTime;
   final IconData _iconData;
-  final int _id;
+  final String _id;
 
   AlertType(
       this._id, this._name, this._message, this._baseTime, this._iconData);
@@ -26,7 +26,7 @@ class AlertType {
     return _iconData;
   }
 
-  int getId() {
+  String getId() {
     return _id;
   }
 }

@@ -4,20 +4,25 @@ class PointOfInterest {
   final String _name;
   final LatLng _position;
   final int _floor;
-  final List<int> _alertIds = [];
+  final List<String> _alertIds = [];
+  final String _id;
 
-  PointOfInterest(this._name, this._position, this._floor);
+  PointOfInterest(this._id, this._name, this._position, this._floor);
 
-  List<int> getAlertIds() {
+  List<String> getAlertIds() {
     return _alertIds;
   }
 
-  void addAlert(int alertId) {
+  void addAlert(String alertId) {
     _alertIds.add(alertId);
   }
 
   String getName() {
     return _name;
+  }
+
+  String getId() {
+    return _id;
   }
 
   LatLng getPosition() {

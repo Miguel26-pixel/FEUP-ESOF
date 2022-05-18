@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
-import 'package:uni/controller/alert/alert_mock_controller.dart';
-import 'package:uni/model/entities/live/spontaneous_alert.dart';
 
 class ValidationButtons extends StatefulWidget {
   final MainAxisAlignment _mainAxisAlignment;
   final AlertControllerInterface _alertController;
-  final int _spontaneousAlertId;
+  final String _spontaneousAlertId;
   const ValidationButtons(
-      {Key key, MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-        AlertControllerInterface alertController,
-        int spontaneousAlertId})
+      {Key key,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
+      AlertControllerInterface alertController,
+      String spontaneousAlertId})
       : _mainAxisAlignment = mainAxisAlignment,
         _alertController = alertController,
         _spontaneousAlertId = spontaneousAlertId,
@@ -28,16 +27,16 @@ class _ValidationButtonsState extends State<ValidationButtons> {
       children: [
         IconButton(
           iconSize: 30,
-          onPressed: () =>
-              widget._alertController.likeAlert(widget._spontaneousAlertId),
+          onPressed: () => {},
+          //widget._alertController.likeAlert(widget._spontaneousAlertId),
           icon: const Icon(
             Icons.check_circle,
             color: Colors.green,
           ),
         ),
         IconButton(
-          onPressed: () =>
-              widget._alertController.dislikeAlert(widget._spontaneousAlertId),
+          onPressed: () => {},
+          //widget._alertController.dislikeAlert(widget._spontaneousAlertId),
           iconSize: 30,
           icon: const Icon(
             Icons.cancel,

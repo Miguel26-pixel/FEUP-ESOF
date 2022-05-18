@@ -1,13 +1,12 @@
-import 'package:uni/model/entities/live/alert_type.dart';
 import 'package:uni/model/entities/live/general_alert.dart';
 
 class Alert extends GeneralAlert {
-  final int _alertTypeId;
+  final String _alertTypeId;
 
-  Alert(int id, DateTime startTime, DateTime finishTime, this._alertTypeId)
+  Alert(String id, DateTime startTime, DateTime finishTime, this._alertTypeId)
       : super(id, startTime, finishTime);
 
-  int getAlertTypeId() {
+  String getAlertTypeId() {
     return _alertTypeId;
   }
 }

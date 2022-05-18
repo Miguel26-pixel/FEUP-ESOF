@@ -4,38 +4,50 @@ import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/model/entities/live/alert.dart';
 import 'package:uni/model/entities/live/alert_type.dart';
 import 'package:uni/model/entities/live/general_alert.dart';
+import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
 
 class AlertMockController implements AlertControllerInterface {
-  final List<GeneralAlert> _alerts = [
-    SpontaneousAlert(
-      0,
+  final _alerts = <String, Alert>{
+    '2': Alert(
+      '2',
+      DateTime.now(),
+      DateTime.now().add(
+        const Duration(days: 1),
+      ),
+      '0',
+    ),
+    '3': Alert(
+      '3',
+      DateTime.now().subtract(
+        const Duration(minutes: 1),
+      ),
+      DateTime.now().add(
+        const Duration(hours: 1),
+      ),
+      '1',
+    ),
+  };
+
+  final _spontaneousAlerts = <String, SpontaneousAlert>{
+    '0': SpontaneousAlert(
+      '0',
       DateTime.now().subtract(const Duration(hours: 1)),
       DateTime.now().add(const Duration(hours: 1)),
       'Spilt Coffee',
       LatLng(41.1775666, -8.5955153),
       0,
     ),
-    SpontaneousAlert(
-      1,
+    '1': SpontaneousAlert(
+      '1',
       DateTime.now().subtract(const Duration(minutes: 10)),
       DateTime.now().add(const Duration(hours: 1)),
       'Really Long Message, Yeah you should probably look into this now :)',
       LatLng(41.1779666, -8.5955153),
       0,
     ),
-    Alert(2, DateTime.now(), DateTime.now().add(const Duration(days: 1)), 0),
-    Alert(
-        3,
-        DateTime.now().subtract(
-          const Duration(minutes: 1),
-        ),
-        DateTime.now().add(
-          const Duration(hours: 1),
-        ),
-        1),
-    SpontaneousAlert(
-      4,
+    '4': SpontaneousAlert(
+      '4',
       DateTime.now().subtract(const Duration(hours: 1)),
       DateTime.now().subtract(const Duration(minutes: 10)),
       """
@@ -43,52 +55,44 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
       LatLng(41.1784666, -8.5955153),
       0,
     ),
-  ];
+  };
 
-  final List<AlertType> _alertTypes = [
-    AlertType(0, 'Full', 'This Location is Full', const Duration(days: 1),
-        Icons.people_outline),
-    AlertType(1, 'Noisy', 'This Location is Noisy', const Duration(days: 1),
-        Icons.volume_up_outlined),
-  ];
+  final _alertTypes = {
+    '0': AlertType('0', 'Full', 'This Location is Full',
+        const Duration(days: 1), Icons.people_outline),
+    '1': AlertType('1', 'Noisy', 'This Location is Noisy',
+        const Duration(days: 1), Icons.volume_up_outlined),
+  };
 
   @override
-  Future<List<GeneralAlert>> getNearbySpontaneousAlerts(int floor) {
-    return Future.value(_alerts
-        .where((element) =>
-            element is SpontaneousAlert && element.getFloor() == floor)
-        .toList());
+  Future<List<SpontaneousAlert>> getNearbySpontaneousAlerts(int floor) {
+    return Future.value(
+      _spontaneousAlerts.values
+          .where(
+            (element) => element.getFloor() == floor,
+          )
+          .toList(),
+    );
   }
 
   @override
-  void likeAlert(int alertId) {
-    for (var alert in _alerts) {
-      if (alert.getId() == alertId) {
-        alert.setFinishTime(5);
-      }
+  Future<GeneralAlert> getAlert(String id) {
+    if (_alerts.containsKey(id)) {
+      return Future.value(_alerts[id]);
     }
+
+    return Future.value(_spontaneousAlerts[id]);
   }
 
   @override
-  void dislikeAlert(int alertId) {
-    for (var alert in _alerts) {
-      if (alert.getId() == alertId) {
-        alert.setFinishTime(-5);
-        print(alert.getFinishTime());
-        if (DateTime.now().isAfter(alert.getFinishTime())) {
-          _alerts.remove(alert);
-        }
-      }
-    }
+  Future<AlertType> getAlertType(String id) async {
+    await Future.delayed(Duration(seconds: 3));
+    return Future.value(_alertTypes[id]);
   }
 
   @override
-  GeneralAlert getAlert(int id) {
-    return _alerts[id];
-  }
-
-  @override
-  AlertType getAlertType(int id) {
-    return _alertTypes[id];
+  Future<List<Alert>> getAlertsOfPoi(PointOfInterest poi) async {
+    await Future.delayed(Duration(seconds: 3));
+    return Future.value(poi.getAlertIds().map((e) => _alerts[e]).toList());
   }
 }

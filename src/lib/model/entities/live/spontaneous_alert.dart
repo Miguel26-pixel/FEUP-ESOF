@@ -9,7 +9,7 @@ class SpontaneousAlert extends GeneralAlert {
   DateTime finishTime;
 
   SpontaneousAlert(
-      int id,
+    String id,
     DateTime startTime,
     DateTime finishTime,
     this._message,

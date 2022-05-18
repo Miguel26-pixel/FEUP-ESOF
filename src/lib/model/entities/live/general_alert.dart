@@ -1,13 +1,14 @@
 class GeneralAlert {
-  final int _id;
+  final String _id;
   final DateTime _startTime;
   DateTime _finishTime;
 
   GeneralAlert(this._id, this._startTime, this._finishTime);
 
-  int getId(){
+  String getId() {
     return _id;
   }
+
   DateTime getStartTime() {
     return _startTime;
   }
