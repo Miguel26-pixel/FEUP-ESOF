@@ -20,61 +20,89 @@ class PointOfInterestPage extends StatefulWidget {
 }
 
 class _PointOfInterestPageState extends State<PointOfInterestPage> {
-  Widget buildAlertItem(BuildContext context, int i, List<Alert> alerts) {
-    final Future<AlertType> alertType = widget._alertControllerInterface
-        .getAlertType(alerts[i].getAlertTypeId());
+  Widget buildAlertItem(
+      BuildContext context, int i, List<AlertType> alertTypes) {
+    final AlertType alertType = alertTypes[i];
 
-    Widget layout(content) => Container(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
-        margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromARGB(50, 0, 0, 0),
-                offset: Offset(0, 1),
-                blurRadius: 1,
-                spreadRadius: 0,
-              )
-            ]),
-        child: content);
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+      margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromARGB(50, 0, 0, 0),
+              offset: Offset(0, 1),
+              blurRadius: 1,
+              spreadRadius: 0,
+            )
+          ]),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          const Align(
+              alignment: Alignment.centerRight,
+              child: ValidationButtons(
+                mainAxisAlignment: MainAxisAlignment.end,
+              )),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              alertType.getName(),
+              style: const TextStyle(fontSize: 16),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: SizedBox(
+              width: 60,
+              child: Icon(
+                alertType.getIconData(),
+                size: 35,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-    return FutureBuilder<AlertType>(
-        future: alertType,
-        builder: (context, AsyncSnapshot<AlertType> snapshot) {
-          if (snapshot.hasData) {
-            return layout(Stack(
-              alignment: Alignment.center,
-              children: [
-                const Align(
-                    alignment: Alignment.centerRight,
-                    child: ValidationButtons(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                    )),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    snapshot.data.getName(),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
+  Widget buildContent(BuildContext context, List<Alert> alerts) {
+    final Future<List<AlertType>> alertTypes = Future.wait(alerts
+        .map((e) =>
+            widget._alertControllerInterface.getAlertType(e.getAlertTypeId()))
+        .toList());
+
+    return FutureBuilder<List<AlertType>>(
+      future: alertTypes,
+      builder: (context, AsyncSnapshot<List<AlertType>> snapshot) {
+        if (snapshot.hasData) {
+          return alerts.isEmpty
+              ? Center(
                   child: SizedBox(
-                    width: 60,
-                    child: Icon(
-                      snapshot.data.getIconData(),
-                      size: 35,
+                    width: 200,
+                    child: Text(
+                      'There are no active alerts here at this moment.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Theme.of(context).hintColor,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ));
-          } else {
-            return layout(Center(child: CircularProgressIndicator()));
-          }
-        });
+                )
+              : ListView.builder(
+                  itemBuilder: (context, index) =>
+                      buildAlertItem(context, index, snapshot.data),
+                  itemCount: alerts.length,
+                );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -117,34 +145,16 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
         );
 
     return FutureBuilder<List<Alert>>(
-        future: alerts,
-        builder: (context, AsyncSnapshot<List<Alert>> snapshot) {
-          if (snapshot.hasData) {
-            return layout(
-              snapshot.data.isEmpty
-                  ? Center(
-                      child: SizedBox(
-                        width: 200,
-                        child: Text(
-                          'There are no active alerts here at this moment.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Theme.of(context).hintColor,
-                          ),
-                        ),
-                      ),
-                    )
-                  : ListView.builder(
-                      itemBuilder: (context, index) =>
-                          buildAlertItem(context, index, snapshot.data),
-                      itemCount: snapshot.data.length,
-                    ),
-            );
-          } else {
-            return layout(Center(
-              child: CircularProgressIndicator(),
-            ));
-          }
-        });
+      future: alerts,
+      builder: (context, AsyncSnapshot<List<Alert>> snapshot) {
+        if (snapshot.hasData) {
+          return layout(buildContent(context, snapshot.data));
+        } else {
+          return layout(Center(
+            child: CircularProgressIndicator(),
+          ));
+        }
+      },
+    );
   }
 }

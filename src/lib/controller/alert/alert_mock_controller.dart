@@ -85,14 +85,12 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
   }
 
   @override
-  Future<AlertType> getAlertType(String id) async {
-    await Future.delayed(Duration(seconds: 3));
+  Future<AlertType> getAlertType(String id) {
     return Future.value(_alertTypes[id]);
   }
 
   @override
-  Future<List<Alert>> getAlertsOfPoi(PointOfInterest poi) async {
-    await Future.delayed(Duration(seconds: 3));
+  Future<List<Alert>> getAlertsOfPoi(PointOfInterest poi) {
     return Future.value(poi.getAlertIds().map((e) => _alerts[e]).toList());
   }
 }
