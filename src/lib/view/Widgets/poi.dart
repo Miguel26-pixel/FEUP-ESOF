@@ -20,11 +20,9 @@ class PointOfInterestPage extends StatefulWidget {
 }
 
 class _PointOfInterestPageState extends State<PointOfInterestPage> {
-  final List<Alert> _alerts = [];
-
-  Widget buildAlertItem(BuildContext context, int i) {
+  Widget buildAlertItem(BuildContext context, int i, List<Alert> alerts) {
     final Future<AlertType> alertType = widget._alertControllerInterface
-        .getAlertType(_alerts[i].getAlertTypeId());
+        .getAlertType(alerts[i].getAlertTypeId());
 
     Widget layout(content) => Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
@@ -122,9 +120,6 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
         future: alerts,
         builder: (context, AsyncSnapshot<List<Alert>> snapshot) {
           if (snapshot.hasData) {
-            _alerts.clear();
-            _alerts.addAll(snapshot.data);
-
             return layout(
               snapshot.data.isEmpty
                   ? Center(
@@ -140,7 +135,8 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
                       ),
                     )
                   : ListView.builder(
-                      itemBuilder: buildAlertItem,
+                      itemBuilder: (context, index) =>
+                          buildAlertItem(context, index, snapshot.data),
                       itemCount: snapshot.data.length,
                     ),
             );
