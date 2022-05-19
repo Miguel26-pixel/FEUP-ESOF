@@ -56,36 +56,46 @@ exports.pointsOfInterest = functions.https.onRequest(async (_, response) => {
 
 app.get("/points", async (req, res) => {
     const locationRaw = req.body.location || DEFAULT_POSITION;
-    const floor = req.body.location || 0;
+    const floor = req.body.floor || 0;
 
     const bounds = geofire.geohashQueryBounds([
         locationRaw.latitude,
         locationRaw.longitude,
     ], 1000);
 
-    const promises = [];
+    const pointsQueries = [];
+    const groupsQueries = [];
 
-    // for (const b of bounds) {
-    //     const q = point
-    //       .orderBy('geohash')
-    //       .startAt(b[0])
-    //       .endAt(b[1]);
+    for (const bound of bounds) {
+        const pointQuery = pointsCollection
+            .where("geohash", "!=", null)
+            .orderBy("geohash")
+            .where("floor", "=", floor)
+            .startAt(bound[0])
+            .endAt(bound[1])
+            .get();
       
-    //     promises.push(q.get());
-    // }
-      
-    
-    const groupsData = await groupsCollection.get();
-    
-    let pointsData = await pointsCollection
-        .where("floor", "!=", null)
-        .get();
+        const groupQuery = groupsCollection
+            .where("geohash", "!=", null)
+            .orderBy("geohash")
+            .where("floor", "=", floor)
+            .startAt(bound[0])
+            .endAt(bound[1])
+            .get();
 
-    const groups = await Promise.all(groupsData.docs.map(async (obj) => {
+        pointsQueries.push(pointQuery);
+        groupsQueries.push(groupQuery);
+    }
+    
+
+    let pointsData = (await Promise.all(pointsQueries)).map(q => q.docs).flat();
+    let groupsData = (await Promise.all(groupsQueries)).map(q => q.docs).flat();
+
+    const groups = await Promise.all(groupsData.map(async (obj) => {
         const data = obj.data();
+
         const points = await Promise.all(data.points.map(async (pointRef) => {
             const data = (await pointRef.get()).data();
-            console.log(pointRef, data)
             const alerts = data.alerts.map((alertRef) => alertRef.id);
     
             return {
@@ -101,7 +111,7 @@ app.get("/points", async (req, res) => {
         }
     }))
 
-    const points = pointsData.docs.map((obj) => {
+    const points = pointsData.map((obj) => {
         const data = obj.data();
         const alerts = data.alerts.map((alertRef) => alertRef.id);
     
@@ -122,7 +132,6 @@ app.get("/point/:id/alerts", async (req, res) => {
     const point = (await pointsCollection.doc(req.params.id).get()).data();
     const alerts = await Promise.all(point.alerts.map(async (alertRef) => {
         const alert = (await alertRef.get()).data();
-        console.log(alert)
         const type = (await alert.type.get()).data();
         return {
             ...alert,
