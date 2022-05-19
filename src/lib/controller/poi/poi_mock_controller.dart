@@ -1,85 +1,113 @@
-import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:uni/controller/poi/poi_controller_interface.dart';
-import 'package:uni/model/entities/live/alert.dart';
-import 'package:uni/model/entities/live/alert_type.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/point_group.dart';
 
 class MockPointOfInterestController
     implements PointOfInterestControllerInterface {
-  final List<PointOfInterest> elements = [
-    PointOfInterest('Bar da biblioteca', LatLng(41.1774666, -8.5950153), 0),
-    PointOfInterest(
-        'Cantina da Faculdade de Engenharia', LatLng(41.176243, -8.595501), 0),
-    PointOfInterest(
-        'Grill da Faculdade de Engenharia', LatLng(41.176395, -8.595318), 0),
-    PointOfInterest('AEFEUP', LatLng(41.176159, -8.596887), 0),
-    PointOfInterest('Bar de minas', LatLng(41.1784362, -8.5972663), 0),
-    PointOfInterest('Biblioteca', LatLng(41.177546, -8.594634), 0),
-    PointOfInterestGroup(
+  static bool _init = false;
+  static final _groups = <String, PointOfInterestGroup>{
+    '6': PointOfInterestGroup(
+      '6',
+      LatLng(
+        41.17727714163054,
+        -8.595256805419924,
+      ),
+      1,
+      [
+        _elements['7'],
+        _elements['8'],
+        _elements['11'],
+        _elements['12'],
+      ],
+    ),
+  };
+
+  static final _elements = <String, PointOfInterest>{
+    '0': PointOfInterest(
+        '0', 'Bar da biblioteca', LatLng(41.1774666, -8.5950153), 0),
+    '1': PointOfInterest('1', 'Cantina da Faculdade de Engenharia',
+        LatLng(41.176243, -8.595501), 0),
+    '2': PointOfInterest('2', 'Grill da Faculdade de Engenharia',
+        LatLng(41.176395, -8.595318), 0),
+    '3': PointOfInterest('3', 'AEFEUP', LatLng(41.176159, -8.596887), 0),
+    '4':
+        PointOfInterest('4', 'Bar de minas', LatLng(41.1784362, -8.5972663), 0),
+    '5': PointOfInterest('5', 'Biblioteca', LatLng(41.177546, -8.594634), 0),
+    '7': PointOfInterest(
+        '7',
+        'Máquina de Café',
         LatLng(
           41.17727714163054,
           -8.595256805419924,
         ),
-        1,
-        [
-          PointOfInterest(
-              'Máquina de Café',
-              LatLng(
-                41.17727714163054,
-                -8.595256805419924,
-              ),
-              1),
-          PointOfInterest(
-              'Vending',
-              LatLng(
-                41.17727714163054,
-                -8.595256805419924,
-              ),
-              1),
-        ]),
-    PointOfInterest(
+        1),
+    '8': PointOfInterest(
+        '8',
+        'Vending',
+        LatLng(
+          41.17727714163054,
+          -8.595256805419924,
+        ),
+        1),
+    '9': PointOfInterest(
+        '9',
         'Máquina de Café',
         LatLng(
           41.17727714163054,
           -8.595256805419924,
         ),
         2),
-    PointOfInterest(
+    '10': PointOfInterest(
+        '10',
         'Vending',
         LatLng(
           41.17727714163054,
           -8.595256805419924,
         ),
         2),
-  ];
+    '11': PointOfInterest(
+        '11',
+        'Vending2',
+        LatLng(
+          41.17727714163054,
+          -8.595256805419924,
+        ),
+        1),
+    '12': PointOfInterest(
+        '12',
+        'Coffee2',
+        LatLng(
+          41.17727714163054,
+          -8.595256805419924,
+        ),
+        1),
+  };
 
   MockPointOfInterestController() {
-    final AlertType type1 = AlertType('Full', 'This Location is Full',
-        const Duration(days: 1), Icons.people_outline);
-    final AlertType type2 = AlertType('Noisy', 'This Location is Noisy',
-        const Duration(days: 1), Icons.volume_up_outlined);
+    if (!_init) {
+      _elements['0'].addAlert('2');
+      _elements['0'].addAlert('3');
 
-    final Alert alert1 = Alert(
-        DateTime.now(), DateTime.now().add(const Duration(days: 1)), type1);
-
-    final Alert alert2 = Alert(
-        DateTime.now().subtract(
-          const Duration(minutes: 1),
-        ),
-        DateTime.now().add(const Duration(hours: 1)),
-        type2);
-
-    elements[0].addAlert(alert1);
-    elements[0].addAlert(alert2);
+      _init = !_init;
+    }
   }
 
   @override
   Future<List<PointOfInterest>> getNearbyPOI(int floor) {
-    return Future.value(
-        elements.where((element) => element.getFloor() == floor).toList());
+    final List<PointOfInterestGroup> groups =
+        _groups.values.where((element) => element.getFloor() == floor).toList();
+    final Set<String> loadedIDs = groups
+        .expand((element) => element.getPoints().map((e) => e.getId()))
+        .toSet();
+    final result = _elements.values
+        .where((element) =>
+            !loadedIDs.contains(element.getId()) && element.getFloor() == floor)
+        .toList();
+    result.addAll(groups);
+
+    return Future.value(result);
   }
 
   @override

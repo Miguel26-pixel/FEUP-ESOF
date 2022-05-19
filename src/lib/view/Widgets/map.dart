@@ -149,7 +149,8 @@ class _MapState extends State<Map> {
           (e) => AlertPoiMarker(
             context: context,
             point: e.getPosition(),
-            pressedBuilder: ((context) => PointOfInterestPage(e)),
+            pressedBuilder: ((context) =>
+                PointOfInterestPage(e, alertController)),
             iconData: Icons.room,
           ),
         )
@@ -161,7 +162,10 @@ class _MapState extends State<Map> {
               size: 40,
               point: e.getPosition(),
               pressedBuilder: ((context) => SpontaneousAlertPage(
-                  e, currentLocationController, _currentLocation)),
+                  alertController,
+                  e,
+                  currentLocationController,
+                  _currentLocation)),
               iconData: Icons.warning_rounded,
             ))
         .toList();

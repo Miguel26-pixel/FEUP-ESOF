@@ -1,5 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:uni/controller/alert/alert_controller_interface.dart';
+import 'package:uni/model/entities/live/alert.dart';
+import 'package:uni/model/entities/live/alert_type.dart';
 import 'package:uni/view/Widgets/titled_bottom_modal.dart';
 import 'package:uni/view/Widgets/validation_buttons.dart';
 import 'package:uni/model/entities/live/point.dart';
@@ -7,14 +10,19 @@ import 'package:uni/model/entities/live/point_group.dart';
 
 class PointOfInterestPage extends StatefulWidget {
   final PointOfInterest _poi;
-  const PointOfInterestPage(final this._poi, {Key key}) : super(key: key);
+  final AlertControllerInterface _alertController;
+  const PointOfInterestPage(final this._poi, final this._alertController,
+      {Key key})
+      : super(key: key);
 
   @override
   State<PointOfInterestPage> createState() => _PointOfInterestPageState();
 }
 
 class _PointOfInterestPageState extends State<PointOfInterestPage> {
-  Widget buildAlertItem(BuildContext context, PointOfInterest poi, int i) {
+  Widget buildAlertItem(BuildContext context, int i, List<Alert> alerts) {
+    final AlertType alertType = alerts[i].getAlertType();
+
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
         width: 200,
@@ -41,7 +49,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                poi.getAlerts()[i].getGeneralAlert().getName(),
+                alertType.getName(),
                 style: const TextStyle(fontSize: 16),
               ),
             ),
@@ -50,7 +58,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
               child: SizedBox(
                 width: 60,
                 child: Icon(
-                  poi.getAlerts()[i].getGeneralAlert().getIconData(),
+                  alertType.getIconData(),
                   size: 35,
                 ),
               ),
@@ -62,6 +70,8 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
   Widget buildPointOfInterest(
       BuildContext context, PointOfInterest poi, bool multiple) {
     final String titleString = poi.getName();
+    final Future<List<Alert>> alerts =
+        widget._alertController.getAlertsOfPoi(poi);
 
     final Widget _title = AutoSizeText(
       titleString.toUpperCase(),
@@ -74,54 +84,65 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
       ),
     );
 
-    return TitledBottomModal(
-      multiple: multiple,
-      header: Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.notifications_on),
-            onPressed: () {},
+    Widget layout(Widget content) => TitledBottomModal(
+          multiple: multiple,
+          header: Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.notifications_on),
+                onPressed: () {},
+              ),
+              Expanded(
+                child: _title,
+              ),
+              IconButton(
+                iconSize: 30,
+                icon: const Icon(Icons.bar_chart),
+                onPressed: () {},
+              ),
+            ],
           ),
-          Expanded(
-            child: _title,
-          ),
-          IconButton(
-            iconSize: 30,
-            icon: const Icon(Icons.bar_chart),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      children: [
-        Expanded(
-          child: widget._poi.getAlerts().isEmpty
-              ? Center(
-                  child: SizedBox(
-                    width: 200,
-                    child: Text(
-                      'There are no active alerts here at this moment.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                  ),
-                )
-              : ListView(
-                  children: poi
-                      .getAlerts()
-                      .asMap()
-                      .map((i, a) =>
-                          MapEntry(i, buildAlertItem(context, poi, i)))
-                      .values
-                      .toList(),
-                ),
-        ),
-      ],
+          children: [
+            Expanded(child: content),
+          ],
+        );
+
+    return FutureBuilder<List<Alert>>(
+      future: alerts,
+      builder: (context, AsyncSnapshot<List<Alert>> snapshot) {
+        if (snapshot.hasData) {
+          return layout(buildContent(context, snapshot.data));
+        } else {
+          return layout(
+            Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
     );
   }
 
-  List<PointOfInterest> pois = [];
+  Widget buildContent(BuildContext context, List<Alert> alerts) {
+    return alerts.isEmpty
+        ? Center(
+            child: SizedBox(
+              width: 200,
+              child: Text(
+                'There are no active alerts here at this moment.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).hintColor,
+                ),
+              ),
+            ),
+          )
+        : ListView.builder(
+            itemBuilder: (context, index) =>
+                buildAlertItem(context, index, alerts),
+            itemCount: alerts.length,
+          );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,12 +154,12 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
       pois.add(widget._poi);
     }
 
-    return ListView(
+    return ListView.builder(
       // This next line does the trick.
       scrollDirection: Axis.horizontal,
-      children: pois
-          .map((poi) => buildPointOfInterest(context, poi, pois.length > 1))
-          .toList(),
+      itemBuilder: (context, i) =>
+          buildPointOfInterest(context, pois[i], pois.length > 1),
+      itemCount: pois.length,
     );
   }
 }
