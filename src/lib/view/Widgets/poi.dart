@@ -10,9 +10,8 @@ import 'package:uni/model/entities/live/point_group.dart';
 
 class PointOfInterestPage extends StatefulWidget {
   final PointOfInterest _poi;
-  final AlertControllerInterface _alertControllerInterface;
-  const PointOfInterestPage(
-      final this._poi, final this._alertControllerInterface,
+  final AlertControllerInterface _alertController;
+  const PointOfInterestPage(final this._poi, final this._alertController,
       {Key key})
       : super(key: key);
 
@@ -72,7 +71,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
       BuildContext context, PointOfInterest poi, bool multiple) {
     final String titleString = poi.getName();
     final Future<List<Alert>> alerts =
-        widget._alertControllerInterface.getAlertsOfPoi(poi);
+        widget._alertController.getAlertsOfPoi(poi);
 
     final Widget _title = AutoSizeText(
       titleString.toUpperCase(),
