@@ -20,9 +20,8 @@ class PointOfInterestPage extends StatefulWidget {
 }
 
 class _PointOfInterestPageState extends State<PointOfInterestPage> {
-  Widget buildAlertItem(
-      BuildContext context, int i, List<AlertType> alertTypes) {
-    final AlertType alertType = alertTypes[i];
+  Widget buildAlertItem(BuildContext context, int i, List<Alert> alerts) {
+    final AlertType alertType = alerts[i].getAlertType();
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
@@ -69,40 +68,24 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
   }
 
   Widget buildContent(BuildContext context, List<Alert> alerts) {
-    final Future<List<AlertType>> alertTypes = Future.wait(alerts
-        .map((e) =>
-            widget._alertControllerInterface.getAlertType(e.getAlertTypeId()))
-        .toList());
-
-    return FutureBuilder<List<AlertType>>(
-      future: alertTypes,
-      builder: (context, AsyncSnapshot<List<AlertType>> snapshot) {
-        if (snapshot.hasData) {
-          return alerts.isEmpty
-              ? Center(
-                  child: SizedBox(
-                    width: 200,
-                    child: Text(
-                      'There are no active alerts here at this moment.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                  ),
-                )
-              : ListView.builder(
-                  itemBuilder: (context, index) =>
-                      buildAlertItem(context, index, snapshot.data),
-                  itemCount: alerts.length,
-                );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
+    return alerts.isEmpty
+        ? Center(
+            child: SizedBox(
+              width: 200,
+              child: Text(
+                'There are no active alerts here at this moment.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).hintColor,
+                ),
+              ),
+            ),
+          )
+        : ListView.builder(
+            itemBuilder: (context, index) =>
+                buildAlertItem(context, index, alerts),
+            itemCount: alerts.length,
           );
-        }
-      },
-    );
   }
 
   @override

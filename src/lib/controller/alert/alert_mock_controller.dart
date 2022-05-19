@@ -8,14 +8,21 @@ import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
 
 class AlertMockController implements AlertControllerInterface {
-  final _alerts = <String, Alert>{
+  static final _alertTypes = {
+    '0': AlertType('0', 'Full', 'This Location is Full',
+        const Duration(days: 1), Icons.people_outline),
+    '1': AlertType('1', 'Noisy', 'This Location is Noisy',
+        const Duration(days: 1), Icons.volume_up_outlined),
+  };
+
+  static final _alerts = <String, Alert>{
     '2': Alert(
       '2',
       DateTime.now(),
       DateTime.now().add(
         const Duration(days: 1),
       ),
-      '0',
+      _alertTypes['0'],
     ),
     '3': Alert(
       '3',
@@ -25,11 +32,11 @@ class AlertMockController implements AlertControllerInterface {
       DateTime.now().add(
         const Duration(hours: 1),
       ),
-      '1',
+      _alertTypes['1'],
     ),
   };
 
-  final _spontaneousAlerts = <String, SpontaneousAlert>{
+  static final _spontaneousAlerts = <String, SpontaneousAlert>{
     '0': SpontaneousAlert(
       '0',
       DateTime.now().subtract(const Duration(hours: 1)),
@@ -55,13 +62,6 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
       LatLng(41.1784666, -8.5955153),
       0,
     ),
-  };
-
-  final _alertTypes = {
-    '0': AlertType('0', 'Full', 'This Location is Full',
-        const Duration(days: 1), Icons.people_outline),
-    '1': AlertType('1', 'Noisy', 'This Location is Noisy',
-        const Duration(days: 1), Icons.volume_up_outlined),
   };
 
   @override
