@@ -2,6 +2,7 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const express = require('express');
 const {seed} = require("./mock");
+const { firestore } = require("firebase-admin");
 
 const app = express();
 app.use(express.json());
@@ -15,13 +16,13 @@ const alertTypeCollection = db.collection("alert-type");
 const spontaneousCollection = db.collection("spontaneous");
 const groupsCollection = db.collection("groups");
 
-seed(
-    admin.firestore, 
-    pointsCollection, 
-    alertsCollection, 
-    alertTypeCollection, 
-    spontaneousCollection,
-    groupsCollection);
+// seed(
+//     admin.firestore, 
+//     pointsCollection, 
+//     alertsCollection, 
+//     alertTypeCollection, 
+//     spontaneousCollection,
+//     groupsCollection);
 
 exports.pointsOfInterest = functions.https.onRequest(async (_, response) => {
   let data = await pointsCollection.get();
@@ -61,6 +62,37 @@ app.get("/point/:id/alerts", async (req, res) => {
     return res.json({
         data: alerts
     })
+});
+
+app.post("/points/:id/alerts/new", async (req, res) => {
+    const {
+        type: typeId,
+    } = req.body;
+
+    if (!typeId) {
+        return res.status(401).json({error: "Invalid arguments"});
+    }
+
+    const type  = await alertTypeCollection.doc(typeId).get();
+    const point = await pointsCollection.doc(req.params.id).get();
+    
+    if (!type.exists || !point.exists) {
+        return res.status(401).json({error: "Not found"})
+    }
+
+    const typeData = type.data()
+
+    const alert = await alertsCollection.add({
+        type: type.ref,
+        "start-time": firestore.Timestamp.fromDate(new Date(Date.now())),
+        "finish-time": firestore.Timestamp.fromDate(new Date(Date.now() + typeData["base-duration-seconds"] * 1000)),
+    });
+
+    await point.ref.update({
+        alerts: firestore.FieldValue.arrayUnion(alert)
+    })
+
+    return res.json("");
 });
 
 exports.widgets = functions.https.onRequest(app);
