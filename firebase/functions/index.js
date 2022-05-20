@@ -33,29 +33,6 @@ const groupsCollection = db.collection("groups");
 //     spontaneousCollection,
 //     groupsCollection);
 
-exports.pointsOfInterest = functions.https.onRequest(async (_, response) => {
-  let data = await pointsCollection.get();
-
-  const result = await Promise.all(data.docs.map(async (obj) =>  {
-      const data = obj.data();
-
-      const alerts = await Promise.all(data.alerts.map(async (alertRef) => {
-        const alert = (await alertRef.get()).data();
-        return alert;
-      }));
-    
-      return {
-          ...data,
-          alerts,
-          id: obj.id
-      }
-    }));
-
-  response.send(JSON.stringify({
-      data: result
-  }));
-});
-
 app.get("/points", async (req, res) => {
     const locationRaw = req.body.location || DEFAULT_POSITION;
     const floor = req.body.floor || 0;
