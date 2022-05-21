@@ -94,6 +94,10 @@ class MockPointOfInterestController
     elements[0].addAlert(alert2);
   }
 
+  @override
+  List<PointOfInterestType> getTypesPOI(){
+    return (poiTypes);
+  }
   
 
   @override
@@ -106,7 +110,11 @@ class MockPointOfInterestController
   Future<bool> createPOI(String name, LatLng pos, int floor,
    PointOfInterestType type){
 
+    print(elements.length);
     elements.add(PointOfInterest(name, pos, floor, type));
+    print("added");
+    print(elements.length);
+
 
     return Future.value(true);
 

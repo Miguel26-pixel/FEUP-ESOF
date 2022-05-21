@@ -7,6 +7,7 @@ import 'package:latlong2/latlong.dart';
 abstract class PointOfInterestControllerInterface {
   Future<List<PointOfInterest>> getNearbyPOI(int floor);
   Future<bool> createPOI(String name, LatLng pos, int floor,
-   PointOfInterestType type);
+  PointOfInterestType type);
   Future<List<int>> getFloorLimits();
+  List<PointOfInterestType> getTypesPOI();
 }

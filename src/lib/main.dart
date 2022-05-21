@@ -19,6 +19,7 @@ import 'package:uni/view/Pages/home_page_view.dart';
 import 'package:uni/view/Pages/logout_route.dart';
 import 'package:uni/view/Pages/map_view.dart';
 import 'package:uni/view/Pages/admin_dashboard_view.dart';
+import 'package:uni/view/Pages/create_poi_view.dart';
 import 'package:uni/view/Pages/splash_page_view.dart';
 import 'package:uni/view/Pages/useful_contacts_card_page_view.dart';
 import 'package:uni/view/Widgets/page_transition.dart';
@@ -105,7 +106,7 @@ class MyAppState extends State<MyApp> {
                     page: AdminDashboardPage(), settings: settings);
               case '/' + Constants.navCreatePoi:
                 return PageTransition.makePageTransition(
-                    page: UsefulContactsCardView(), settings: settings);
+                    page: CreatePOIPage(), settings: settings);
               case '/' + Constants.navUsefulContacts:
                 return PageTransition.makePageTransition(
                     page: UsefulContactsCardView(), settings: settings);
