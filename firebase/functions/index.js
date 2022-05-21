@@ -10,6 +10,8 @@ const DEFAULT_POSITION = {
     latitude: 41.177787,
     longitude: -8.595922,
 }
+const ALERT_TIME_REDUCE_SECONDS = 120;
+const ALERT_ADD_TIME_REDUCE_SECONDS = 60;
 
 
 const app = express();
@@ -78,9 +80,13 @@ app.get("/point/:id/alerts", async (req, res) => {
             return result;
         }
 
-        const type = (await alert.type.get()).data();
+        const type = {
+            ...(await alert.type.get()).data(),
+            id: alert.type.id
+        };
         result.push({
             ...alert,
+            id: alertRef.id,
             type,
         });
 
@@ -90,6 +96,50 @@ app.get("/point/:id/alerts", async (req, res) => {
     return res.json({
         data: alerts
     })
+});
+
+app.post("/alerts/:id/reject", async (req, res) => {
+    const alertSnapshot = await alertsCollection.doc(req.params.id).get();
+    
+    if (!alertSnapshot.exists) {
+        return res.status(401).json({error: "Not found"})
+    }
+
+    const alert = alertSnapshot.data();
+    
+    const currentFinish = alert["finish-time"].toDate();
+
+    if (currentFinish < Date.now()) {
+        return res.status(401).json({error: "Not found"});
+    }
+
+    await alertSnapshot.ref.update({
+        "finish-time": firestore.Timestamp.fromDate(new Date(currentFinish - ALERT_TIME_REDUCE_SECONDS * 1000)),
+    });
+
+    return res.json("");
+});
+
+app.post("/alerts/:id/accept", async (req, res) => {
+    const alertSnapshot = await alertsCollection.doc(req.params.id).get();
+    
+    if (!alertSnapshot.exists) {
+        return res.status(401).json({error: "Not found"})
+    }
+
+    const alert = alertSnapshot.data();
+    
+    const currentFinish = alert["finish-time"].toDate();
+
+    if (currentFinish < Date.now()) {
+        return res.status(401).json({error: "Not found"});
+    }
+
+    await alertSnapshot.ref.update({
+        "finish-time": firestore.Timestamp.fromDate(new Date(currentFinish + ALERT_ADD_TIME_REDUCE_SECONDS * 1000)),
+    });
+
+    return res.json("");
 });
 
 app.post("/points/:id/alerts/new", async (req, res) => {
