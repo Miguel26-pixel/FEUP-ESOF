@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const geofire = require("geofire-common");
 
 /**
  * 
@@ -100,5 +101,42 @@ exports.seed = async (
         alerts: [
             alert1
         ]
+    });
+
+    await spontaneousCollection.add({
+        "start-time": firestore.Timestamp.fromDate(new Date("11 May 2022 12:00:00 UTC+1")),
+        "finish-time": firestore.Timestamp.fromDate(new Date("25 May 2022 12:00:00 UTC+1")),
+        message: "Spilt Cofee",
+        position: new firestore.GeoPoint(41.1775666, -8.5955153),
+        geohash: geofire.geohashForLocation([41.1775666, -8.5955153]),
+        floor: 0,
+    });
+
+
+    await spontaneousCollection.add({
+        "start-time": firestore.Timestamp.fromDate(new Date("11 May 2022 12:00:00 UTC+1")),
+        "finish-time": firestore.Timestamp.fromDate(new Date("25 May 2022 12:00:00 UTC+1")),
+        message: "Spilt Cofee",
+        position: new firestore.GeoPoint(41.1775666, -8.5955153),
+        geohash: geofire.geohashForLocation([41.1775666, -8.5955153]),
+        floor: 1,
+    });
+
+    await spontaneousCollection.add({
+        "start-time": firestore.Timestamp.fromDate(new Date("11 May 2022 12:00:00 UTC+1")),
+        "finish-time": firestore.Timestamp.fromDate(new Date("25 May 2022 12:00:00 UTC+1")),
+        message: "Spot in constructions",
+        position: new firestore.GeoPoint(41.1779666, -8.5955153),
+        geohash: geofire.geohashForLocation([41.1779666, -8.5955153]),
+        floor: 0,
+    });
+
+    await spontaneousCollection.add({
+        "start-time": firestore.Timestamp.fromDate(new Date("11 May 2022 12:00:00 UTC+1")),
+        "finish-time": firestore.Timestamp.fromDate(new Date("25 May 2022 12:00:00 UTC+1")),
+        message: "Flooded street",
+        position: new firestore.GeoPoint(41.021195, -8.563309),
+        geohash: geofire.geohashForLocation([41.021195, -8.563309]),
+        floor: 0,
     });
 }

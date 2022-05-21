@@ -2,6 +2,7 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const express = require('express');
 const {seed} = require("./mock");
+const geofire = require("geofire-common");
 const { firestore } = require("firebase-admin");
 
 const RADIUS_METERS = 1000;
@@ -131,11 +132,10 @@ app.get("/alerts/spontaneous", async (req, res) => {
         locationRaw.longitude,
     ], RADIUS_METERS);
 
-    const pointsQueries = [];
-    const groupsQueries = [];
+    const queries = [];
 
     for (const bound of bounds) {
-        const pointQuery = pointsCollection
+        const query = spontaneousCollection
             .where("geohash", "!=", null)
             .orderBy("geohash")
             .where("floor", "=", floor)
@@ -143,48 +143,23 @@ app.get("/alerts/spontaneous", async (req, res) => {
             .endAt(bound[1])
             .get();
 
-        pointsQueries.push(pointQuery);
-        groupsQueries.push(groupQuery);
+        queries.push(query);
     }
-    
 
-    let pointsData = (await Promise.all(pointsQueries)).map(q => q.docs).flat();
-    let groupsData = (await Promise.all(groupsQueries)).map(q => q.docs).flat();
 
-    const groups = await Promise.all(groupsData.map(async (obj) => {
+    let spontaneousAlertsSnapshots = (await Promise.all(queries)).map(q => q.docs).flat();
+
+    const alerts = await Promise.all(spontaneousAlertsSnapshots.map(async (obj) => {
         const data = obj.data();
-
-        const points = await Promise.all(data.points.map(async (pointRef) => {
-            const data = (await pointRef.get()).data();
-            const alerts = data.alerts.map((alertRef) => alertRef.id);
-    
-            return {
-                ...data,
-                alerts,
-                id: obj.id
-            }
-        }));
 
         return {
             ...data,
-            points,
+            id: obj.id
         }
     }))
 
-    const points = pointsData.map((obj) => {
-        const data = obj.data();
-        const alerts = data.alerts.map((alertRef) => alertRef.id);
-    
-        return {
-            ...data,
-            alerts,
-            id: obj.id
-        }
-    });
-  
     res.json({
-        points,
-        groups,
+        data: alerts,
     })
 })
 
