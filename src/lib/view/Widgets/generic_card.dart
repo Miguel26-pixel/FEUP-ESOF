@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uni/model/entities/time_utilities.dart';
 
@@ -100,11 +99,11 @@ class GenericCardState extends State<GenericCard> {
                             margin: EdgeInsets.only(top: 8),
                           ),
                           Flexible(
-                            child: Container(
-                              child: this.getDeleteIcon(context),
-                              alignment: Alignment.centerRight,
-                              height: 32,
-                            )),
+                              child: Container(
+                            child: this.getDeleteIcon(context),
+                            alignment: Alignment.centerRight,
+                            height: 32,
+                          )),
                         ].where((e) => e != null).toList(),
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       ),
@@ -136,11 +135,8 @@ class GenericCardState extends State<GenericCard> {
 
   Widget getMoveIcon(context) {
     return (widget.editingMode != null && widget.editingMode)
-        ? Icon(
-          Icons.drag_handle_rounded,
-          color: Colors.grey.shade500,
-          size: 22.0
-        )
-        : null; 
+        ? Icon(Icons.drag_handle_rounded,
+            color: Colors.grey.shade500, size: 22.0)
+        : null;
   }
 }

@@ -5,7 +5,6 @@ import 'package:uni/view/Widgets/form_text_field.dart';
 import 'package:uni/view/Widgets/toast_message.dart';
 import 'package:email_validator/email_validator.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:tuple/tuple.dart';
@@ -122,7 +121,7 @@ class BugReportFormState extends State<BugReportForm> {
         child: Row(
           children: <Widget>[
             Icon(Icons.bug_report,
-                color: Theme.of(context).accentColor, size: 50.0),
+                color: Theme.of(context).colorScheme.secondary, size: 50.0),
             Expanded(
                 child: Text(
               'Bugs e Sugestões',
@@ -130,7 +129,7 @@ class BugReportFormState extends State<BugReportForm> {
               textAlign: TextAlign.center,
             )),
             Icon(Icons.bug_report,
-                color: Theme.of(context).accentColor, size: 50.0),
+                color: Theme.of(context).colorScheme.secondary, size: 50.0),
           ],
         ));
   }
@@ -169,7 +168,7 @@ class BugReportFormState extends State<BugReportForm> {
                 margin: EdgeInsets.only(right: 15),
                 child: Icon(
                   Icons.bug_report,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                 )),
             Expanded(
                 child: DropdownButton(

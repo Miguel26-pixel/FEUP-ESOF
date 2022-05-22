@@ -1,5 +1,4 @@
 import 'package:uni/model/entities/trip.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uni/view/Widgets/trip_row.dart';
 
@@ -61,7 +60,7 @@ class BusStopRow extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .headline4
-                .apply(color: Theme.of(context).accentColor)),
+                .apply(color: Theme.of(context).colorScheme.secondary)),
         quarterTurns: 3,
       ),
     );
@@ -75,7 +74,7 @@ class BusStopRow extends StatelessWidget {
           padding: EdgeInsets.all(12.0), child: TripRow(trip: trips[0])));
     } else {
       for (int i = 0; i < trips.length; i++) {
-        Color color = Theme.of(context).accentColor;
+        Color color = Theme.of(context).colorScheme.secondary;
         if (i == trips.length - 1) color = Colors.transparent;
 
         tripRows.add(Container(

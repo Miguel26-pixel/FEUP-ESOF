@@ -70,7 +70,7 @@ class _LoginPageViewState extends State<LoginPageView> {
     final MediaQueryData queryData = MediaQuery.of(context);
 
     return Scaffold(
-        backgroundColor: Theme.of(context).accentColor,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         body: WillPopScope(
             child: Padding(
                 padding: EdgeInsets.only(
@@ -174,7 +174,7 @@ class _LoginPageViewState extends State<LoginPageView> {
         });
       },
       isExpanded: true,
-      dropdownColor: Theme.of(context).accentColor,
+      dropdownColor: Theme.of(context).colorScheme.secondary,
       iconDisabledColor: Theme.of(context).primaryColor,
       iconEnabledColor: Theme.of(context).primaryColor,
       style: TextStyle(color: Colors.white, fontSize: 20),
@@ -260,7 +260,7 @@ class _LoginPageViewState extends State<LoginPageView> {
           },
           child: Text('Entrar',
               style: TextStyle(
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                   fontWeight: FontWeight.w400,
                   fontSize: 20),
               textAlign: TextAlign.center),

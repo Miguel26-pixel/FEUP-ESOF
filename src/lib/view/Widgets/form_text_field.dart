@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FormTextField extends StatelessWidget {
@@ -45,7 +44,7 @@ class FormTextField extends StatelessWidget {
                 margin: EdgeInsets.only(right: 15),
                 child: Icon(
                   icon,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                 )),
             Expanded(
                 child: TextFormField(
@@ -54,7 +53,8 @@ class FormTextField extends StatelessWidget {
               maxLines: maxLines,
               decoration: InputDecoration(
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Theme.of(context).accentColor),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.secondary),
                 ),
                 hintText: hintText,
                 hintStyle: Theme.of(context).textTheme.bodyText2,
