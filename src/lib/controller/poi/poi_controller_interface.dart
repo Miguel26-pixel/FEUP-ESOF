@@ -9,5 +9,5 @@ abstract class PointOfInterestControllerInterface {
   Future<bool> createPOI(String name, LatLng pos, int floor,
   PointOfInterestType type);
   Future<List<int>> getFloorLimits();
-  List<PointOfInterestType> getTypesPOI();
+  Future<List<PointOfInterestType>> getTypesPOI();
 }

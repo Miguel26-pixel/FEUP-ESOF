@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:uni/model/entities/live/poi_type.dart';
 import 'package:uni/view/Pages/general_page_view.dart';
@@ -27,7 +28,8 @@ class _CreatePOIPageState extends GeneralPageViewState {
   _CreatePOIPageState(){
     getFloorLimit();
     print("herea aa");
-    print(floorLimits.first);
+    getPOITypes();
+    print(poiTypes.length);
 
   }
 
@@ -38,6 +40,8 @@ class _CreatePOIPageState extends GeneralPageViewState {
   TextEditingController longitudeController = TextEditingController();
   TextEditingController floorController = TextEditingController();
 
+  List<bool> isSelected = [];
+  List<PointOfInterestType> poiTypes = [];
   List<int> floorLimits = [0,9];
   int currvalue = 0;
 
@@ -54,25 +58,26 @@ class _CreatePOIPageState extends GeneralPageViewState {
             borderSide: BorderSide(color: Colors.white, width: 3)));
   }
 
-  int getMinFloor(){
-    int minFloor;
-    MockPointOfInterestController().getFloorLimits().then((response){
-      print("MIN FLOOR");
-      print(response.first );
-      minFloor = response.first;
-      return 0;
-    });
-
-    return 0;
-
-  }
-
   void getFloorLimit() {
     MockPointOfInterestController().getFloorLimits().then((response){
       print("HERE");
       print(response.first);
       floorLimits = [... response];
       print(floorLimits.first);
+    }
+    );
+  }
+  void getPOITypes() {
+    MockPointOfInterestController().getTypesPOI().then((response){
+
+      isSelected = List<bool>.generate(response.length, (index) => false);
+      print(isSelected.length);
+      poiTypes = [... response];
+      print("SIZE OF POITUPE");
+      print(poiTypes.length);
+      if (poiTypes.first.getIcon() != null){
+        print("YES ICON");
+      }
     }
     );
   }
@@ -125,7 +130,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
       Align(
         alignment: Alignment.center,
         child: Column(
-          children: <Widget>[getTitle(" Select Floor:", Icon(
+          children: <Widget>[getTitle("Select Floor:", Icon(
           Icons.elevator_rounded ,
           color: Theme.of(context).accentColor,
         )),
@@ -138,14 +143,112 @@ class _CreatePOIPageState extends GeneralPageViewState {
             ),
           ],
         )
-      );/*TextField(
-      decoration: InputDecoration(
-        labelText: 'name',
-        hintText: 'Name',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-      ),
-      controller: floorController,
-  );*/
+      );
+
+  List<Widget> getTypesPoiWidgets(){
+    final List<Widget> widgets= [];
+
+    print('in poi widget');
+
+    print(poiTypes.length);
+
+    poiTypes.forEach((type) {
+      print('add widget');
+      widgets.add(
+          Column(
+            children: [
+              Icon(
+                  type.getIcon()
+              ),
+              Text(type.getName())
+            ],
+          ));
+
+      print("here");
+      /*print("there is a poi");
+      if ( type.getIcon() != null){
+        print("there is icon ");
+      }
+      if (num < 3) {
+        row.add(Icon(
+            type.getIcon()
+        ));
+      }
+      else{
+        widgets.add(Row(
+          children: row,
+        ));
+
+        row = [];
+        row.add(Icon(
+            type.getIcon()
+        ));
+        num = 1;
+      }
+      num++;*/
+    });
+
+   /* if (widgets.isEmpty){
+      throw Exception("NO types of points of interest");
+    }*/
+    print("sizes");
+    print(isSelected.length);
+    print(poiTypes.length);
+    return widgets;
+  }
+
+  Widget getTypesPOI(){
+
+    /*return GridView.count(
+        crossAxisCount: 2,
+        children: getTypesPoiWidgets().map((widget) {
+          final index = ++counter - 1;
+
+          return ToggleButtons(
+            selectedColor: Colors.red,
+            isSelected: [isSelected[index]],
+              onPressed: (int index) {
+                setState(() {
+                  for (int buttonIndex = 0; buttonIndex <
+                      isSelected.length; buttonIndex++) {
+                    if (buttonIndex == index) {
+                      print("SLECTED ");
+                      print(buttonIndex);
+
+                      isSelected[buttonIndex] = true;
+                    } else {
+                      isSelected[buttonIndex] = false;
+                    }
+                  }
+                });
+                },
+            children: [widget],
+          );
+        }).toList());*/
+      return ToggleButtons(
+      children: getTypesPoiWidgets(),
+      onPressed: (int index) {
+        setState(() {
+          for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
+            if (buttonIndex == index) {
+              print("SLECTED ");
+              print(buttonIndex);
+
+              isSelected[buttonIndex] = true;
+
+            } else {
+              isSelected[buttonIndex] = false;
+            }
+          }
+        });
+      },
+      selectedColor: Theme.of(context).accentColor,
+      fillColor: Colors.white60,
+      renderBorder: false,
+      isSelected: isSelected,
+    );
+  }
+
 
   Widget getForm(){
     return Form(
@@ -154,36 +257,47 @@ class _CreatePOIPageState extends GeneralPageViewState {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          getTitle("Select Point's name: ", Icon(
+          getTitle("Select name: ", Icon(
             Icons.add_business_rounded,
             color: Theme.of(context).accentColor,
           )),
           getPOIName(),
-          getTitle("Select Point's latitude:",Icon(
+          getTitle("Select latitude:",Icon(
             Icons.add_location,
             color: Theme.of(context).accentColor,
           )),
           getPOILatitude(),
-          getTitle("Select Point's longitude:",Icon(
+          getTitle("Select longitude:",Icon(
             Icons.add_location,
             color: Theme.of(context).accentColor,
           )),
           getPOILongitude(),
           getPOIFloor(),
+          getTitle("Select type:", Icon(
+            Icons.add_location,
+            color: Theme.of(context).accentColor,
+          )),
+          getTypesPOI(),
 
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0,
                 horizontal:  15),
             child: ElevatedButton(
               onPressed: () {
-                final PointOfInterestType poi =
-                MockPointOfInterestController().getTypesPOI()[0];
-                print('here');
-                print(nameController.text);
+                print("here");
 
+
+                int index = isSelected.indexOf(true);
+                PointOfInterestType poi = poiTypes[index];
+                print('type');
+                print(index);
+                print('name');
+                print(nameController.text);
+                print('floor');
                 final double latitude = double.parse(latitudeController.text);
                 final double longitude = double.parse(longitudeController.text);
-                final int floor = int.parse(floorController.text);
+                final int floor = currvalue;
+                print(floor);
 
                 final createPOI = MockPointOfInterestController().createPOI(
                     nameController.text, LatLng(latitude, longitude),floor, poi);
@@ -192,6 +306,12 @@ class _CreatePOIPageState extends GeneralPageViewState {
                   if (response){
                     print('added poi');
                   }
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+
+                  Navigator.pushNamed(context, '/' + Constants.navLive);
+
+
                 });
               },
               child: const Text('Create Point of interest'),
