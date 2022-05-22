@@ -12,6 +12,7 @@ const DEFAULT_POSITION = {
 }
 const ALERT_TIME_REDUCE_SECONDS = 120;
 const ALERT_ADD_TIME_REDUCE_SECONDS = 60;
+const SPONTANEOUS_LIFETIME = 300;
 
 
 const app = express();
@@ -113,11 +114,17 @@ app.post("/alerts/:id/reject", async (req, res) => {
         return res.status(401).json({error: "Not found"});
     }
 
+    const newTimestamp = new Date(currentFinish - ALERT_TIME_REDUCE_SECONDS * 1000);
+
     await alertSnapshot.ref.update({
-        "finish-time": firestore.Timestamp.fromDate(new Date(currentFinish - ALERT_TIME_REDUCE_SECONDS * 1000)),
+        "finish-time": firestore.Timestamp.fromDate(newTimestamp),
     });
 
-    return res.json("");
+    const deleted = newTimestamp < Date.now();
+
+    return res.json({
+        deleted,
+    });
 });
 
 app.post("/alerts/:id/accept", async (req, res) => {
@@ -213,6 +220,29 @@ app.get("/alerts/spontaneous", async (req, res) => {
     })
 })
 
+app.post("/alerts/spontaneous/new", async (req, res) => {
+    const {
+        floor,
+        message,
+        location,
+    } = req.body;
+    
+    if (!message || floor === null || !location?.latitude || !location?.longitude) {
+        return res.status(401).json({error: "Invalid arguments"});
+    }
+
+    await spontaneousCollection.add({
+        message,
+        floor,
+        position: new firestore.GeoPoint(location.latitude, location.longitude),
+        geohash: geofire.geohashForLocation([location.latitude, location.longitude]),
+        "start-time": firestore.Timestamp.fromDate(new Date(Date.now())),
+        "finish-time": firestore.Timestamp.fromDate(new Date(Date.now() + SPONTANEOUS_LIFETIME * 1000)),
+    });
+
+    res.json("");
+})
+
 app.post("/alerts/spontaneous/:id/reject", async (req, res) => {
     const alertSnapshot = await spontaneousCollection.doc(req.params.id).get();
     
@@ -228,11 +258,17 @@ app.post("/alerts/spontaneous/:id/reject", async (req, res) => {
         return res.status(401).json({error: "Not found"});
     }
 
+    const newTimestamp = new Date(currentFinish - ALERT_TIME_REDUCE_SECONDS * 1000);
+
     await alertSnapshot.ref.update({
-        "finish-time": firestore.Timestamp.fromDate(new Date(currentFinish - ALERT_TIME_REDUCE_SECONDS * 1000)),
+        "finish-time": firestore.Timestamp.fromDate(newTimestamp),
     });
 
-    return res.json("");
+    const deleted = newTimestamp < Date.now();
+
+    return res.json({
+        deleted,
+    });
 });
 
 app.post("/alerts/spontaneous/:id/accept", async (req, res) => {
