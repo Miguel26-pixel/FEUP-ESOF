@@ -12,6 +12,7 @@ const DEFAULT_POSITION = {
     longitude: -8.595922,
 }
 const GROUP_MAX_DIST = 0.02; // KILOMETERS
+const FLOOR_LIMITS = [-1, 4];
 
 const app = express();
 app.use(express.json());
@@ -104,6 +105,12 @@ app.get("/points", async (req, res) => {
     res.json({
         points,
         groups,
+    })
+})
+
+app.get("/points/limits", async (req, res) => {
+    return res.json({
+        data: FLOOR_LIMITS
     })
 })
 
