@@ -182,22 +182,22 @@ app.get("/alerts/spontaneous", async (req, res) => {
         locationRaw.longitude,
     ], RADIUS_METERS);
 
-    const queries = [];
+    const spontaneousAlertsSnapshots  = [];
+
+    const currentDate = firestore.Timestamp.fromDate(new Date());
 
     for (const bound of bounds) {
-        const query = spontaneousCollection
+        const docs = (await spontaneousCollection
             .where("geohash", "!=", null)
             .orderBy("geohash")
-            .where("floor", "=", floor)
             .startAt(bound[0])
             .endAt(bound[1])
-            .get();
-
-        queries.push(query);
+            .get()).docs;
+        const res = 
+            docs.filter(doc => ((d) => d.floor === floor && d["finish-time"] > currentDate)(doc.data()));
+        spontaneousAlertsSnapshots.push(...res);
     }
 
-
-    let spontaneousAlertsSnapshots = (await Promise.all(queries)).map(q => q.docs).flat();
 
     const alerts = await Promise.all(spontaneousAlertsSnapshots.map(async (obj) => {
         const data = obj.data();
@@ -212,6 +212,50 @@ app.get("/alerts/spontaneous", async (req, res) => {
         data: alerts,
     })
 })
+
+app.post("/alerts/spontaneous/:id/reject", async (req, res) => {
+    const alertSnapshot = await spontaneousCollection.doc(req.params.id).get();
+    
+    if (!alertSnapshot.exists) {
+        return res.status(401).json({error: "Not found"})
+    }
+
+    const alert = alertSnapshot.data();
+    
+    const currentFinish = alert["finish-time"].toDate();
+
+    if (currentFinish < Date.now()) {
+        return res.status(401).json({error: "Not found"});
+    }
+
+    await alertSnapshot.ref.update({
+        "finish-time": firestore.Timestamp.fromDate(new Date(currentFinish - ALERT_TIME_REDUCE_SECONDS * 1000)),
+    });
+
+    return res.json("");
+});
+
+app.post("/alerts/spontaneous/:id/accept", async (req, res) => {
+    const alertSnapshot = await spontaneousCollection.doc(req.params.id).get();
+    
+    if (!alertSnapshot.exists) {
+        return res.status(401).json({error: "Not found"})
+    }
+
+    const alert = alertSnapshot.data();
+    
+    const currentFinish = alert["finish-time"].toDate();
+
+    if (currentFinish < Date.now()) {
+        return res.status(401).json({error: "Not found"});
+    }
+
+    await alertSnapshot.ref.update({
+        "finish-time": firestore.Timestamp.fromDate(new Date(currentFinish + ALERT_ADD_TIME_REDUCE_SECONDS * 1000)),
+    });
+
+    return res.json("");
+});
 
 exports.widgets = functions.https.onRequest(app);
 
