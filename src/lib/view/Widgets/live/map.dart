@@ -8,6 +8,7 @@ import 'package:uni/controller/current_location.dart';
 import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
+import 'package:uni/view/Widgets/form_text_field.dart';
 import 'package:uni/view/Widgets/live/create_spontaneous_alert.dart';
 import 'package:uni/view/Widgets/live/poi.dart';
 import 'package:uni/view/Widgets/live/alert_poi_marker.dart';
@@ -270,22 +271,25 @@ class _MapState extends State<Map> {
           onPressed: () => showModalBottomSheet(
             context: context,
             backgroundColor: Colors.transparent,
-            enableDrag: false,
+            isScrollControlled: true,
             builder: (context) => CreateSpontaneousAlert(),
           ),
         ),
       ),
     );
 
-    return _floorsLoaded
-        ? Stack(
-            alignment: Alignment.topRight,
-            children: [
-              mapComponent,
-              mapButtons,
-              spontaneousCreateButton,
-            ],
-          )
-        : const CircularProgressIndicator();
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: _floorsLoaded
+          ? Stack(
+              alignment: Alignment.topRight,
+              children: [
+                mapComponent,
+                mapButtons,
+                spontaneousCreateButton,
+              ],
+            )
+          : const CircularProgressIndicator(),
+    );
   }
 }
