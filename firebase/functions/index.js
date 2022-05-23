@@ -3,10 +3,7 @@ const admin = require("firebase-admin");
 const express = require('express');
 const {seed} = require("./mock");
 const geofire = require("geofire-common");
-<<<<<<< HEAD
-=======
 const { parsePoint } = require("./utils");
->>>>>>> main
 const { firestore } = require("firebase-admin");
 
 const RADIUS_METERS = 1000;
@@ -14,15 +11,12 @@ const DEFAULT_POSITION = {
     latitude: 41.177787,
     longitude: -8.595922,
 }
-<<<<<<< HEAD
 const ALERT_TIME_REDUCE_SECONDS = 120;
 const ALERT_ADD_TIME_REDUCE_SECONDS = 60;
 const SPONTANEOUS_LIFETIME = 300;
 
-=======
 const GROUP_MAX_DIST = 0.02; // KILOMETERS
 const FLOOR_LIMITS = [-1, 4];
->>>>>>> main
 
 const app = express();
 app.use(express.json());
@@ -37,11 +31,7 @@ const spontaneousCollection = db.collection("spontaneous");
 const groupsCollection = db.collection("groups");
 
 // seed(
-<<<<<<< HEAD
-//     admin.firestore, 
-=======
 //     db, 
->>>>>>> main
 //     pointsCollection, 
 //     alertsCollection, 
 //     alertTypeCollection, 
@@ -225,7 +215,6 @@ app.post("/points/new", async (req, res) => {
 });
 
 app.get("/point/:id/alerts", async (req, res) => {
-<<<<<<< HEAD
     const pointRef = pointsCollection.doc(req.params.id);
     const pointSnapshot = await pointRef.get();
     if (!pointSnapshot.exists) {
@@ -251,15 +240,6 @@ app.get("/point/:id/alerts", async (req, res) => {
         const type = {
             ...(await alert.type.get()).data(),
             id: alert.type.id
-=======
-    const point = (await pointsCollection.doc(req.params.id).get()).data();
-    const alerts = await Promise.all(point.alerts.map(async (alertRef) => {
-        const alert = (await alertRef.get()).data();
-        const type = (await alert.type.get()).data();
-        return {
-            ...alert,
-            type,
->>>>>>> main
         };
         result.push({
             ...alert,
