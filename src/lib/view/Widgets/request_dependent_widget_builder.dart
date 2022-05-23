@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:uni/controller/local_storage/app_last_user_info_update_database.dart';
 import 'package:uni/model/app_state.dart';
 
 class RequestDependentWidgetBuilder extends StatelessWidget {
-  const RequestDependentWidgetBuilder({
-    Key key,
-    @required this.context,
-    @required this.status,
-    @required this.contentGenerator,
-    @required this.content,
-    @required this.contentChecker,
-    @required this.onNullContent,
-    this.index
-  }) : super(key: key);
+  const RequestDependentWidgetBuilder(
+      {Key key,
+      @required this.context,
+      @required this.status,
+      @required this.contentGenerator,
+      @required this.content,
+      @required this.contentChecker,
+      @required this.onNullContent,
+      this.index})
+      : super(key: key);
 
   final BuildContext context;
   final RequestStatus status;

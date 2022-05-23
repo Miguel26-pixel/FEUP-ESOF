@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
@@ -46,13 +48,15 @@ class CurrentLocationController {
     return parseLocation(data);
   }
 
-  void subscribeLocationUpdate(Function(LatLng) callback) async {
+  Future<StreamSubscription<LocationData>> subscribeLocationUpdate(
+      Function(LatLng) callback) async {
     final bool authorized = await verifySetup();
 
     if (!authorized) {
-      return;
+      return null;
     }
 
-    location.onLocationChanged.listen((data) => callback(parseLocation(data)));
+    return location.onLocationChanged
+        .listen((data) => callback(parseLocation(data)));
   }
 }

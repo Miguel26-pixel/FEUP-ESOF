@@ -41,7 +41,8 @@ SentryEvent beforeSend(SentryEvent event) {
 
 Future<void> main() async {
   OnStartUp.onStart(state);
-    runApp(MyApp());
+
+  runApp(MyApp());
 }
 
 /// Manages the state of the app

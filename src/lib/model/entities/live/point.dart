@@ -10,23 +10,28 @@ class PointOfInterest {
   final PointOfInterestType _type;
   final List<Alert> _alerts = [];
 
-  PointOfInterest(this._name, this._position, this._floor, this._type);
+  PointOfInterest(this._id,this._name, this._position, this._floor, this._type);
+  final List<String> _alertIds = [];
+  final String _id;
 
-  List<Alert> getAlerts() {
-    return _alerts;
+  List<String> getAlertIds() {
+    return _alertIds;
   }
 
   bool addAlert(Alert alert) {
-    if ( _type.checkValidAlert(alert.getType())){
+    if (_type.checkValidAlert(alert.getAlertType())) {
       _alerts.add(alert);
       return true;
     }
     return false;
-    
   }
 
   String getName() {
     return _name;
+  }
+
+  String getId() {
+    return _id;
   }
 
   LatLng getPosition() {
@@ -35,5 +40,9 @@ class PointOfInterest {
 
   int getFloor() {
     return _floor;
+  }
+
+  PointOfInterestType getType(){
+    return _type;
   }
 }

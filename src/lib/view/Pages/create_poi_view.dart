@@ -26,7 +26,7 @@ class CreatePOIPage extends StatefulWidget {
 
 
 class _CreatePOIPageState extends GeneralPageViewState {
-  
+
   _CreatePOIPageState(){
 
   }
@@ -74,21 +74,21 @@ class _CreatePOIPageState extends GeneralPageViewState {
   }
 
 
-  
+
   Widget getTitle(String text, Icon icon){
     return Padding(padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
-    child:  Row(
-      children: [
-        icon,
-        Padding(padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
-        child: Text(text,
-            style: TextStyle(
-                fontSize: 18.0,
-                color: Theme.of(context).accentColor,
-                fontWeight: FontWeight.normal))
+        child:  Row(
+          children: [
+            icon,
+            Padding(padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                child: Text(text,
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        color: Theme.of(context).accentColor,
+                        fontWeight: FontWeight.normal))
+            )
+          ],
         )
-      ],
-    )
     );
   }
 
@@ -106,43 +106,43 @@ class _CreatePOIPageState extends GeneralPageViewState {
       return null;
     },
 
-      controller: nameController,
+    controller: nameController,
   );
 
   Widget getPOILatitude() => TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Latitude',
-        hintText: 'Latitude',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-      ),
+    decoration: InputDecoration(
+      labelText: 'Latitude',
+      hintText: 'Latitude',
+      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+    ),
     validator: (value) {
-        final double lat = double.tryParse(value);
+      final double lat = double.tryParse(value);
       if (lat == null || value.isEmpty || lat <= -90 || lat >= 90 ) {
         latitudeController.clear();
         return 'Invalid input, please enter a number between -90 and 90';
       }
       return null;
     },
-      controller: latitudeController,
+    controller: latitudeController,
   );
-  
+
   Widget getPOILongitude() => TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Longitude',
-        hintText: 'Longitude',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-      ),
-      controller: longitudeController,
-      validator: (value) {
-        final double long = double.tryParse(value);
-        if (long == null || value.isEmpty || long <= -90 || long >= 90 ) {
-          longitudeController.clear();
-          return 'Invalid input, please enter a number between -90 and 90';
-        }
+    decoration: InputDecoration(
+      labelText: 'Longitude',
+      hintText: 'Longitude',
+      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+    ),
+    controller: longitudeController,
+    validator: (value) {
+      final double long = double.tryParse(value);
+      if (long == null || value.isEmpty || long <= -90 || long >= 90 ) {
+        longitudeController.clear();
+        return 'Invalid input, please enter a number between -90 and 90';
+      }
       return null;
     },
   );
-  
+
   Widget getPOIFloor(){
     return Align(
         alignment: Alignment.center,
@@ -232,33 +232,33 @@ class _CreatePOIPageState extends GeneralPageViewState {
 
   Widget getForm(){
     return Form(
-      key: _formKey,
-      child: Column(
+        key: _formKey,
+        child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-            getTitle('Select name: ', Icon(
-          Icons.add_business_rounded,
-          color: Theme.of(context).accentColor,
-        )),
-        getPOIName(),
-        getTitle('Select latitude:', Icon(
-          Icons.add_location,
-          color: Theme.of(context).accentColor,
-        )),
-        getPOILatitude(),
-        getTitle('Select longitude:',Icon(
-          Icons.add_location,
-          color: Theme.of(context).accentColor,
-        )),
-        getPOILongitude(),
-        getPOIFloor(),
-        getTitle('Select type:', Icon(
-          Icons.add_location,
-          color: Theme.of(context).accentColor,
-        )),
-    ]
-    )
+              getTitle('Select name: ', Icon(
+                Icons.add_business_rounded,
+                color: Theme.of(context).accentColor,
+              )),
+              getPOIName(),
+              getTitle('Select latitude:', Icon(
+                Icons.add_location,
+                color: Theme.of(context).accentColor,
+              )),
+              getPOILatitude(),
+              getTitle('Select longitude:',Icon(
+                Icons.add_location,
+                color: Theme.of(context).accentColor,
+              )),
+              getPOILongitude(),
+              getPOIFloor(),
+              getTitle('Select type:', Icon(
+                Icons.add_location,
+                color: Theme.of(context).accentColor,
+              )),
+            ]
+        )
     );
   }
 
@@ -285,38 +285,38 @@ class _CreatePOIPageState extends GeneralPageViewState {
   Widget getButton(){
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20,
-          horizontal:  100),
-      child: Hero(
-        tag: 'btn1',
-        child: ElevatedButton(
-          onPressed: () {
+        padding: const EdgeInsets.symmetric(vertical: 20,
+            horizontal:  100),
+        child: Hero(
+          tag: 'btn1',
+          child: ElevatedButton(
+            onPressed: () {
 
-            submit().then((response) {
-              if (response){
-                Navigator.pushNamed(context, '/' + Constants.navLive);
-              }
-              else{
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Error. Please try again.')),
-                );
-                latitudeController.clear();
-                longitudeController.clear();
-                nameController.clear();
+              submit().then((response) {
+                if (response){
+                  Navigator.pushNamed(context, '/' + Constants.navLive);
+                }
+                else{
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Error. Please try again.')),
+                  );
+                  latitudeController.clear();
+                  longitudeController.clear();
+                  nameController.clear();
 
-              }
+                }
 
-            });
-            if(!mounted) return ;
+              });
+              if(!mounted) return ;
 
-          },
-          child: const Text('Create Point of interest'),
-        ),
-      )
+            },
+            child: const Text('Create Point of interest'),
+          ),
+        )
     );
   }
 
-  
+
   @override
   Widget getBody(BuildContext context) {
 
@@ -325,17 +325,17 @@ class _CreatePOIPageState extends GeneralPageViewState {
 
 
     return  Container(
-      child:  Align(
-        alignment: AlignmentDirectional.center,
-          child: ListView(
-            children: [
-              PageTitle(name: Constants.navCreatePoi),
-              getForm(),
-              getTypesPOI(),
-              getButton(),
-            ],
-          )
-      )
+        child:  Align(
+            alignment: AlignmentDirectional.center,
+            child: ListView(
+              children: [
+                PageTitle(name: Constants.navCreatePoi),
+                getForm(),
+                getTypesPOI(),
+                getButton(),
+              ],
+            )
+        )
     );
   }
 }

@@ -29,3 +29,4 @@ const faculties = [
   'fpceup',
   'icbas'
 ];
+

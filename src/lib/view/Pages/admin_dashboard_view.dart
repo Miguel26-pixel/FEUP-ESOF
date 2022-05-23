@@ -5,7 +5,6 @@ import 'package:uni/view/Widgets/page_title.dart';
 
 
 class AdminDashboardPage extends StatefulWidget {
-
   AdminDashboardPage(){}
 
   @override
