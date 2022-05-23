@@ -53,11 +53,11 @@ class MockPointOfInterestController
 
       _poiTypes = [
         PointOfInterestType('Food', _alertTypes,Icons.restaurant),
-        PointOfInterestType('Study', [_alertTypes[0], _alertTypes[1]], Icons.library_books_rounded),
+        PointOfInterestType('Study', [_alertTypes[0], _alertTypes[1]], Icons.school_rounded),
         PointOfInterestType('Vending', [_alertTypes[1], _alertTypes[3]], Icons.local_convenience_store_rounded),
         PointOfInterestType('Parking', [_alertTypes[1]],Icons.local_parking_rounded),
         PointOfInterestType('Printing', [_alertTypes[1], _alertTypes[3]], Icons.local_print_shop_rounded),
-        PointOfInterestType('Material', [_alertTypes[1], _alertTypes[3]], Icons.school_rounded),
+        PointOfInterestType('Material', [_alertTypes[1], _alertTypes[3]], Icons.library_books_rounded),
         PointOfInterestType('Other', _alertTypes,  Icons.devices_other_rounded)];
 
       final Alert alert1 = Alert( '1',

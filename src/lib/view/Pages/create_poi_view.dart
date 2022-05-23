@@ -84,7 +84,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
                 child: Text(text,
                     style: TextStyle(
                         fontSize: 18.0,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).toggleableActiveColor,
                         fontWeight: FontWeight.normal))
             )
           ],
@@ -149,15 +149,20 @@ class _CreatePOIPageState extends GeneralPageViewState {
         child: Column(
           children: <Widget>[getTitle('Select Floor:', Icon(
             Icons.elevator_rounded ,
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).toggleableActiveColor,
           )),
-            NumberPicker(
-              value: floor,
-              minValue: floorLimits.first,
-              maxValue: floorLimits.last,
-              axis: Axis.horizontal,
-              onChanged: (value) => setState(() => floor = value),
-            ),
+        Theme(
+          data: Theme.of(context).copyWith(
+            accentColor: Theme.of(context).toggleableActiveColor,
+          ),
+          child:  NumberPicker(
+            value: floor,
+            minValue: floorLimits.first,
+            maxValue: floorLimits.last,
+            axis: Axis.horizontal,
+            onChanged: (value) => setState(() => floor = value),
+          ),
+        )
           ],
         )
     );
@@ -182,7 +187,6 @@ class _CreatePOIPageState extends GeneralPageViewState {
             children: [
               Icon(
                 poiTypes[i].getIcon(),
-                //color: setWidgetColor(i),
                 size: 40,
               ),
               Expanded(child: getPOITypeTitle(i)),
@@ -205,7 +209,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
 
     return GridView.count(
         primary: false,
-        padding: EdgeInsets.fromLTRB(60, 30, 40, 0),
+        padding: EdgeInsets.fromLTRB(70, 30, 25, 0),
         shrinkWrap: true,
         crossAxisSpacing: 5,
         mainAxisSpacing: 5,
@@ -222,7 +226,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
                 renderBorder: false,
                 children: [widget],
                 isSelected: [ isSelected == index],
-                selectedColor: Theme.of(context).accentColor,
+                selectedColor: Theme.of(context).toggleableActiveColor,
 
               )
           );
@@ -239,23 +243,23 @@ class _CreatePOIPageState extends GeneralPageViewState {
             children: [
               getTitle('Select name: ', Icon(
                 Icons.add_business_rounded,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).toggleableActiveColor,
               )),
               getPOIName(),
               getTitle('Select latitude:', Icon(
                 Icons.add_location,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).toggleableActiveColor,
               )),
               getPOILatitude(),
               getTitle('Select longitude:',Icon(
                 Icons.add_location,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).toggleableActiveColor,
               )),
               getPOILongitude(),
               getPOIFloor(),
               getTitle('Select type:', Icon(
                 Icons.add_location,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).toggleableActiveColor,
               )),
             ]
         )
