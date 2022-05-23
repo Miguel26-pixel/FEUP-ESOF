@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uni/view/Widgets/rounded_bottom_modal.dart';
+import 'package:uni/view/Widgets/live/rounded_bottom_modal.dart';
 
 class TitledBottomModal extends StatelessWidget {
   final Widget _header;

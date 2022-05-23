@@ -6,8 +6,8 @@ import 'package:location/location.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/controller/current_location.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
-import 'package:uni/view/Widgets/rounded_bottom_modal.dart';
-import 'package:uni/view/Widgets/validation_buttons.dart';
+import 'package:uni/view/Widgets/live/rounded_bottom_modal.dart';
+import 'package:uni/view/Widgets/live/validation_buttons.dart';
 
 class SpontaneousAlertPage extends StatefulWidget {
   final SpontaneousAlert _spontaneousAlert;

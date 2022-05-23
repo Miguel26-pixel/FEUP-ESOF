@@ -8,9 +8,12 @@ import 'package:uni/controller/current_location.dart';
 import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
-import 'package:uni/view/Widgets/poi.dart';
-import 'package:uni/view/Widgets/alert_poi_marker.dart';
-import 'package:uni/view/Widgets/spontaneous_alert.dart';
+import 'package:uni/view/Widgets/live/create_spontaneous_alert.dart';
+import 'package:uni/view/Widgets/live/poi.dart';
+import 'package:uni/view/Widgets/live/alert_poi_marker.dart';
+import 'package:uni/view/Widgets/live/spontaneous_alert.dart';
+
+import 'alert_poi_marker.dart';
 
 class Map extends StatefulWidget {
   const Map({Key key}) : super(key: key);
@@ -264,7 +267,12 @@ class _MapState extends State<Map> {
         margin: EdgeInsets.only(bottom: 20, right: 20),
         child: FloatingActionButton(
           child: Icon(Icons.add),
-          onPressed: () => {},
+          onPressed: () => showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            enableDrag: false,
+            builder: (context) => CreateSpontaneousAlert(),
+          ),
         ),
       ),
     );
