@@ -35,7 +35,7 @@ class MockPointOfInterestController
     PointOfInterestType('Vending', [alertTypes[1], alertTypes[3]], Icons.local_convenience_store_rounded),
     PointOfInterestType('Parking', [alertTypes[1]],Icons.local_parking_rounded),
     PointOfInterestType('Printing', [alertTypes[1], alertTypes[3]], Icons.local_print_shop_rounded),
-    PointOfInterestType('Study material', [alertTypes[1], alertTypes[3]], Icons.school_rounded),
+    PointOfInterestType('Material', [alertTypes[1], alertTypes[3]], Icons.school_rounded),
     PointOfInterestType('Other', alertTypes,  Icons.devices_other_rounded),];
 
 

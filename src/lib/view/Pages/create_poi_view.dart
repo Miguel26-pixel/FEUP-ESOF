@@ -162,7 +162,13 @@ class _CreatePOIPageState extends GeneralPageViewState {
 
   }
 
-
+  Text getPOITypeTitle(int i){
+    return Text(
+      poiTypes[i].getName(),
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis, // and this
+    );
+  }
 
   List<Widget> getTypesPoiWidgets(){
     final List<Widget> widgets= [];
@@ -180,11 +186,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
                 //color: setWidgetColor(i),
                 size: 40,
               ),
-              Expanded(child: Text(
-                poiTypes[i].getName(),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis, // and this
-              )),
+              Expanded(child: getPOITypeTitle(i)),
             ],
           ));
     }
@@ -196,11 +198,11 @@ class _CreatePOIPageState extends GeneralPageViewState {
   }
 
   void onControlPress(int index){
+    print(index);
 
     setState(() {
       isSelected = index;
       print(index);
-
     });
   }
 
@@ -209,7 +211,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
 
     return GridView.count(
         primary: false,
-        padding: EdgeInsets.fromLTRB(40, 30, 40, 0),
+        padding: EdgeInsets.fromLTRB(60, 30, 40, 0),
         shrinkWrap: true,
         crossAxisSpacing: 5,
         mainAxisSpacing: 5,
@@ -227,9 +229,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
                 renderBorder: false,
                 children: [widget],
                 isSelected: [ isSelected == index],
-                selectedColor: Theme
-                    .of(context)
-                    .accentColor,
+                selectedColor: Theme.of(context).accentColor,
 
               )
           );
@@ -288,15 +288,11 @@ class _CreatePOIPageState extends GeneralPageViewState {
     print(floor);
     submited = false;
 
-    MockPointOfInterestController().createPOI(
-        nameController.text, LatLng(latitude, longitude),floor, poi).then((value) {
-          return value;
-    }
-    );
-
-    return Future.value(true);
+    return MockPointOfInterestController().createPOI(
+        nameController.text, LatLng(latitude, longitude),floor, poi);
 
   }
+
 
   Widget getButton(){
 
@@ -310,14 +306,16 @@ class _CreatePOIPageState extends GeneralPageViewState {
 
             submit().then((response) {
               print(response);
+
               if (response){
-                Navigator.pushNamed(context, '/' + Constants.navLive);
+                Navigator.pushNamed(context, '/' + Constants.navAbout);
               }
               else{
                 print('ERROR');
               }
 
             });
+            if(!mounted) return ;
 
 
           },
