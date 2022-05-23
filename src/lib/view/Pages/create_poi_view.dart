@@ -32,7 +32,6 @@ class _CreatePOIPageState extends GeneralPageViewState {
   }
 
 
-
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
@@ -43,9 +42,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
   int isSelected = -1;
   List<PointOfInterestType> poiTypes = [];
   List<int> floorLimits = [0,9];
-  int currvalue = 0;
-  int pressed = 0;
-  bool submited = false;
+  int floor = 0;
 
   void getFloorLimit() async{
     setState( () async {
@@ -54,9 +51,10 @@ class _CreatePOIPageState extends GeneralPageViewState {
 
   }
   void getPOITypes() async{
-    print("hlllooo");
     setState( () async {
       poiTypes = await MockPointOfInterestController().getTypesPOI();
+      isSelected = poiTypes.length - 1;
+
     });
     log("" + poiTypes.length.toString());
 
@@ -118,7 +116,9 @@ class _CreatePOIPageState extends GeneralPageViewState {
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
       ),
     validator: (value) {
-      if (value == null || value.isEmpty ) {
+        final double lat = double.tryParse(value);
+      if (lat == null || value.isEmpty || lat <= -90 || lat >= 90 ) {
+        latitudeController.clear();
         return 'Invalid input, please enter a number between -90 and 90';
       }
       return null;
@@ -134,9 +134,11 @@ class _CreatePOIPageState extends GeneralPageViewState {
       ),
       controller: longitudeController,
       validator: (value) {
-      if (value == null || value.isEmpty ){
-        return 'Invalid input, please enter a number between -90 and 90';
-      }
+        final double long = double.tryParse(value);
+        if (long == null || value.isEmpty || long <= -90 || long >= 90 ) {
+          longitudeController.clear();
+          return 'Invalid input, please enter a number between -90 and 90';
+        }
       return null;
     },
   );
@@ -145,16 +147,16 @@ class _CreatePOIPageState extends GeneralPageViewState {
     return Align(
         alignment: Alignment.center,
         child: Column(
-          children: <Widget>[getTitle("Select Floor:", Icon(
+          children: <Widget>[getTitle('Select Floor:', Icon(
             Icons.elevator_rounded ,
             color: Theme.of(context).accentColor,
           )),
             NumberPicker(
-              value: currvalue,
+              value: floor,
               minValue: floorLimits.first,
               maxValue: floorLimits.last,
               axis: Axis.horizontal,
-              onChanged: (value) => setState(() => currvalue = value),
+              onChanged: (value) => setState(() => floor = value),
             ),
           ],
         )
@@ -173,9 +175,6 @@ class _CreatePOIPageState extends GeneralPageViewState {
   List<Widget> getTypesPoiWidgets(){
     final List<Widget> widgets= [];
 
-    print('in poi widget');
-
-    print(poiTypes.length);
 
     for (int i = 0 ; i<poiTypes.length ; i++){
       widgets.add(
@@ -192,17 +191,12 @@ class _CreatePOIPageState extends GeneralPageViewState {
     }
 
 
-    print("sizes");
-    print(poiTypes.length);
     return widgets;
   }
 
   void onControlPress(int index){
-    print(index);
-
     setState(() {
       isSelected = index;
-      print(index);
     });
   }
 
@@ -218,8 +212,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
         crossAxisCount: 3,
         children: getTypesPoiWidgets().map((widget) {
           final index = ++counter - 1;
-          print(index);
-          print(isSelected);
+
 
           return Hero(
               tag: index.toString(),
@@ -244,23 +237,23 @@ class _CreatePOIPageState extends GeneralPageViewState {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-            getTitle("Select name: ", Icon(
+            getTitle('Select name: ', Icon(
           Icons.add_business_rounded,
           color: Theme.of(context).accentColor,
         )),
         getPOIName(),
-        getTitle("Select latitude:",Icon(
+        getTitle('Select latitude:', Icon(
           Icons.add_location,
           color: Theme.of(context).accentColor,
         )),
         getPOILatitude(),
-        getTitle("Select longitude:",Icon(
+        getTitle('Select longitude:',Icon(
           Icons.add_location,
           color: Theme.of(context).accentColor,
         )),
         getPOILongitude(),
         getPOIFloor(),
-        getTitle("Select type:", Icon(
+        getTitle('Select type:', Icon(
           Icons.add_location,
           color: Theme.of(context).accentColor,
         )),
@@ -273,23 +266,18 @@ class _CreatePOIPageState extends GeneralPageViewState {
     if (_formKey.currentState.validate()) {
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Processing Data')),
+        const SnackBar(content: Text('Created POI successfully')),
       );
     }
-    PointOfInterestType poi = poiTypes[isSelected];
-    print('type');
-    print(isSelected);
-    print('name');
-    print(nameController.text);
-    print('floor');
+    if (isSelected == -1){
+      isSelected = poiTypes.length -1;
+    }
+    final String name = nameController.text;
     final double latitude = double.parse(latitudeController.text);
     final double longitude = double.parse(longitudeController.text);
-    final int floor = currvalue;
-    print(floor);
-    submited = false;
 
     return MockPointOfInterestController().createPOI(
-        nameController.text, LatLng(latitude, longitude),floor, poi);
+        name, LatLng(latitude, longitude),floor, poiTypes[isSelected]);
 
   }
 
@@ -305,18 +293,21 @@ class _CreatePOIPageState extends GeneralPageViewState {
           onPressed: () {
 
             submit().then((response) {
-              print(response);
-
               if (response){
-                Navigator.pushNamed(context, '/' + Constants.navAbout);
+                Navigator.pushNamed(context, '/' + Constants.navLive);
               }
               else{
-                print('ERROR');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Error. Please try again.')),
+                );
+                latitudeController.clear();
+                longitudeController.clear();
+                nameController.clear();
+
               }
 
             });
             if(!mounted) return ;
-
 
           },
           child: const Text('Create Point of interest'),
@@ -328,11 +319,9 @@ class _CreatePOIPageState extends GeneralPageViewState {
   
   @override
   Widget getBody(BuildContext context) {
+
     getPOITypes();
     getFloorLimit();
-    log("herea aa");
-
-    print(poiTypes.length);
 
 
     return  Container(
@@ -349,5 +338,4 @@ class _CreatePOIPageState extends GeneralPageViewState {
       )
     );
   }
-
 }
