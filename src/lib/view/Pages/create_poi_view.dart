@@ -92,21 +92,24 @@ class _CreatePOIPageState extends GeneralPageViewState {
     );
   }
 
-  Widget getPOIName() => TextFormField(
-    decoration: InputDecoration(
-      labelText: 'Name',
-      hintText: 'Name',
-      contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-
-    ),
-    validator: (value) {
-      if (value == null || value.isEmpty) {
-        return 'Please enter some text';
-      }
-      return null;
-    },
-
-    controller: nameController,
+  Widget getPOIName() => Theme(
+      data: Theme.of(context).copyWith(
+        accentColor: Theme.of(context).toggleableActiveColor,
+      ),
+      child: TextFormField(
+        decoration: InputDecoration(
+          labelText: 'Name',
+          hintText: 'Name',
+          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter some text';
+          }
+          return null;
+        },
+        controller: nameController,
+      )
   );
 
   Widget getPOILatitude() => TextFormField(

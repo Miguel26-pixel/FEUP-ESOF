@@ -53,11 +53,15 @@ class MockPointOfInterestController
 
       _poiTypes = [
         PointOfInterestType('Food', _alertTypes,Icons.restaurant),
-        PointOfInterestType('Study', [_alertTypes[0], _alertTypes[1]], Icons.school_rounded),
-        PointOfInterestType('Vending', [_alertTypes[1], _alertTypes[3]], Icons.local_convenience_store_rounded),
+        PointOfInterestType('Study', [_alertTypes[0], _alertTypes[1]],
+            Icons.school_rounded),
+        PointOfInterestType('Vending', [_alertTypes[1], _alertTypes[3]],
+            Icons.local_convenience_store_rounded),
         PointOfInterestType('Parking', [_alertTypes[1]],Icons.local_parking_rounded),
-        PointOfInterestType('Printing', [_alertTypes[1], _alertTypes[3]], Icons.local_print_shop_rounded),
-        PointOfInterestType('Material', [_alertTypes[1], _alertTypes[3]], Icons.library_books_rounded),
+        PointOfInterestType('Printing', [_alertTypes[1], _alertTypes[3]],
+            Icons.local_print_shop_rounded),
+        PointOfInterestType('Material', [_alertTypes[1], _alertTypes[3]],
+            Icons.library_books_rounded),
         PointOfInterestType('Other', _alertTypes,  Icons.devices_other_rounded)];
 
       final Alert alert1 = Alert( '1',
@@ -72,18 +76,19 @@ class MockPointOfInterestController
           _alertTypes[1]);
 
       _elements = {
-    '0': PointOfInterest(
-    '0', 'Bar da biblioteca', LatLng(41.1774666, -8.5950153), 0, _poiTypes[0]),
+    '0': PointOfInterest('0', 'Bar da biblioteca',
+        LatLng(41.1774666, -8.5950153), 0, _poiTypes[0]),
     '1': PointOfInterest('1', 'Cantina da Faculdade de Engenharia',
     LatLng(41.176243, -8.595501), 0, _poiTypes[0]),
     '2': PointOfInterest('2', 'Grill da Faculdade de Engenharia',
     LatLng(41.176395, -8.595318), 0,_poiTypes[0]),
-    '3': PointOfInterest('3', 'AEFEUP', LatLng(41.176159, -8.596887), 0, _poiTypes[0]),
-    '4':
-    PointOfInterest('4', 'Bar de minas', LatLng(41.1784362, -8.5972663), 0, _poiTypes[0]),
-    '5': PointOfInterest('5', 'Biblioteca', LatLng(41.177546, -8.594634), 0, _poiTypes[1]),
-    '7': PointOfInterest(
-    '7',     'Máquina de Café',
+    '3': PointOfInterest('3', 'AEFEUP', LatLng(41.176159, -8.596887),
+        0, _poiTypes[0]),
+    '4': PointOfInterest('4', 'Bar de minas',
+        LatLng(41.1784362, -8.5972663), 0, _poiTypes[0]),
+    '5': PointOfInterest('5', 'Biblioteca', LatLng(41.177546, -8.594634),
+        0, _poiTypes[1]),
+    '7': PointOfInterest('7',     'Máquina de Café',
     LatLng(
     41.17727714163054,
     -8.595256805419924,
@@ -161,8 +166,10 @@ class MockPointOfInterestController
    PointOfInterestType type){
 
     print(_elements.length);
-    _elements[_elements.length.toString()] = PointOfInterest( _elements.length.toString(), name, pos, floor, type);
-    print("added");
+    _elements[(_elements.length + 1).toString()] =
+        PointOfInterest( (_elements.length + 1).toString(),
+            name, pos, floor, type);
+    print('added');
     print(_elements.length);
 
 
