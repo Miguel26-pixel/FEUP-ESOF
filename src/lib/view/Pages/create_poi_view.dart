@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:uni/model/entities/live/poi_type.dart';
 import 'package:uni/view/Pages/general_page_view.dart';
@@ -11,10 +13,13 @@ import 'package:numberpicker/numberpicker.dart';
 
 class CreatePOIPage extends StatefulWidget {
 
-  CreatePOIPage(){}
+
+  CreatePOIPage(){
+  }
+
 
   @override
-  State<StatefulWidget> createState(){
+  _CreatePOIPageState createState(){
     return _CreatePOIPageState();
   }
 }
@@ -23,15 +28,10 @@ class CreatePOIPage extends StatefulWidget {
 class _CreatePOIPageState extends GeneralPageViewState {
   
   _CreatePOIPageState(){
+
   }
-  @override
-  void initState() {
-    getFloorLimit();
-    print("herea aa");
-    getPOITypes();
-    print(poiTypes.length);
-   {
-  }}
+
+
 
   final _formKey = GlobalKey<FormState>();
 
@@ -40,11 +40,27 @@ class _CreatePOIPageState extends GeneralPageViewState {
   TextEditingController longitudeController = TextEditingController();
   TextEditingController floorController = TextEditingController();
 
-  List<bool> isSelected = [];
+  int isSelected = -1;
   List<PointOfInterestType> poiTypes = [];
-  List<int> floorLimits = [];
+  List<int> floorLimits = [0,9];
   int currvalue = 0;
   int pressed = 0;
+  bool submited = false;
+
+  void getFloorLimit() async{
+    setState( () async {
+      floorLimits = await MockPointOfInterestController().getFloorLimits();
+    });
+
+  }
+  void getPOITypes() async{
+    print("hlllooo");
+    setState( () async {
+      poiTypes = await MockPointOfInterestController().getTypesPOI();
+    });
+    log("" + poiTypes.length.toString());
+
+  }
 
   InputDecoration textFieldDecoration(String placeholder) {
     return InputDecoration(
@@ -59,30 +75,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
             borderSide: BorderSide(color: Colors.white, width: 3)));
   }
 
-  void getFloorLimit() {
-    MockPointOfInterestController().getFloorLimits().then((response){
-      print("HERE");
-      print(response.first);
-      floorLimits = [... response];
-      print(floorLimits.first);
-    }
-    );
-  }
-  void getPOITypes() {
-    MockPointOfInterestController().getTypesPOI().then((response){
 
-      isSelected = List<bool>.generate(response.length, (index) => false);
-      print(isSelected.length);
-      poiTypes = [... response];
-      print("SIZE OF POITUPE");
-      print(poiTypes.length);
-      pressed = poiTypes.length -1;
-      if (poiTypes.first.getIcon() != null){
-        print("YES ICON");
-      }
-    }
-    );
-  }
   
   Widget getTitle(String text, Icon icon){
     return Padding(padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
@@ -125,8 +118,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
       ),
     validator: (value) {
-      if (value == null || value.isEmpty || !(value.runtimeType == double || value.runtimeType == int) ||
-          value as double <=  -90 || value as double >=90) {
+      if (value == null || value.isEmpty ) {
         return 'Invalid input, please enter a number between -90 and 90';
       }
       return null;
@@ -142,8 +134,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
       ),
       controller: longitudeController,
       validator: (value) {
-      if (value == null || value.isEmpty || !(value.runtimeType == double || value.runtimeType == int) ||
-          value as double <=  -90 || value as double >=90) {
+      if (value == null || value.isEmpty ){
         return 'Invalid input, please enter a number between -90 and 90';
       }
       return null;
@@ -171,12 +162,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
 
   }
 
-    setWidgetColor(int i){
-    if (isSelected[i]){
-      return Theme.of(context).accentColor;
-    }
-    return Colors.black;
-  }
+
 
   List<Widget> getTypesPoiWidgets(){
     final List<Widget> widgets= [];
@@ -205,39 +191,21 @@ class _CreatePOIPageState extends GeneralPageViewState {
 
 
     print("sizes");
-    print(isSelected.length);
     print(poiTypes.length);
     return widgets;
   }
 
   void onControlPress(int index){
-    isSelected[index] = true;
-    print(index);
-    pressed = index;
-    for (int buttonIndex = 0; buttonIndex <
-        isSelected.length; buttonIndex++) {
-      if (buttonIndex == index) {
-        print("SLECTED ");
-        print(buttonIndex);
 
-        isSelected[buttonIndex] = true;
-      } else {
-        isSelected[buttonIndex] = false;
-      }
-    }
-    int s = 0;
-    for( bool a in isSelected){
-      print(s);
-      s++;
-      if (a){
-        print('true');
-      }
-    }
+    setState(() {
+      isSelected = index;
+      print(index);
+
+    });
   }
 
-  Widget getTypesPOI(){
+  Widget getTypesPOI() {
     var counter = 0;
-    getPOITypes();
 
     return GridView.count(
         primary: false,
@@ -248,83 +216,24 @@ class _CreatePOIPageState extends GeneralPageViewState {
         crossAxisCount: 3,
         children: getTypesPoiWidgets().map((widget) {
           final index = ++counter - 1;
-
-          print("selected");
           print(index);
-          print(isSelected[index]);
+          print(isSelected);
 
-          return ToggleButtons(
-            onPressed: (_) => onControlPress(index),
-            fillColor: Colors.white60,
-            renderBorder: false,
-            children: [widget],
-            isSelected: [isSelected[index]],
-            selectedColor: Theme.of(context).accentColor,
+          return Hero(
+              tag: index.toString(),
+              child: ToggleButtons(
+                onPressed: (_) => onControlPress(index),
+                fillColor: Colors.white60,
+                renderBorder: false,
+                children: [widget],
+                isSelected: [ isSelected == index],
+                selectedColor: Theme
+                    .of(context)
+                    .accentColor,
 
-
+              )
           );
         }).toList());
-/*
-    List<bool> selected = [false, false, false, false];
-
-    return GridView.count(
-        crossAxisCount: 2,
-        children: [
-          Icon(Icons.info),
-          Icon(Icons.title),
-          Icon(Icons.info),
-          Icon(Icons.title)
-        ]);
-
-
-    return GridView.count(
-        crossAxisCount: 2,
-        children: getTypesPoiWidgets().map((widget) {
-          final index = ++counter - 1;
-
-          return ToggleButtons(
-            selectedColor: Colors.red,
-            isSelected: [isSelected[index]],
-              onPressed: (int index) {
-                setState(() {
-                  for (int buttonIndex = 0; buttonIndex <
-                      isSelected.length; buttonIndex++) {
-                    if (buttonIndex == index) {
-                      print("SLECTED ");
-                      print(buttonIndex);
-
-                      isSelected[buttonIndex] = true;
-                    } else {
-                      isSelected[buttonIndex] = false;
-                    }
-                  }
-                });
-                },
-            children: [widget],
-          );
-        }).toList());
-      return ToggleButtons(
-      children: getTypesPoiWidgets(),
-      onPressed: (int index) {
-        setState(() {
-          for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
-            if (buttonIndex == index) {
-              print("SLECTED ");
-              print(buttonIndex);
-
-              isSelected[buttonIndex] = true;
-
-            } else {
-              isSelected[buttonIndex] = false;
-            }
-          }
-        });
-      },
-      selectedColor: Theme.of(context).accentColor,
-      fillColor: Colors.white60,
-      renderBorder: false,
-      isSelected: isSelected,
-    );*/
   }
 
 
@@ -360,17 +269,16 @@ class _CreatePOIPageState extends GeneralPageViewState {
     );
   }
 
-  bool submit(){
+  Future<bool> submit() {
     if (_formKey.currentState.validate()) {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Processing Data')),
       );
     }
-    int index = isSelected.indexOf(true);
-    PointOfInterestType poi = poiTypes[index];
+    PointOfInterestType poi = poiTypes[isSelected];
     print('type');
-    print(index);
+    print(isSelected);
     print('name');
     print(nameController.text);
     print('floor');
@@ -378,18 +286,16 @@ class _CreatePOIPageState extends GeneralPageViewState {
     final double longitude = double.parse(longitudeController.text);
     final int floor = currvalue;
     print(floor);
-    bool submited = false;
+    submited = false;
 
     MockPointOfInterestController().createPOI(
-        nameController.text, LatLng(latitude, longitude),floor, poi)
-        .then((response) {
-      if (response){
-        print('added poi');
-        submited = true;
-      }
-    });
+        nameController.text, LatLng(latitude, longitude),floor, poi).then((value) {
+          return value;
+    }
+    );
 
-    return submited;
+    return Future.value(true);
+
   }
 
   Widget getButton(){
@@ -397,41 +303,50 @@ class _CreatePOIPageState extends GeneralPageViewState {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20,
           horizontal:  100),
-      child: ElevatedButton(
-        onPressed: () {
-            if (submit()){
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
+      child: Hero(
+        tag: 'btn1',
+        child: ElevatedButton(
+          onPressed: () {
 
-              Navigator.pushNamed(context, '/' + Constants.navLive);
-            }
-            else{
-              print('ERROR');
-            }
+            submit().then((response) {
+              print(response);
+              if (response){
+                Navigator.pushNamed(context, '/' + Constants.navLive);
+              }
+              else{
+                print('ERROR');
+              }
+
+            });
+
 
           },
-        child: const Text('Create Point of interest'),
-      ),
+          child: const Text('Create Point of interest'),
+        ),
+      )
     );
   }
 
   
   @override
   Widget getBody(BuildContext context) {
-/*
-    return Container(
-        child: PageView(
-          children: [getMockGrid()],
-        )
-    );*/
+    getPOITypes();
+    getFloorLimit();
+    log("herea aa");
+
+    print(poiTypes.length);
 
 
     return  Container(
       child:  Align(
         alignment: AlignmentDirectional.center,
           child: ListView(
-            children: [ PageTitle(name: Constants.navCreatePoi),
-              getForm(), getTypesPOI(), getButton()],
+            children: [
+              PageTitle(name: Constants.navCreatePoi),
+              getForm(),
+              getTypesPOI(),
+              getButton(),
+            ],
           )
       )
     );
