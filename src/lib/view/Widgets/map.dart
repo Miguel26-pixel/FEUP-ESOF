@@ -258,12 +258,24 @@ class _MapState extends State<Map> {
       ],
     );
 
+    final Widget spontaneousCreateButton = Align(
+      alignment: Alignment.bottomRight,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 20, right: 20),
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => {},
+        ),
+      ),
+    );
+
     return _floorsLoaded
         ? Stack(
             alignment: Alignment.topRight,
             children: [
               mapComponent,
               mapButtons,
+              spontaneousCreateButton,
             ],
           )
         : const CircularProgressIndicator();
