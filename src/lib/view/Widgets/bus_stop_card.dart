@@ -22,7 +22,8 @@ class BusStopCard extends GenericCard {
   String getTitle() => 'Autocarros';
 
   @override
-  onClick(BuildContext context) => Navigator.pushNamed(context, '/' + Constants.navStops);
+  onClick(BuildContext context) =>
+      Navigator.pushNamed(context, '/' + Constants.navStops);
 
   @override
   Widget buildCardContent(BuildContext context) {
@@ -57,10 +58,8 @@ class BusStopCard extends GenericCard {
                   Text('Configura os teus autocarros',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline4
-                          .apply(color: Theme.of(context).accentColor)),
+                      style: Theme.of(context).textTheme.headline4.apply(
+                          color: Theme.of(context).colorScheme.secondary)),
                   IconButton(
                     icon: Icon(Icons.settings),
                     onPressed: () => Navigator.push(
@@ -91,7 +90,7 @@ class BusStopCard extends GenericCard {
                   style: Theme.of(context)
                       .textTheme
                       .headline4
-                      .apply(color: Theme.of(context).accentColor)))
+                      .apply(color: Theme.of(context).colorScheme.secondary)))
         ]);
         break;
     }
@@ -106,7 +105,7 @@ class BusStopCard extends GenericCard {
             style: Theme.of(context)
                 .textTheme
                 .headline4
-                .apply(color: Theme.of(context).accentColor)),
+                .apply(color: Theme.of(context).colorScheme.secondary)),
       ],
     );
   }

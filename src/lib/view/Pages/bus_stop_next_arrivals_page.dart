@@ -158,7 +158,7 @@ class _NextArrivalsState extends State<NextArrivals>
               ),
               IconButton(
                   icon: Icon(Icons.edit),
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                   onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
