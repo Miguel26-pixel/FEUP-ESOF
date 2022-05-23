@@ -1,5 +1,62 @@
+const { firestore } = require("firebase-admin");
 const admin = require("firebase-admin");
 const geofire = require("geofire-common");
+<<<<<<< HEAD
+=======
+
+const deleteCollection = (firestore, collection, batchSize=400) => {
+    return collection.listDocuments()
+        .then((docs) => {
+
+            let batch = firestore.batch();
+
+            if(docs.length <= batchSize){
+                docs.map( (doc) => {
+                    batch.delete(doc);
+                });
+                batch.commit();
+                return true;
+            }
+            else{
+                for (let i = 0; i < batchSize; i++){
+                    batch.delete(docs[i]);
+                }
+                batch.commit();
+                return false;
+            }
+        })
+        .then( function(batchStatus) {
+            return batchStatus ? true : deleteCollection(collectionPath, batchSize, debug);
+        })
+        .catch( function(error) {
+            console.error(`Error clearing collections (${error})`);
+            return false;
+        });
+}
+
+/**
+ * 
+ * @param {admin.firestore.Firestore} db
+ * @param {admin.firestore.CollectionReference} pointsCollection 
+ * @param {admin.firestore.CollectionReference} alertsCollection 
+ * @param {admin.firestore.CollectionReference} alertTypeCollection 
+ * @param {admin.firestore.CollectionReference} groupsCollection 
+ */
+const dropAll = async (
+    db, 
+    pointsCollection,
+    alertsCollection, 
+    alertTypeCollection, 
+    spontaneousCollection, 
+    groupsCollection
+    ) => Promise.all([
+        deleteCollection(db, pointsCollection),
+        deleteCollection(db, alertsCollection),
+        deleteCollection(db, alertTypeCollection),
+        deleteCollection(db, spontaneousCollection),
+        deleteCollection(db, groupsCollection),
+    ]);
+>>>>>>> main
 
 /**
  * 
@@ -10,7 +67,7 @@ const geofire = require("geofire-common");
  * @param {admin.firestore.CollectionReference} groupsCollection 
  */
 exports.seed = async (
-    firestore, 
+    db, 
     pointsCollection,
     alertsCollection, 
     alertTypeCollection, 
@@ -18,6 +75,15 @@ exports.seed = async (
     groupsCollection
     ) => {
     
+    await dropAll(
+        db,
+        pointsCollection,
+        alertsCollection,
+        alertTypeCollection,
+        spontaneousCollection,
+        groupsCollection,
+    )
+
     const alertType0 = await alertTypeCollection.add({
         "base-duration-seconds": 600,
         message: "This location is full",
@@ -58,6 +124,7 @@ exports.seed = async (
         name: "Bar da Biblioteca",
         floor: 0,
         position: new firestore.GeoPoint(41.1774666, -8.5950153),
+        geohash: geofire.geohashForLocation([41.1774666, -8.5950153]),
         alerts: [
             alert0
         ]
@@ -78,6 +145,7 @@ exports.seed = async (
 
     await groupsCollection.add({
         position: new firestore.GeoPoint(41.17727714163054, -8.595256805419924),
+        geohash: geofire.geohashForLocation([41.17727714163054, -8.595256805419924]),
         floor: 1,
         points: [
             groupPoint1,
@@ -89,6 +157,7 @@ exports.seed = async (
         name: "Máquina de Café",
         floor: 2,
         position: new firestore.GeoPoint(41.1774666, -8.5950153),
+        geohash: geofire.geohashForLocation([41.1774666, -8.5950153]),
         alerts: [
             alert0
         ]
@@ -98,11 +167,13 @@ exports.seed = async (
         name: "Cantina da Faculdade de Engenharia",
         floor: 0,
         position: new firestore.GeoPoint(41.176243, -8.595501),
+        geohash: geofire.geohashForLocation([41.176243, -8.595501]),
         alerts: [
             alert1
         ]
     });
 
+<<<<<<< HEAD
     await spontaneousCollection.add({
         "start-time": firestore.Timestamp.fromDate(new Date("11 May 2022 12:00:00 UTC+1")),
         "finish-time": firestore.Timestamp.fromDate(new Date("25 May 2022 12:00:00 UTC+1")),
@@ -139,4 +210,6 @@ exports.seed = async (
         geohash: geofire.geohashForLocation([41.021195, -8.563309]),
         floor: 0,
     });
+=======
+>>>>>>> main
 }
