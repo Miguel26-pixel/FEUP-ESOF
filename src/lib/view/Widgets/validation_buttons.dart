@@ -27,7 +27,8 @@ class _ValidationButtonsState extends State<ValidationButtons> {
       children: [
         IconButton(
           iconSize: 30,
-          onPressed: () => widget._alertController.likeAlert(widget._spontaneousAlertId),
+          onPressed: () => widget._alertController
+              .likeAlert(widget._spontaneousAlertId),
           icon: const Icon(
             Icons.check_circle,
             color: Colors.green,

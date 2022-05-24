@@ -96,29 +96,29 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
 
 
   @override
-  void likeAlert(int spontaneousId) {
-    if (_spontaneousAlerts[spontaneousId.toString()] != null) {
-      _spontaneousAlerts[spontaneousId.toString()].finishTime
+  void likeAlert(String spontaneousId) {
+    if (_spontaneousAlerts[spontaneousId] != null) {
+      _spontaneousAlerts[spontaneousId].finishTime
           .add(Duration(minutes:2));
     }
-    else if (_alerts[spontaneousId.toString()] != null) {
-      _alerts[spontaneousId.toString()].setFinishTime(2);
+    else if (_alerts[spontaneousId] != null) {
+      _alerts[spontaneousId].setFinishTime(2);
     }
   }
 
 
 
   @override
-  bool dislikeAlert(int spontaneousId) {
-    if (_spontaneousAlerts[spontaneousId.toString()] != null) {
-      _spontaneousAlerts[spontaneousId.toString()].finishTime
+  bool dislikeAlert(String spontaneousId) {
+    if (_spontaneousAlerts[spontaneousId] != null) {
+      _spontaneousAlerts[spontaneousId].finishTime
           .subtract(Duration(minutes:2));
-      _spontaneousAlerts.remove(spontaneousId.toString());
+      _spontaneousAlerts.remove(spontaneousId);
       return true;
     }
-    else if (_alerts[spontaneousId.toString()] != null) {
-      _alerts[spontaneousId.toString()].setFinishTime(-2);
-      _alerts.remove(spontaneousId.toString());
+    else if (_alerts[spontaneousId] != null) {
+      _alerts[spontaneousId].setFinishTime(-2);
+      _alerts.remove(spontaneousId);
       return true;
     }
     return false;
