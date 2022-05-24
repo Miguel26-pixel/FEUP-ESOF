@@ -8,4 +8,6 @@ abstract class AlertControllerInterface {
   Future<List<Alert>> getAlertsOfPoi(PointOfInterest poi);
   Future<GeneralAlert> getAlert(String id);
   Future<AlertType> getAlertType(String id);
+  void likeAlert(int spontaneousId);
+  bool dislikeAlert(int spontaneousId);
 }

@@ -18,6 +18,11 @@ class GeneralAlert {
   }
 
   void setFinishTime(int upOrDown) {
-    _finishTime = _finishTime.add(Duration(minutes: upOrDown));
+    if (upOrDown >= 0) {
+      _finishTime = _finishTime.add(Duration(minutes: upOrDown));
+    }
+    else {
+      _finishTime = _finishTime.subtract(Duration(minutes: (-1)*upOrDown));
+    }
   }
 }

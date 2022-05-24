@@ -14,6 +14,7 @@ class SpontaneousAlertPage extends StatefulWidget {
   final AlertControllerInterface alertController;
   final CurrentLocationController _currentLocationController;
   final LatLng _position;
+  int alertTime = 30;
 
   const SpontaneousAlertPage(
       final this.alertController,
