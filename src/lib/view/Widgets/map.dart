@@ -145,12 +145,15 @@ class _MapState extends State<Map> {
   @override
   Widget build(BuildContext context) {
     final List<Marker> markers = _pointsOfInterest
+        .asMap()
+        .entries
         .map(
           (e) => AlertPoiMarker(
+            key: Key('location-icon' + e.key.toString()),
             context: context,
-            point: e.getPosition(),
+            point: e.value.getPosition(),
             pressedBuilder: ((context) =>
-                PointOfInterestPage(e, alertController)),
+                PointOfInterestPage(e.value, alertController)),
             iconData: Icons.room,
           ),
         )

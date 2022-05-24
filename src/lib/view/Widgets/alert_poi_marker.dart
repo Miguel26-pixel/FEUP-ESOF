@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 
 class AlertPoiMarker extends Marker {
   AlertPoiMarker({
+    Key key,
     LatLng point,
     WidgetBuilder pressedBuilder,
     BuildContext context,
@@ -15,6 +16,7 @@ class AlertPoiMarker extends Marker {
           anchorPos: AnchorPos.align(AnchorAlign.top),
           point: point,
           builder: (ctx) => IconButton(
+            key: key,
             padding: EdgeInsets.zero,
             iconSize: size - 10,
             icon: Icon(
