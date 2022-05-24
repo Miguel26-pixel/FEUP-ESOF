@@ -99,6 +99,7 @@ class _CreateSpontaneousAlertState extends State<CreateSpontaneousAlert> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Couldn't get current position.")),
       );
+      return;
     }
 
     if (_formKey.currentState.validate()) {
