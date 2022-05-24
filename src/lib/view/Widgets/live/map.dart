@@ -39,15 +39,15 @@ class _MapState extends State<Map> {
   int _currentFloor = 0;
   int _maxFloor;
   int _minFloor;
+  LatLng _center = FEUP_POS;
   bool _locationLoaded;
   bool _floorsLoaded;
   bool _followingCurrentPosition;
   List<PointOfInterest> _pointsOfInterest = [];
   List<SpontaneousAlert> _spontaneousAlerts = [];
   StreamSubscription<LocationData> _subscription;
-  MapOptions _options;
 
-  MapController _mapController;
+  final MapController _mapController = MapController();
 
   @override
   void setState(fn) {
@@ -57,7 +57,8 @@ class _MapState extends State<Map> {
   }
 
   void setMapCenter(LatLng center) {
-    _mapController?.move(center, _initialZoom);
+    _center = center;
+    _mapController.move(center, _initialZoom);
   }
 
   void followLocation() {
@@ -69,7 +70,8 @@ class _MapState extends State<Map> {
     }
   }
 
-  void unfollowLocation(MapPosition _, bool hasGesture) {
+  void unfollowLocation(MapPosition position, bool hasGesture) {
+    _center = position.center;
     if (_locationLoaded) {
       _followingCurrentPosition = !hasGesture;
     }
@@ -154,15 +156,6 @@ class _MapState extends State<Map> {
     searchPOI();
     searchAlerts();
 
-    _options = MapOptions(
-      onMapCreated: ((mapController) => _mapController = mapController),
-      onPositionChanged: unfollowLocation,
-      controller: _mapController,
-      center: FEUP_POS,
-      zoom: _initialZoom,
-      maxZoom: _initialZoom,
-    );
-
     super.initState();
   }
 
@@ -206,7 +199,13 @@ class _MapState extends State<Map> {
     markers.addAll(alertMarkers);
 
     final Widget mapComponent = FlutterMap(
-      options: _options,
+      mapController: _mapController,
+      options: MapOptions(
+        onPositionChanged: unfollowLocation,
+        center: _center,
+        zoom: _initialZoom,
+        maxZoom: _initialZoom,
+      ),
       layers: [
         TileLayerOptions(
           urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -311,6 +310,7 @@ class _MapState extends State<Map> {
                     pointOfInterestController,
                     currentLocationController,
                     _currentLocation,
+                    onCreate: () => setState(() {}),
                   ),
                 ],
               ),

@@ -17,10 +17,11 @@ class CreateSpontaneousAlert extends StatefulWidget {
   final CurrentLocationController _currentLocationController;
   final LatLng _position;
   final AlertControllerInterface _alertController;
+  final Function() onCreate;
 
   const CreateSpontaneousAlert(this._alertController, this._poiController,
       this._currentLocationController, this._position,
-      {Key key})
+      {Key key, this.onCreate})
       : super(key: key);
 
   @override
@@ -110,6 +111,8 @@ class _CreateSpontaneousAlertState extends State<CreateSpontaneousAlert> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Alert added!')),
         );
+
+        widget.onCreate.call();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(result.item2)),
