@@ -45,6 +45,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
   int floor = 0;
 
   void getFloorLimit() async{
+
     setState( () async {
       floorLimits = await MockPointOfInterestController().getFloorLimits();
     });
@@ -56,23 +57,9 @@ class _CreatePOIPageState extends GeneralPageViewState {
       isSelected = poiTypes.length - 1;
 
     });
-    log("" + poiTypes.length.toString());
+    log(poiTypes.length.toString());
 
   }
-
-  InputDecoration textFieldDecoration(String placeholder) {
-    return InputDecoration(
-        hintStyle: TextStyle(color: Colors.white),
-        errorStyle: TextStyle(
-          color: Colors.white70,
-        ),
-        hintText: placeholder,
-        contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-        border: UnderlineInputBorder(),
-        focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white, width: 3)));
-  }
-
 
 
   Widget getTitle(String text, Icon icon){
@@ -84,7 +71,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
                 child: Text(text,
                     style: TextStyle(
                         fontSize: 18.0,
-                        color: Theme.of(context).toggleableActiveColor,
+                        color: Theme.of(context).colorScheme.secondary,
                         fontWeight: FontWeight.normal))
             )
           ],
@@ -92,16 +79,21 @@ class _CreatePOIPageState extends GeneralPageViewState {
     );
   }
 
-  Widget getPOIName() => Theme(
-      data: Theme.of(context).copyWith(
-        accentColor: Theme.of(context).toggleableActiveColor,
+  InputDecoration getFormBoarder(String hint){
+    return InputDecoration(
+      labelText: hint,
+      hintText: hint,
+      labelStyle : TextStyle( color : Colors.grey),
+      contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+            color: Colors.grey),
       ),
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Name',
-          hintText: 'Name',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        ),
+    );
+  }
+
+  Widget getPOIName() =>  TextFormField(
+        decoration: getFormBoarder('Name'),
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter some text';
@@ -109,15 +101,10 @@ class _CreatePOIPageState extends GeneralPageViewState {
           return null;
         },
         controller: nameController,
-      )
   );
 
   Widget getPOILatitude() => TextFormField(
-    decoration: InputDecoration(
-      labelText: 'Latitude',
-      hintText: 'Latitude',
-      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-    ),
+    decoration: getFormBoarder('Latitude'),
     validator: (value) {
       final double lat = double.tryParse(value);
       if (lat == null || value.isEmpty || lat <= -90 || lat >= 90 ) {
@@ -130,12 +117,8 @@ class _CreatePOIPageState extends GeneralPageViewState {
   );
 
   Widget getPOILongitude() => TextFormField(
-    decoration: InputDecoration(
-      labelText: 'Longitude',
-      hintText: 'Longitude',
-      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-    ),
-    controller: longitudeController,
+    decoration: getFormBoarder('Longitude'),
+  controller: longitudeController,
     validator: (value) {
       final double long = double.tryParse(value);
       if (long == null || value.isEmpty || long <= -90 || long >= 90 ) {
@@ -152,20 +135,18 @@ class _CreatePOIPageState extends GeneralPageViewState {
         child: Column(
           children: <Widget>[getTitle('Select Floor:', Icon(
             Icons.elevator_rounded ,
-            color: Theme.of(context).toggleableActiveColor,
+            color: Theme.of(context).colorScheme.secondary,
           )),
-        Theme(
-          data: Theme.of(context).copyWith(
-            accentColor: Theme.of(context).toggleableActiveColor,
-          ),
-          child:  NumberPicker(
-            value: floor,
-            minValue: floorLimits.first,
-            maxValue: floorLimits.last,
-            axis: Axis.horizontal,
-            onChanged: (value) => setState(() => floor = value),
-          ),
-        )
+              NumberPicker(
+                value: floor,
+                minValue: floorLimits.first,
+                maxValue: floorLimits.last,
+                axis: Axis.horizontal,
+                selectedTextStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                onChanged: (value) => setState(() => floor = value),
+              ),
           ],
         )
     );
@@ -229,7 +210,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
                 renderBorder: false,
                 children: [widget],
                 isSelected: [ isSelected == index],
-                selectedColor: Theme.of(context).toggleableActiveColor,
+                selectedColor: Theme.of(context).colorScheme.secondary,
 
               )
           );
@@ -246,23 +227,23 @@ class _CreatePOIPageState extends GeneralPageViewState {
             children: [
               getTitle('Select name: ', Icon(
                 Icons.add_business_rounded,
-                color: Theme.of(context).toggleableActiveColor,
+                color: Theme.of(context).colorScheme.secondary,
               )),
               getPOIName(),
               getTitle('Select latitude:', Icon(
                 Icons.add_location,
-                color: Theme.of(context).toggleableActiveColor,
+                color: Theme.of(context).colorScheme.secondary,
               )),
               getPOILatitude(),
               getTitle('Select longitude:',Icon(
                 Icons.add_location,
-                color: Theme.of(context).toggleableActiveColor,
+                color: Theme.of(context).colorScheme.secondary,
               )),
               getPOILongitude(),
               getPOIFloor(),
               getTitle('Select type:', Icon(
                 Icons.add_location,
-                color: Theme.of(context).toggleableActiveColor,
+                color: Theme.of(context).colorScheme.secondary,
               )),
             ]
         )

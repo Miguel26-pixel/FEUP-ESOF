@@ -33,7 +33,7 @@ class _AdminDashboardPageState extends GeneralPageViewState {
           child: Text(d,
               style: TextStyle(
                   fontSize: 18.0,
-                  color: Theme.of(context).toggleableActiveColor,
+                  color: Theme.of(context).colorScheme.secondary,
                   fontWeight: FontWeight.normal)),
         ),
         dense: true,

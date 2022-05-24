@@ -57,12 +57,14 @@ class MockPointOfInterestController
             Icons.school_rounded),
         PointOfInterestType('Vending', [_alertTypes[1], _alertTypes[3]],
             Icons.local_convenience_store_rounded),
-        PointOfInterestType('Parking', [_alertTypes[1]],Icons.local_parking_rounded),
+        PointOfInterestType('Parking', [_alertTypes[1]],
+            Icons.local_parking_rounded),
         PointOfInterestType('Printing', [_alertTypes[1], _alertTypes[3]],
             Icons.local_print_shop_rounded),
         PointOfInterestType('Material', [_alertTypes[1], _alertTypes[3]],
             Icons.library_books_rounded),
-        PointOfInterestType('Other', _alertTypes,  Icons.devices_other_rounded)];
+        PointOfInterestType('Other', _alertTypes,
+            Icons.devices_other_rounded)];
 
       final Alert alert1 = Alert( '1',
           DateTime.now(), DateTime.now().add(const Duration(days: 1))
@@ -165,12 +167,10 @@ class MockPointOfInterestController
   Future<bool> createPOI(String name, LatLng pos, int floor,
    PointOfInterestType type){
 
-    print(_elements.length);
     _elements[(_elements.length + 1).toString()] =
         PointOfInterest( (_elements.length + 1).toString(),
             name, pos, floor, type);
-    print('added');
-    print(_elements.length);
+
 
 
     return Future.value(true);
