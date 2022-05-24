@@ -2,50 +2,28 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:numberpicker/numberpicker.dart';
+import 'package:uni/controller/poi/poi_controller_interface.dart';
 import 'package:uni/view/Widgets/live/titled_bottom_modal.dart';
 
 class CreateSpontaneousAlert extends StatefulWidget {
-  const CreateSpontaneousAlert({Key key}) : super(key: key);
+  const CreateSpontaneousAlert(this._poiController, {Key key})
+      : super(key: key);
+  static const _maxDescriptionSize = 50;
+  final PointOfInterestControllerInterface _poiController;
 
   @override
   State<CreateSpontaneousAlert> createState() => _CreateSpontaneousAlertState();
 }
 
-class _CreateSpontaneousAlertState extends State<CreateSpontaneousAlert>
-    with SingleTickerProviderStateMixin {
+class _CreateSpontaneousAlertState extends State<CreateSpontaneousAlert> {
   final _formKey = GlobalKey<FormState>();
-  AnimationController _controller;
-  Animation _animation;
-  final FocusNode _focusNode = FocusNode();
+  final _descriptionController = TextEditingController();
+  int floor = 0;
 
   @override
   void initState() {
     super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 100),
-    );
-    _animation = Tween(begin: 0.0, end: 120.0).animate(_controller)
-      ..addListener(() {
-        setState(() {});
-      });
-
-    _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    _focusNode.dispose();
-
-    super.dispose();
   }
 
   Widget getTitle() {
@@ -61,34 +39,97 @@ class _CreateSpontaneousAlertState extends State<CreateSpontaneousAlert>
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget getLayout(List<Widget> content) {
     final EdgeInsets _insets = MediaQuery.of(context).viewInsets;
 
     return SingleChildScrollView(
-      padding: EdgeInsets.only(bottom: max(0, _insets.bottom - 150)),
+      padding: EdgeInsets.only(bottom: max(0, _insets.bottom - 100)),
       child: TitledBottomModal(
-        header: Row(
-          children: [
-            Expanded(child: getTitle()),
-          ],
-        ),
-        multiple: false,
-        children: [
-          Expanded(
-            child: Form(
-              key: _formKey,
+          minHeight: 300,
+          header: Row(
+            children: [
+              Expanded(child: getTitle()),
+            ],
+          ),
+          multiple: false,
+          children: content),
+    );
+  }
+
+  Widget getForm(BuildContext context, List<int> floorLimits) {
+    return getLayout(
+      [
+        Expanded(
+          child: Form(
+            key: _formKey,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 18),
               child: Column(
                 children: [
                   TextFormField(
-                      //focusNode: _focusNode,
-                      ),
+                    style: TextStyle(fontSize: 17),
+                    decoration: InputDecoration(
+                      labelText: 'Description',
+                      contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                    ),
+                    controller: _descriptionController,
+                    validator: (value) {
+                      if (value.length >
+                          CreateSpontaneousAlert._maxDescriptionSize) {
+                        return 'Description length must be lesser or equal' +
+                            'to ${CreateSpontaneousAlert._maxDescriptionSize}';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'SELECT FLOOR',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  NumberPicker(
+                    value: floor,
+                    minValue: floorLimits.first,
+                    maxValue: floorLimits.last,
+                    axis: Axis.horizontal,
+                    onChanged: (value) => setState(() => floor = value),
+                  ),
                 ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Future<List<int>> _floorLimits =
+        widget._poiController.getFloorLimits();
+
+    return FutureBuilder(
+        future: _floorLimits,
+        builder: (ctx, snapshot) {
+          if (snapshot.hasData) {
+            return getForm(context, snapshot.data);
+          } else {
+            return getLayout([
+              Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ]);
+          }
+        });
   }
 }

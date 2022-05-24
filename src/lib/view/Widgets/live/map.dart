@@ -272,7 +272,8 @@ class _MapState extends State<Map> {
             context: context,
             backgroundColor: Colors.transparent,
             isScrollControlled: true,
-            builder: (context) => CreateSpontaneousAlert(),
+            builder: (context) =>
+                CreateSpontaneousAlert(pointOfInterestController),
           ),
         ),
       ),
