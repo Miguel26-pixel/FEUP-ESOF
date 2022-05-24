@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
 import 'package:uni/assets/constants/map.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/controller/alert/alert_mock_controller.dart';
@@ -8,9 +11,12 @@ import 'package:uni/controller/current_location.dart';
 import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
-import 'package:uni/view/Widgets/poi.dart';
-import 'package:uni/view/Widgets/alert_poi_marker.dart';
-import 'package:uni/view/Widgets/spontaneous_alert.dart';
+import 'package:uni/view/Widgets/live/create_spontaneous_alert.dart';
+import 'package:uni/view/Widgets/live/poi.dart';
+import 'package:uni/view/Widgets/live/alert_poi_marker.dart';
+import 'package:uni/view/Widgets/live/spontaneous_alert.dart';
+
+import 'alert_poi_marker.dart';
 
 class Map extends StatefulWidget {
   const Map({Key key}) : super(key: key);
@@ -33,16 +39,26 @@ class _MapState extends State<Map> {
   int _currentFloor = 0;
   int _maxFloor;
   int _minFloor;
+  LatLng _center = FEUP_POS;
   bool _locationLoaded;
   bool _floorsLoaded;
   bool _followingCurrentPosition;
   List<PointOfInterest> _pointsOfInterest = [];
   List<SpontaneousAlert> _spontaneousAlerts = [];
+  StreamSubscription<LocationData> _subscription;
 
-  MapController _mapController;
+  final MapController _mapController = MapController();
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   void setMapCenter(LatLng center) {
-    _mapController?.move(center, _initialZoom);
+    _center = center;
+    _mapController.move(center, _initialZoom);
   }
 
   void followLocation() {
@@ -54,11 +70,10 @@ class _MapState extends State<Map> {
     }
   }
 
-  void unfollowLocation(MapPosition _, bool hasGesture) {
+  void unfollowLocation(MapPosition position, bool hasGesture) {
+    _center = position.center;
     if (_locationLoaded) {
-      setState(() {
-        _followingCurrentPosition = !hasGesture;
-      });
+      _followingCurrentPosition = !hasGesture;
     }
   }
 
@@ -110,17 +125,19 @@ class _MapState extends State<Map> {
     _floorsLoaded = false;
 
     pointOfInterestController.getFloorLimits().then((value) {
-      _minFloor = value[0];
-      _maxFloor = value[1];
-      _floorsLoaded = true;
+      setState(() {
+        _minFloor = value[0];
+        _maxFloor = value[1];
+        _floorsLoaded = true;
+      });
     });
 
-    currentLocationController.getCurrentLocation().then((value) => {
-          setState(() {
-            _currentLocation = value;
-            _locationLoaded = value != null;
-          })
-        });
+    currentLocationController.getCurrentLocation().then((value) {
+      setState(() {
+        _currentLocation = value;
+        _locationLoaded = value != null;
+      });
+    });
 
     currentLocationController.subscribeLocationUpdate((value) {
       setState(
@@ -134,12 +151,21 @@ class _MapState extends State<Map> {
       if (_locationLoaded && _followingCurrentPosition) {
         setMapCenter(_currentLocation);
       }
-    });
+    }).then((value) => _subscription = value);
 
     searchPOI();
     searchAlerts();
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (_subscription != null) {
+      _subscription.cancel();
+    }
+
+    super.dispose();
   }
 
   @override
@@ -173,11 +199,10 @@ class _MapState extends State<Map> {
     markers.addAll(alertMarkers);
 
     final Widget mapComponent = FlutterMap(
+      mapController: _mapController,
       options: MapOptions(
-        onMapCreated: ((mapController) => _mapController = mapController),
         onPositionChanged: unfollowLocation,
-        controller: _mapController,
-        center: FEUP_POS,
+        center: _center,
         zoom: _initialZoom,
         maxZoom: _initialZoom,
       ),
@@ -258,14 +283,63 @@ class _MapState extends State<Map> {
       ],
     );
 
-    return _floorsLoaded
-        ? Stack(
-            alignment: Alignment.topRight,
-            children: [
-              mapComponent,
-              mapButtons,
-            ],
-          )
-        : const CircularProgressIndicator();
+    final Widget spontaneousCreateButton = Align(
+      alignment: Alignment.bottomRight,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 20, right: 20),
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            isDismissible: true,
+            isScrollControlled: true,
+            builder: (context) => Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Column(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  CreateSpontaneousAlert(
+                    alertController,
+                    pointOfInterestController,
+                    currentLocationController,
+                    _currentLocation,
+                    onCreate: () => setState(() {}),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: _floorsLoaded
+          ? Stack(
+              alignment: Alignment.topRight,
+              children: [
+                mapComponent,
+                mapButtons,
+                spontaneousCreateButton,
+              ],
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ],
+            ),
+    );
   }
 }

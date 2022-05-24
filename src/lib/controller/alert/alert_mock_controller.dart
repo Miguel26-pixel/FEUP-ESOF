@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:tuple/tuple.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/model/entities/live/alert.dart';
 import 'package:uni/model/entities/live/alert_type.dart';
@@ -8,6 +9,8 @@ import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
 
 class AlertMockController implements AlertControllerInterface {
+  int _alertCounter = 5;
+
   static final _alertTypes = {
     '0': AlertType('0', 'Full', 'This Location is Full',
         const Duration(days: 1), Icons.people_outline),
@@ -92,5 +95,24 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
   @override
   Future<List<Alert>> getAlertsOfPoi(PointOfInterest poi) {
     return Future.value(poi.getAlertIds().map((e) => _alerts[e]).toList());
+  }
+
+  @override
+  Future<Tuple2<bool, String>> createSpontaneousAlert(
+      String description, int floor, LatLng position) {
+    if (position == null) {
+      return Future.value(Tuple2(false, "Couldn't get current position"));
+    }
+
+    _spontaneousAlerts[_alertCounter.toString()] = SpontaneousAlert(
+        _alertCounter.toString(),
+        DateTime.now(),
+        DateTime.now().add(Duration(seconds: 300)),
+        description,
+        position,
+        floor);
+    _alertCounter++;
+
+    return Future.value(Tuple2(true, ''));
   }
 }
