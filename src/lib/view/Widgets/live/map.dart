@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
 import 'package:uni/assets/constants/map.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/controller/alert/alert_mock_controller.dart';
@@ -8,7 +11,6 @@ import 'package:uni/controller/current_location.dart';
 import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
-import 'package:uni/view/Widgets/form_text_field.dart';
 import 'package:uni/view/Widgets/live/create_spontaneous_alert.dart';
 import 'package:uni/view/Widgets/live/poi.dart';
 import 'package:uni/view/Widgets/live/alert_poi_marker.dart';
@@ -42,8 +44,17 @@ class _MapState extends State<Map> {
   bool _followingCurrentPosition;
   List<PointOfInterest> _pointsOfInterest = [];
   List<SpontaneousAlert> _spontaneousAlerts = [];
+  StreamSubscription<LocationData> _subscription;
+  MapOptions _options;
 
   MapController _mapController;
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   void setMapCenter(LatLng center) {
     _mapController?.move(center, _initialZoom);
@@ -60,9 +71,7 @@ class _MapState extends State<Map> {
 
   void unfollowLocation(MapPosition _, bool hasGesture) {
     if (_locationLoaded) {
-      setState(() {
-        _followingCurrentPosition = !hasGesture;
-      });
+      _followingCurrentPosition = !hasGesture;
     }
   }
 
@@ -114,17 +123,19 @@ class _MapState extends State<Map> {
     _floorsLoaded = false;
 
     pointOfInterestController.getFloorLimits().then((value) {
-      _minFloor = value[0];
-      _maxFloor = value[1];
-      _floorsLoaded = true;
+      setState(() {
+        _minFloor = value[0];
+        _maxFloor = value[1];
+        _floorsLoaded = true;
+      });
     });
 
-    currentLocationController.getCurrentLocation().then((value) => {
-          setState(() {
-            _currentLocation = value;
-            _locationLoaded = value != null;
-          })
-        });
+    currentLocationController.getCurrentLocation().then((value) {
+      setState(() {
+        _currentLocation = value;
+        _locationLoaded = value != null;
+      });
+    });
 
     currentLocationController.subscribeLocationUpdate((value) {
       setState(
@@ -138,12 +149,30 @@ class _MapState extends State<Map> {
       if (_locationLoaded && _followingCurrentPosition) {
         setMapCenter(_currentLocation);
       }
-    });
+    }).then((value) => _subscription = value);
 
     searchPOI();
     searchAlerts();
 
+    _options = MapOptions(
+      onMapCreated: ((mapController) => _mapController = mapController),
+      onPositionChanged: unfollowLocation,
+      controller: _mapController,
+      center: FEUP_POS,
+      zoom: _initialZoom,
+      maxZoom: _initialZoom,
+    );
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (_subscription != null) {
+      _subscription.cancel();
+    }
+
+    super.dispose();
   }
 
   @override
@@ -177,14 +206,7 @@ class _MapState extends State<Map> {
     markers.addAll(alertMarkers);
 
     final Widget mapComponent = FlutterMap(
-      options: MapOptions(
-        onMapCreated: ((mapController) => _mapController = mapController),
-        onPositionChanged: unfollowLocation,
-        controller: _mapController,
-        center: FEUP_POS,
-        zoom: _initialZoom,
-        maxZoom: _initialZoom,
-      ),
+      options: _options,
       layers: [
         TileLayerOptions(
           urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -271,9 +293,28 @@ class _MapState extends State<Map> {
           onPressed: () => showModalBottomSheet(
             context: context,
             backgroundColor: Colors.transparent,
+            isDismissible: true,
             isScrollControlled: true,
-            builder: (context) =>
-                CreateSpontaneousAlert(pointOfInterestController),
+            builder: (context) => Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Column(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  CreateSpontaneousAlert(
+                    alertController,
+                    pointOfInterestController,
+                    currentLocationController,
+                    _currentLocation,
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -290,7 +331,15 @@ class _MapState extends State<Map> {
                 spontaneousCreateButton,
               ],
             )
-          : const CircularProgressIndicator(),
+          : Column(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }

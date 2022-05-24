@@ -58,13 +58,13 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
 
   @override
   void dispose() {
-    super.dispose();
-
     final subscription = _locationSubscription;
 
     if (subscription != null) {
       subscription.cancel();
     }
+
+    super.dispose();
   }
 
   String durationToString(Duration duration) {
