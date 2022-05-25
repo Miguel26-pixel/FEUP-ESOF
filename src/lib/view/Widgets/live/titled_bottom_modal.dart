@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uni/view/Widgets/rounded_bottom_modal.dart';
+import 'package:uni/view/Widgets/live/rounded_bottom_modal.dart';
 
 class TitledBottomModal extends StatelessWidget {
   final Widget _header;
@@ -7,14 +7,14 @@ class TitledBottomModal extends StatelessWidget {
   final double _minHeight;
   final double _headerHeight;
   final bool _multiple;
-  const TitledBottomModal(
-      {Key key,
-      Widget header,
-      List<Widget> children,
-      bool multiple,
-      double minHeight = 400,
-      double headerHeight = 62})
-      : _header = header,
+  const TitledBottomModal({
+    Key key,
+    Widget header,
+    List<Widget> children,
+    bool multiple,
+    double minHeight = 400,
+    double headerHeight = 62,
+  })  : _header = header,
         _children = children,
         _minHeight = minHeight,
         _headerHeight = headerHeight,
@@ -42,11 +42,12 @@ class TitledBottomModal extends StatelessWidget {
     children.addAll(_children);
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: RoundedBottomModal(
         width: MediaQuery.of(context).size.width - (_multiple ? 40 : 20),
         minHeight: _minHeight,
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: children,
         ),
       ),

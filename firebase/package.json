@@ -1,6 +1,9 @@
 {
   "dependencies": {
-    "express": "^4.18.1",
-    "kill-port": "^2.0.0"
+    "firebase": "^9.8.1",
+    "firebase-admin": "^10.0.2",
+    "geofire-common": "^5.2.0",
+    "firebase-functions": "^3.18.0",
+    "express": "^4.18.1"
   }
 }
