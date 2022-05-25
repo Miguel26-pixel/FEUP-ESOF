@@ -8,16 +8,20 @@ import 'steps/given_live.dart';
 
 Future<void> main() {
   final config = FlutterTestConfiguration()
-    ..features = [RegExp('features/*.*.feature')]
+    ..features = [RegExp('test_driver/features/.*\.feature')]
     ..reporters = [
       ProgressReporter(),
       TestRunSummaryReporter(),
-      JsonReporter(path: './report.json')
+      JsonReporter(path: './report.json'),
+      StdoutReporter()
     ] // you can include the "StdoutReporter()" without the message level parameter for verbose log information
     ..hooks = []
     ..stepDefinitions = [
-      openSideDrawerStep(),
-      viewsLocationIcon(),
+      GivenOpenSideDrawer(),
+      WhenTapWarning(),
+      ThenViewSAlertPage(),
+      ThenViewLocationIcon(),
+      ThenViewWarningIcon(),
     ]
     ..customStepParameterDefinitions = []
     ..restartAppBetweenScenarios = true

@@ -175,7 +175,7 @@ class _MapState extends State<Map> {
         .entries
         .map(
           (e) => AlertPoiMarker(
-            key: Key('location-icon' + e.key.toString()),
+            key: Key('location-icon-' + e.key.toString()),
             context: context,
             point: e.value.getPosition(),
             pressedBuilder: ((context) =>
@@ -186,15 +186,20 @@ class _MapState extends State<Map> {
         .toList();
 
     final List<Marker> alertMarkers = _spontaneousAlerts
+        .asMap()
+        .entries
         .map((e) => AlertPoiMarker(
+              key: Key('warning-icon-' + e.key.toString()),
               context: context,
               size: 40,
-              point: e.getPosition(),
+              point: e.value.getPosition(),
               pressedBuilder: ((context) => SpontaneousAlertPage(
-                  alertController,
-                  e,
-                  currentLocationController,
-                  _currentLocation)),
+                    alertController,
+                    e.value,
+                    currentLocationController,
+                    _currentLocation,
+                    key: Key('warning-' + e.key.toString() + '-page'),
+                  )),
               iconData: Icons.warning_rounded,
             ))
         .toList();
