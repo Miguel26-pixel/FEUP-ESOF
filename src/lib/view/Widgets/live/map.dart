@@ -207,6 +207,7 @@ class _MapState extends State<Map> {
     markers.addAll(alertMarkers);
 
     final Widget mapComponent = FlutterMap(
+      key: Key('live-map'),
       mapController: _mapController,
       options: MapOptions(
         onPositionChanged: unfollowLocation,
@@ -329,6 +330,7 @@ class _MapState extends State<Map> {
     );
 
     return Scaffold(
+      key: Key('live-scaffold'),
       resizeToAvoidBottomInset: true,
       body: _floorsLoaded
           ? Stack(
