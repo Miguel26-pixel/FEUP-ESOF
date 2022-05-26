@@ -1,5 +1,5 @@
 Feature: Test
-    Scenario: Map shows when Live@UP menu is selected
+    Map shows when Live@UP menu is selected
 
     Scenario: View map
         Given I open the side drawer

@@ -175,7 +175,7 @@ class _MapState extends State<Map> {
         .entries
         .map(
           (e) => AlertPoiMarker(
-            key: Key('location-icon' + e.key.toString()),
+            key: Key('location-icon-' + e.key.toString()),
             context: context,
             point: e.value.getPosition(),
             pressedBuilder: ((context) =>
