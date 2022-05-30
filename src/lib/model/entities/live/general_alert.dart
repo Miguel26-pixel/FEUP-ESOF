@@ -17,12 +17,11 @@ class GeneralAlert {
     return _finishTime;
   }
 
-  void setFinishTime(int upOrDown) {
-    if (upOrDown >= 0) {
-      _finishTime = _finishTime.add(Duration(minutes: upOrDown));
-    }
-    else {
-      _finishTime = _finishTime.subtract(Duration(minutes: (-1)*upOrDown));
-    }
+  void addTime(int time) {
+    _finishTime = _finishTime.add(Duration(minutes: time));
+  }
+
+  void removeTime(int time) {
+    _finishTime = _finishTime.subtract(Duration(minutes: (-1)*time));
   }
 }

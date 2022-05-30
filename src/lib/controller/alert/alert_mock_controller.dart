@@ -96,29 +96,29 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
 
 
   @override
-  void likeAlert(String spontaneousId) {
-    if (_spontaneousAlerts[spontaneousId] != null) {
-      _spontaneousAlerts[spontaneousId].finishTime
+  void likeAlert(String alertId) {
+    if (_spontaneousAlerts[alertId] != null) {
+      _spontaneousAlerts[alertId].finishTime
           .add(Duration(minutes:2));
     }
-    else if (_alerts[spontaneousId] != null) {
-      _alerts[spontaneousId].setFinishTime(2);
+    else if (_alerts[alertId] != null) {
+      _alerts[alertId].addTime(2);
     }
   }
 
 
 
   @override
-  bool dislikeAlert(String spontaneousId) {
-    if (_spontaneousAlerts[spontaneousId] != null) {
-      _spontaneousAlerts[spontaneousId].finishTime
+  bool dislikeAlert(String alertId) {
+    if (_spontaneousAlerts[alertId] != null) {
+      _spontaneousAlerts[alertId].finishTime
           .subtract(Duration(minutes:2));
-      _spontaneousAlerts.remove(spontaneousId);
+      _spontaneousAlerts.remove(alertId);
       return true;
     }
-    else if (_alerts[spontaneousId] != null) {
-      _alerts[spontaneousId].setFinishTime(-2);
-      _alerts.remove(spontaneousId);
+    else if (_alerts[alertId] != null) {
+      _alerts[alertId].removeTime(2);
+      _alerts.remove(alertId);
       return true;
     }
     return false;
