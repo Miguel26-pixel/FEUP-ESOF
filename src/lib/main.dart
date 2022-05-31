@@ -69,7 +69,7 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    MockPointOfInterestController pointOfInterestController =
+    final MockPointOfInterestController pointOfInterestController =
         MockPointOfInterestController();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,

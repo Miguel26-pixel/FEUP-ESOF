@@ -11,10 +11,11 @@ import 'package:latlong2/latlong.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class CreatePOIPage extends StatefulWidget {
-  MockPointOfInterestController _pointOfInterestController;
-  CreatePOIPage(MockPointOfInterestController pointOfInterestController) {
-    _pointOfInterestController = pointOfInterestController;
-  }
+  final MockPointOfInterestController _pointOfInterestController;
+
+  final onCreate;
+  CreatePOIPage(this._pointOfInterestController, {Key key, this.onCreate})
+      : super(key: key);
 
   @override
   _CreatePOIPageState createState() {

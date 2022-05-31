@@ -1,5 +1,4 @@
 import 'package:latlong2/latlong.dart';
-import 'package:uni/model/entities/live/alert.dart';
 import 'package:uni/model/entities/live/poi_type.dart';
 
 class PointOfInterest {
