@@ -94,6 +94,7 @@ class NavigationDrawerState extends State<NavigationDrawer> {
           title: Container(
             padding: EdgeInsets.only(bottom: 3.0, left: 20.0),
             child: Text(d,
+                key: Key(d),
                 style: TextStyle(
                     fontSize: 18.0,
                     color: Theme.of(context).colorScheme.secondary,
