@@ -68,7 +68,8 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
   };
 
   @override
-  Future<List<SpontaneousAlert>> getNearbySpontaneousAlerts(int floor) {
+  Future<List<SpontaneousAlert>> getNearbySpontaneousAlerts(
+      int floor, LatLng _) {
     return Future.value(
       _spontaneousAlerts.values
           .where(

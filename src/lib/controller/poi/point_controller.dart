@@ -9,7 +9,7 @@ import 'package:uni/model/entities/live/point_group.dart';
 class PointOfInterestController implements PointOfInterestControllerInterface {
   @override
   Future<List<int>> getFloorLimits() async {
-    Response res = await get(Uri.parse(
+    final Response res = await get(Uri.parse(
         'https://us-central1-liveup-7c242.cloudfunctions.net/widgets/points/limits'));
 
     if (res.statusCode != 200) {
@@ -27,7 +27,7 @@ class PointOfInterestController implements PointOfInterestControllerInterface {
     final double latitude = currentPosition.latitude;
     final double longitude = currentPosition.longitude;
 
-    Response res = await get(Uri.parse(
+    final Response res = await get(Uri.parse(
         'https://us-central1-liveup-7c242.cloudfunctions.net/widgets/points?floor=${floor.toString()}'));
 
     if (res.statusCode != 200) {

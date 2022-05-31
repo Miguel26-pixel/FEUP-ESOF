@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:uni/assets/constants/map.dart';
+import 'package:uni/controller/alert/alert_controller.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/controller/alert/alert_mock_controller.dart';
 import 'package:uni/controller/current_location.dart';
@@ -31,7 +32,7 @@ class _MapState extends State<Map> {
       CurrentLocationController();
   PointOfInterestControllerInterface pointOfInterestController =
       PointOfInterestController();
-  AlertControllerInterface alertController = AlertMockController();
+  AlertControllerInterface alertController = AlertController();
 
   final double _initialZoom = 18.3;
 
@@ -108,7 +109,7 @@ class _MapState extends State<Map> {
 
   void searchAlerts() {
     alertController
-        .getNearbySpontaneousAlerts(_currentFloor)
+        .getNearbySpontaneousAlerts(_currentFloor, _mapController.center)
         .then((value) => setState(() {
               _spontaneousAlerts = [];
               for (var alert in value) {
@@ -133,15 +134,17 @@ class _MapState extends State<Map> {
       });
     });
 
-    currentLocationController.getCurrentLocation().then((value) {
-      setState(() {
-        _currentLocation = value;
-        _locationLoaded = value != null;
-      });
+    _mapController.onReady?.then((_) => {
+          currentLocationController.getCurrentLocation().then((value) {
+            setState(() {
+              _currentLocation = value;
+              _locationLoaded = value != null;
+            });
 
-      searchPOI();
-      searchAlerts();
-    });
+            searchPOI();
+            searchAlerts();
+          })
+        });
 
     currentLocationController.subscribeLocationUpdate((value) {
       setState(
