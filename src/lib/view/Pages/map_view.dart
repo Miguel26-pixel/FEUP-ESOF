@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uni/view/Pages/general_page_view.dart';
-import 'package:uni/view/Widgets/map.dart';
+import 'package:uni/view/Widgets/live/map.dart';
 
 class MapPage extends StatefulWidget {
   @override

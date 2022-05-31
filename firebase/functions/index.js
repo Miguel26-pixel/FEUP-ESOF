@@ -3,14 +3,14 @@ const admin = require("firebase-admin");
 const express = require('express');
 const {seed} = require("./mock");
 const geofire = require("geofire-common");
-const { parsePoint } = require("./utils");
 const { firestore } = require("firebase-admin");
 
 const RADIUS_METERS = 1000;
-const DEFAULT_POSITION = {
-    latitude: 41.177787,
-    longitude: -8.595922,
-}
+const DEFAULT_POSITION = [
+    41.177787,
+    -8.595922,
+]
+
 const ALERT_TIME_REDUCE_SECONDS = 120;
 const ALERT_ADD_TIME_REDUCE_SECONDS = 60;
 const SPONTANEOUS_LIFETIME = 300;
@@ -30,31 +30,30 @@ const alertTypeCollection = db.collection("alert-type");
 const spontaneousCollection = db.collection("spontaneous");
 const groupsCollection = db.collection("groups");
 
-// seed(
-//     db, 
-//     pointsCollection, 
-//     alertsCollection, 
-//     alertTypeCollection, 
-//     spontaneousCollection,
-//     groupsCollection);
+seed(
+    db, 
+    pointsCollection, 
+    alertsCollection, 
+    alertTypeCollection, 
+    spontaneousCollection,
+    groupsCollection);
 
 app.get("/points", async (req, res) => {
-    const locationRaw = req.body.location || DEFAULT_POSITION;
-    const floor = req.body.floor || 0;
+    const locationRaw = [req.query.latitude, req.query.longitude] || DEFAULT_POSITION;
+    const floor = parseInt(req.query.floor) || 0;
 
     const bounds = geofire.geohashQueryBounds([
-        locationRaw.latitude,
-        locationRaw.longitude,
+        locationRaw[0] || DEFAULT_POSITION[0],
+        locationRaw[1] || DEFAULT_POSITION[1],
     ], RADIUS_METERS);
 
-    const pointsQueries = [];
-    const groupsQueries = [];
+    const pointsData = [];
+    const groupsData = [];
 
     for (const bound of bounds) {
         const pointQuery = pointsCollection
             .where("geohash", "!=", null)
             .orderBy("geohash")
-            .where("floor", "=", floor)
             .startAt(bound[0])
             .endAt(bound[1])
             .get();
@@ -62,18 +61,21 @@ app.get("/points", async (req, res) => {
         const groupQuery = groupsCollection
             .where("geohash", "!=", null)
             .orderBy("geohash")
-            .where("floor", "=", floor)
             .startAt(bound[0])
             .endAt(bound[1])
             .get();
+            
+        const pointRes = 
+            (await pointQuery).docs.filter(doc => ((d) => d.floor === floor)(doc.data()));
+        pointsData.push(...pointRes);
 
-        pointsQueries.push(pointQuery);
-        groupsQueries.push(groupQuery);
+        const groupRes = 
+            (await groupQuery).docs.filter(doc => ((d) => d.floor === floor)(doc.data()));
+        groupsData.push(...groupRes);
     }
-    
 
-    let pointsData = (await Promise.all(pointsQueries)).map(q => q.docs).flat();
-    let groupsData = (await Promise.all(groupsQueries)).map(q => q.docs).flat();
+    console.log(pointsData)
+    
 
     const groups = await Promise.all(groupsData.map(async (obj) => {
         const data = obj.data();
@@ -126,7 +128,7 @@ app.post("/points/new", async (req, res) => {
         location,
     } = req.body;
 
-    if (!name || floor === null || !location?.latitude || !location?.longitude) {
+    if (!name || floor === null || !location || !location.latitude || !location.longitude) {
         return res.status(401).json({error: "Invalid arguments"});
     }
 
@@ -337,12 +339,12 @@ app.post("/points/:id/alerts/new", async (req, res) => {
 });
 
 app.get("/alerts/spontaneous", async (req, res) => {
-    const locationRaw = req.body.location || DEFAULT_POSITION;
-    const floor = req.body.floor || 0;
+    const locationRaw = [req.query.latitude, req.query.longitude] || DEFAULT_POSITION;
+    const floor = parseInt(req.query.floor) || 0;
 
     const bounds = geofire.geohashQueryBounds([
-        locationRaw.latitude,
-        locationRaw.longitude,
+        locationRaw[0] || DEFAULT_POSITION[0],
+        locationRaw[1] || DEFAULT_POSITION[1],
     ], RADIUS_METERS);
 
     const spontaneousAlertsSnapshots  = [];
