@@ -7,7 +7,6 @@ class Alert extends GeneralAlert {
   Alert(String id, DateTime startTime, DateTime finishTime, this._alertType)
       : super(id, startTime, finishTime);
 
-
   AlertType getAlertType() {
     return _alertType;
   }

@@ -11,16 +11,23 @@ import 'package:latlong2/latlong.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class CreatePOIPage extends StatefulWidget {
-  CreatePOIPage() {}
+  MockPointOfInterestController _pointOfInterestController;
+  CreatePOIPage(MockPointOfInterestController pointOfInterestController) {
+    _pointOfInterestController = pointOfInterestController;
+  }
 
   @override
   _CreatePOIPageState createState() {
-    return _CreatePOIPageState();
+    return _CreatePOIPageState(_pointOfInterestController);
   }
 }
 
 class _CreatePOIPageState extends GeneralPageViewState {
-  _CreatePOIPageState() {}
+  _CreatePOIPageState(MockPointOfInterestController pointOfInterestController) {
+    _pointOfInterestController = pointOfInterestController;
+  }
+
+  MockPointOfInterestController _pointOfInterestController;
 
   final _formKey = GlobalKey<FormState>();
   final _scrollKey = GlobalKey<ScaffoldState>();
@@ -40,7 +47,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
     super.initState();
     poiTypes = [];
     selectedType = -1;
-    floorLimits = [-1, 4];
+    floorLimits = [-1, 3];
     floor = 0;
     getPOITypes();
     getFloorLimit();
@@ -48,12 +55,12 @@ class _CreatePOIPageState extends GeneralPageViewState {
 
   void getFloorLimit() async {
     setState(() async {
-      floorLimits = await MockPointOfInterestController().getFloorLimits();
+      floorLimits = await _pointOfInterestController.getFloorLimits();
     });
   }
 
   void getPOITypes() async {
-    final temp = await MockPointOfInterestController().getTypesPOI();
+    final temp = await _pointOfInterestController.getTypesPOI();
 
     setState(() {
       poiTypes = temp;
@@ -82,7 +89,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
         ));
   }
 
-  InputDecoration getFormBoarder(String hint) {
+  InputDecoration getFormBorder(String hint) {
     return InputDecoration(
       labelText: hint,
       hintText: hint,
@@ -95,7 +102,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
   }
 
   Widget getPOIName() => TextFormField(
-        decoration: getFormBoarder('Name'),
+        decoration: getFormBorder('Name'),
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter some text';
@@ -106,7 +113,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
       );
 
   Widget getPOILatitude() => TextFormField(
-        decoration: getFormBoarder('Latitude'),
+        decoration: getFormBorder('Latitude'),
         validator: (value) {
           final double lat = double.tryParse(value);
           if (lat == null || value.isEmpty || lat <= -90 || lat >= 90) {
@@ -119,7 +126,7 @@ class _CreatePOIPageState extends GeneralPageViewState {
       );
 
   Widget getPOILongitude() => TextFormField(
-        decoration: getFormBoarder('Longitude'),
+        decoration: getFormBorder('Longitude'),
         controller: longitudeController,
         validator: (value) {
           final double long = double.tryParse(value);
@@ -202,19 +209,18 @@ class _CreatePOIPageState extends GeneralPageViewState {
 
   Future<bool> submit() {
     if (_formKey.currentState.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Created POI successfully')),
-      );
-    }
-    if (selectedType == -1) {
-      selectedType = poiTypes.length - 1;
-    }
-    final String name = nameController.text;
-    final double latitude = double.parse(latitudeController.text);
-    final double longitude = double.parse(longitudeController.text);
+      if (selectedType == -1) {
+        selectedType = poiTypes.length - 1;
+      }
+      final String name = nameController.value.text;
+      final double latitude = double.parse(latitudeController.value.text);
+      final double longitude = double.parse(longitudeController.value.text);
 
-    return MockPointOfInterestController().createPOI(
-        name, LatLng(latitude, longitude), floor, poiTypes[selectedType]);
+      return _pointOfInterestController.createPOI(
+          name, LatLng(latitude, longitude), floor, poiTypes[selectedType]);
+    } else {
+      return Future.value(false);
+    }
   }
 
   Widget getButton() {
@@ -226,6 +232,9 @@ class _CreatePOIPageState extends GeneralPageViewState {
             onPressed: () {
               submit().then((response) {
                 if (response) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Created POI successfully')),
+                  );
                   Navigator.pushNamed(context, '/' + Constants.navLive);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(

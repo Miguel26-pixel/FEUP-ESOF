@@ -7,6 +7,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry/sentry.dart';
 import 'package:redux/redux.dart';
 import 'package:uni/controller/middleware.dart';
+import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:uni/model/app_state.dart';
 import 'package:uni/redux/actions.dart';
 import 'package:uni/redux/reducers.dart';
@@ -68,6 +69,8 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    MockPointOfInterestController pointOfInterestController =
+        MockPointOfInterestController();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -101,7 +104,8 @@ class MyAppState extends State<MyApp> {
                     page: AdminDashboardPage(), settings: settings);
               case '/' + Constants.navCreatePoi:
                 return PageTransition.makePageTransition(
-                    page: CreatePOIPage(), settings: settings);
+                    page: CreatePOIPage(pointOfInterestController),
+                    settings: settings);
               case '/' + Constants.navUsefulContacts:
                 return PageTransition.makePageTransition(
                     page: UsefulContactsCardView(), settings: settings);
