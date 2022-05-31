@@ -1,9 +1,13 @@
 import 'dart:math';
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:uni/controller/alert/alert_mock_controller.dart';
+import 'package:uni/model/entities/live/alert.dart';
+import 'package:uni/model/entities/live/alert_type.dart';
+import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
 
 class AlertController extends AlertMockController {
@@ -12,6 +16,41 @@ class AlertController extends AlertMockController {
     final nanoseconds = dataObj['_nanoseconds'];
     return DateTime.fromMicrosecondsSinceEpoch(
         (seconds * pow(10, 6) + nanoseconds / pow(10, 3)).toInt());
+  }
+
+  @override
+  Future<List<Alert>> getAlertsOfPoi(PointOfInterest poi) async {
+    final Response res = await get(Uri.parse(
+        'https://us-central1-liveup-7c242.cloudfunctions.net/widgets/point/${poi.getId()}/alerts'));
+
+    if (res.statusCode != 200) {
+      throw Exception('Network error');
+    }
+
+    final decoded = jsonDecode(res.body);
+
+    final List<Alert> alerts = decoded['data'].map<Alert>((element) {
+      final finishTime = this.parseDate(element['finish-time']);
+      final startTime = this.parseDate(element['start-time']);
+      final id = element['id'];
+
+      final typeElement = element['type'];
+      final typeMessage = typeElement['message'];
+      final typeName = typeElement['name'];
+      final typeDuration = typeElement['base-duration-seconds'];
+      final typeId = typeElement['id'];
+      final typeIcon = typeElement['icon'];
+      final AlertType alertType = AlertType(
+          typeId,
+          typeName,
+          typeMessage,
+          Duration(seconds: typeDuration),
+          IconData(typeIcon, fontFamily: 'MaterialIcons'));
+
+      return Alert(id, startTime, finishTime, alertType);
+    }).toList();
+
+    return alerts;
   }
 
   @override
