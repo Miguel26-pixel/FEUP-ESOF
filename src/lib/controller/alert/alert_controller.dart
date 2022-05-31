@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:tuple/tuple.dart';
 import 'package:uni/controller/alert/alert_mock_controller.dart';
 import 'package:uni/model/entities/live/alert.dart';
 import 'package:uni/model/entities/live/alert_type.dart';
@@ -51,6 +52,36 @@ class AlertController extends AlertMockController {
     }).toList();
 
     return alerts;
+  }
+
+  @override
+  Future<Tuple2<bool, String>> createSpontaneousAlert(
+      String description, int floor, LatLng position) async {
+    final headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+
+    final body = {
+      'floor': floor,
+      'location': {
+        'latitude': position.latitude,
+        'longitude': position.longitude
+      },
+      'message': description
+    };
+
+    final Response res = await post(
+      Uri.parse(
+          'https://us-central1-liveup-7c242.cloudfunctions.net/widgets/alerts/spontaneous/new'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (res.statusCode != 200) {
+      return Tuple2(false, 'Unknown error');
+    }
+
+    return Tuple2(true, '');
   }
 
   @override
