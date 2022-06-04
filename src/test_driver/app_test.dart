@@ -10,7 +10,7 @@ Future<void> main() {
       ProgressReporter(),
       TestRunSummaryReporter(),
       JsonReporter(path: './report.json'),
-      StdoutReporter()
+      StdoutReporter(),
     ]
     ..hooks = []
     ..stepDefinitions = [
@@ -19,6 +19,7 @@ Future<void> main() {
       thenViewSAlertPage(),
       thenViewLocationIcon(),
       thenViewWarningIcon(),
+      thenViewLocationIcon(),
     ]
     ..customStepParameterDefinitions = []
     ..restartAppBetweenScenarios = true
