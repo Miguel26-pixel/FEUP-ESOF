@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 Feature: View Map
-=======
-Feature: Test
->>>>>>> main
     Map shows when Live@UP menu is selected
 
     Scenario: View map

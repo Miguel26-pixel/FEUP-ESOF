@@ -16,7 +16,6 @@ StepDefinitionGeneric thenViewLocationIcon() {
       await FlutterDriverUtils.isPresent(context.world.driver, location),
       true,
     );
-<<<<<<< HEAD
   }));
 }
 
@@ -45,7 +44,5 @@ StepDefinitionGeneric thenViewSAlertPage() {
       await FlutterDriverUtils.isPresent(context.world.driver, location),
       true,
     );
-=======
->>>>>>> main
   }));
 }
