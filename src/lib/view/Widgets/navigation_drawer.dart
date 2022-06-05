@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uni/controller/admin/admin_mock_controller.dart';
 import '../../utils/constants.dart' as Constants;
 
 class NavigationDrawer extends StatefulWidget {
@@ -33,6 +34,15 @@ class NavigationDrawerState extends State<NavigationDrawer> {
       Constants.navAbout: _onSelectPage,
       Constants.navBugReport: _onSelectPage,
     };
+
+    final admin = MockAdminController().isAdmin();
+    admin.then((response) {
+      if (response){
+      setState(() {
+        drawerItems[Constants.navAdmin] = _onSelectPage;
+      });
+      } 
+    });
   }
 
   // Callback Functions
@@ -94,6 +104,7 @@ class NavigationDrawerState extends State<NavigationDrawer> {
           title: Container(
             padding: EdgeInsets.only(bottom: 3.0, left: 20.0),
             child: Text(d,
+                key: Key(d),
                 style: TextStyle(
                     fontSize: 18.0,
                     color: Theme.of(context).colorScheme.secondary,

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
+<module version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
+<<<<<<< HEAD
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/src/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/src/.dart_tool" />
@@ -32,8 +33,8 @@
       <excludeFolder url="file://$MODULE_DIR$/src/windows/flutter/ephemeral/.plugin_symlinks/url_launcher_windows/.dart_tool" />
     </content>
     <orderEntry type="inheritedJdk" />
+=======
+>>>>>>> e0e1e3604ef4609f6892b38aa77b25012e532221
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Dart SDK" level="project" />
-    <orderEntry type="library" name="Dart Packages" level="project" />
   </component>
 </module>

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:tuple/tuple.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/model/entities/live/alert.dart';
 import 'package:uni/model/entities/live/alert_type.dart';
@@ -8,11 +9,17 @@ import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
 
 class AlertMockController implements AlertControllerInterface {
+  int _alertCounter = 5;
+
   static final _alertTypes = {
     '0': AlertType('0', 'Full', 'This Location is Full',
         const Duration(days: 1), Icons.people_outline),
     '1': AlertType('1', 'Noisy', 'This Location is Noisy',
         const Duration(days: 1), Icons.volume_up_outlined),
+    '2': AlertType('3', 'Cleaning', 'This Location is being cleaned',
+        const Duration(days: 1), Icons.people_outline),
+    '3': AlertType('4', 'Out of service', 'This Location is out of service',
+        const Duration(days: 1), Icons.people_outline)
   };
 
   static final _alerts = <String, Alert>{
@@ -95,8 +102,9 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
   }
 
 
+
   @override
-  void likeAlert(String alertId) {
+  Future<void> likeAlert(String alertId) {
     if (_spontaneousAlerts[alertId] != null) {
       _spontaneousAlerts[alertId].finishTime
           .add(Duration(minutes:2));
@@ -109,18 +117,39 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
 
 
   @override
-  bool dislikeAlert(String alertId) {
+  Future<bool> dislikeAlert(String alertId) {
     if (_spontaneousAlerts[alertId] != null) {
       _spontaneousAlerts[alertId].finishTime
-          .subtract(Duration(minutes:2));
+          .subtract(Duration(minutes: 2));
       _spontaneousAlerts.remove(alertId);
-      return true;
+      return Future.value(true);
     }
     else if (_alerts[alertId] != null) {
       _alerts[alertId].removeTime(2);
       _alerts.remove(alertId);
-      return true;
+      return Future.value(true);
     }
-    return false;
+    return Future.value(false);
+  }
+
+
+  @override
+  Future<Tuple2<bool, String>> createSpontaneousAlert(
+      String description, int floor, LatLng position) {
+    if (position == null) {
+      return Future.value(Tuple2(false, "Couldn't get current position"));
+    }
+
+    _spontaneousAlerts[_alertCounter.toString()] = SpontaneousAlert(
+        _alertCounter.toString(),
+        DateTime.now(),
+        DateTime.now().add(Duration(seconds: 300)),
+        description,
+        position,
+        floor);
+    _alertCounter++;
+
+    return Future.value(Tuple2(true, ''));
+
   }
 }

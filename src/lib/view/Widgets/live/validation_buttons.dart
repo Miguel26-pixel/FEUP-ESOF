@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
 
@@ -20,6 +22,10 @@ class ValidationButtons extends StatefulWidget {
 }
 
 class _ValidationButtonsState extends State<ValidationButtons> {
+  bool disabled = false;
+  void initState() {
+    disabled = false;
+  }
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -27,8 +33,10 @@ class _ValidationButtonsState extends State<ValidationButtons> {
       children: [
         IconButton(
           iconSize: 30,
-          onPressed: () => widget._alertController
-              .likeAlert(widget._alertId),
+          onPressed: () => disabled ? widget._alertController
+              .likeAlert(widget._alertId) .then( (value) => {
+                  setState(() => {disabled = true})
+          }) : null,
           icon: const Icon(
             Icons.check_circle,
             color: Colors.green,
@@ -36,7 +44,9 @@ class _ValidationButtonsState extends State<ValidationButtons> {
         ),
         IconButton(
           onPressed: () => widget._alertController
-              .dislikeAlert(widget._alertId),
+              .dislikeAlert(widget._alertId) .then( (value) => {
+                if(value == true)
+          }),
           iconSize: 30,
           icon: const Icon(
             Icons.cancel,

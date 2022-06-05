@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/model/entities/live/alert.dart';
 import 'package:uni/model/entities/live/alert_type.dart';
-import 'package:uni/view/Widgets/titled_bottom_modal.dart';
-import 'package:uni/view/Widgets/validation_buttons.dart';
+import 'package:uni/view/Widgets/live/titled_bottom_modal.dart';
+import 'package:uni/view/Widgets/live/validation_buttons.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/point_group.dart';
 
@@ -49,6 +49,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
             Align(
               alignment: Alignment.center,
               child: Text(
+
                 alertType.getName(),
                 style: const TextStyle(fontSize: 16),
               ),
@@ -58,6 +59,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
               child: SizedBox(
                 width: 60,
                 child: Icon(
+
                   alertType.getIconData(),
                   size: 35,
                 ),
