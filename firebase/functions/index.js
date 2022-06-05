@@ -257,6 +257,14 @@ app.get("/point/:id/alerts", async (req, res) => {
     })
 });
 
+app.get("/alert/types", async (req, res) => {
+    const alertData = await alertTypeCollection.get();
+
+    return res.json({
+        data: alertData.docs.map(doc => doc.data())
+    })
+});
+
 app.post("/alerts/:id/reject", async (req, res) => {
     const alertSnapshot = await alertsCollection.doc(req.params.id).get();
     
