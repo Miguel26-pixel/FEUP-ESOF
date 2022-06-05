@@ -16,6 +16,10 @@ class AlertMockController implements AlertControllerInterface {
         const Duration(days: 1), Icons.people_outline),
     '1': AlertType('1', 'Noisy', 'This Location is Noisy',
         const Duration(days: 1), Icons.volume_up_outlined),
+    '2': AlertType('3', 'Cleaning', 'This Location is being cleaned',
+        const Duration(days: 1), Icons.people_outline),
+    '3': AlertType('4', 'Out of service', 'This Location is out of service',
+        const Duration(days: 1), Icons.people_outline)
   };
 
   static final _alerts = <String, Alert>{

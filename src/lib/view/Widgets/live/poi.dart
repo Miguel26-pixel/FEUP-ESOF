@@ -49,6 +49,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
             Align(
               alignment: Alignment.center,
               child: Text(
+
                 alertType.getName(),
                 style: const TextStyle(fontSize: 16),
               ),
@@ -58,6 +59,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
               child: SizedBox(
                 width: 60,
                 child: Icon(
+
                   alertType.getIconData(),
                   size: 35,
                 ),
