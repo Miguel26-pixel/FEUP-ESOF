@@ -144,7 +144,18 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
   }
 
   @override
-  Future <Map<String, AlertType>> getAllAlertTypes() {
+  Future<Map<String, AlertType>> getAllAlertTypes() {
     return Future.value(_alertTypes);
+  }
+
+  @override
+  Future<Tuple2<bool, String>> createAlert(
+      PointOfInterest pointOfInterest, AlertType alertType) {
+    return Future.value(Tuple2(true, ''));
+  }
+
+  @override
+  Future<List<AlertType>> getAlertTypes() {
+    return Future.value(_alertTypes.values.toList());
   }
 }
