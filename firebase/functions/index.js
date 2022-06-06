@@ -279,6 +279,7 @@ app.get("/point/:id/alerts", async (req, res) => {
   const alerts = await point.alerts.reduce(async (result, alertRef) => {
     const alertSnapshot = await alertRef.get();
     const alert = alertSnapshot.data();
+    result = await result;
 
     if (alert["start-time"].toDate() > new Date()) {
       return result;

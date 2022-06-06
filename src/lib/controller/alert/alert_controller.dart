@@ -6,7 +6,6 @@ import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:tuple/tuple.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
-import 'package:uni/controller/alert/alert_mock_controller.dart';
 import 'package:uni/model/entities/live/alert.dart';
 import 'package:uni/model/entities/live/alert_type.dart';
 import 'package:uni/model/entities/live/general_alert.dart';
@@ -144,9 +143,24 @@ class AlertController implements AlertControllerInterface {
 
   @override
   Future<Tuple2<bool, String>> createAlert(
-      PointOfInterest pointOfInterest, AlertType alert) {
-    // TODO: implement createAlert
-    throw UnimplementedError();
+      PointOfInterest pointOfInterest, AlertType alert) async {
+    final headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+
+    final body = {'type': alert.getId()};
+    final Response res = await post(
+      Uri.parse(
+          'https://us-central1-liveup-7c242.cloudfunctions.net/widgets/points/${pointOfInterest.getId()}/alerts/new'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (res.statusCode != 200) {
+      throw Exception('Network error');
+    }
+
+    return Tuple2(true, '');
   }
 
   @override
@@ -174,12 +188,13 @@ class AlertController implements AlertControllerInterface {
 
     final List<AlertType> alertTypes =
         decoded['data'].map<AlertType>((element) {
+      final id = element['id'];
       final name = element['name'];
       final duration = Duration(seconds: element['base-duration-seconds']);
       final message = element['message'];
       final icon = int.parse(element['icon']);
 
-      return AlertType('', name, message, duration,
+      return AlertType(id, name, message, duration,
           IconData(icon, fontFamily: 'MaterialIcons'));
     }).toList();
 
