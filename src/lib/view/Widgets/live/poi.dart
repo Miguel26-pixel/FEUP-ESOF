@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/model/entities/live/alert.dart';
 import 'package:uni/model/entities/live/alert_type.dart';
+import 'package:uni/view/Widgets/live/alert_type_selector.dart';
 import 'package:uni/view/Widgets/live/titled_bottom_modal.dart';
 import 'package:uni/view/Widgets/live/validation_buttons.dart';
 import 'package:uni/model/entities/live/point.dart';
@@ -20,6 +21,11 @@ class PointOfInterestPage extends StatefulWidget {
 }
 
 class _PointOfInterestPageState extends State<PointOfInterestPage> {
+  bool isCreatingAlert = false;
+  final _formKey = GlobalKey<FormState>();
+  int selectedType;
+  List<AlertType> alertTypes;
+
   Widget buildAlertItem(BuildContext context, int i, List<Alert> alerts) {
     final AlertType alertType = alerts[i].getAlertType();
 
@@ -49,7 +55,6 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
             Align(
               alignment: Alignment.center,
               child: Text(
-
                 alertType.getName(),
                 style: const TextStyle(fontSize: 16),
               ),
@@ -59,7 +64,6 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
               child: SizedBox(
                 width: 60,
                 child: Icon(
-
                   alertType.getIconData(),
                   size: 35,
                 ),
@@ -67,6 +71,49 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
             ),
           ],
         ));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    alertTypes = [];
+    selectedType = -1;
+    getPOITypes();
+  }
+
+  void getPOITypes() async {
+    final temp = await widget._alertController.getAlertTypes();
+
+    setState(() {
+      alertTypes = temp;
+      selectedType = -1;
+    });
+  }
+
+  Future<void> getNewPage(BuildContext context) async {
+    Navigator.of(context).pop();
+  }
+
+  void submitAlert() async {
+    if (_formKey.currentState.validate()) {
+      if (selectedType == -1) {
+        return;
+      }
+
+      final result = await widget._alertController
+          .createAlert(widget._poi, alertTypes[selectedType]);
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.of(context, rootNavigator: true).pop();
+      if (result.item1 == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Alert added!')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error ')),
+        );
+      }
+    }
   }
 
   Widget buildPointOfInterest(
@@ -86,6 +133,109 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
       ),
     );
 
+    final Widget _createAlertPage = Container(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Spacer(),
+            SingleChildScrollView(
+              child: AlertTypeSelector(
+                types: alertTypes,
+                callback: (index) {
+                  setState(() {
+                    selectedType = index;
+                  });
+                },
+                selected: selectedType,
+              ),
+            ),
+            Spacer(),
+            Padding(
+              padding: EdgeInsets.only(bottom: 20),
+              child: ElevatedButton(
+                onPressed: () {
+                  submitAlert();
+                },
+                child: Text(
+                  'Confirm',
+                  style: TextStyle(fontSize: 17),
+                ),
+                style: ButtonStyle(
+                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(
+                      horizontal: 100,
+                    )),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5))))),
+              ),
+            ),
+          ],
+        ),
+      ),
+      //),
+    );
+
+    Widget buildCreateAlertButton(BuildContext context) {
+      final button = OutlinedButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => Dialog(
+              child: SizedBox(
+                height: 500,
+                width: 500,
+                child: _createAlertPage,
+              ),
+            ),
+            //child: Text('Hello'),))
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+          primary: Theme.of(context).colorScheme.secondary,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+        ),
+        child: Align(
+          alignment: Alignment.center,
+          child: Container(
+            width: 200,
+            child: Row(
+              //alignment: Alignment.centerLeft,
+              children: [
+                Container(
+                  child: Icon(
+                    Icons.add_alert,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                ),
+                // alignment: Alignment.center,
+                Text(
+                  'CREATE ALERT',
+                  style: const TextStyle(
+                    fontSize: 17,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      return Container(
+        width: 300,
+        height: 60,
+        margin: const EdgeInsets.only(bottom: 15),
+        child: button,
+      );
+    }
+
     Widget layout(Widget content) => TitledBottomModal(
           multiple: multiple,
           header: Row(
@@ -104,8 +254,9 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
               ),
             ],
           ),
-          children: [
+          children: <Widget>[
             Expanded(child: content),
+            Container(child: buildCreateAlertButton(context)),
           ],
         );
 
@@ -149,7 +300,6 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
   @override
   Widget build(BuildContext context) {
     final List<PointOfInterest> pois = [];
-
     if (widget._poi is PointOfInterestGroup) {
       pois.addAll((widget._poi as PointOfInterestGroup).getPoints());
     } else {
