@@ -7,7 +7,6 @@ import 'package:uni/view/Pages/general_page_view.dart';
 import 'package:uni/view/Widgets/type_selector.dart';
 import '../../utils/constants.dart' as Constants;
 import 'package:uni/view/Widgets/page_title.dart';
-import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:numberpicker/numberpicker.dart';
 

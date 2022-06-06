@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:uni/controller/poi/poi_controller_interface.dart';
 import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:uni/model/entities/live/poi_type.dart';
 import 'package:uni/model/entities/live/point.dart';
@@ -26,9 +25,6 @@ class PointOfInterestController extends MockPointOfInterestController {
   @override
   Future<List<PointOfInterest>> getNearbyPOI(
       int floor, LatLng currentPosition) async {
-    final double latitude = currentPosition.latitude;
-    final double longitude = currentPosition.longitude;
-
     final Response res = await get(Uri.parse(
         'https://us-central1-liveup-7c242.cloudfunctions.net/widgets/points?floor=${floor.toString()}'));
 
