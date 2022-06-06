@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:uni/controller/poi/point_controller.dart';
 import 'package:uni/model/entities/live/poi_type.dart';
 import 'package:uni/view/Pages/general_page_view.dart';
 import 'package:uni/view/Widgets/type_selector.dart';
@@ -11,7 +12,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class CreatePOIPage extends StatefulWidget {
-  final MockPointOfInterestController _pointOfInterestController;
+  final PointOfInterestController _pointOfInterestController;
 
   final onCreate;
   CreatePOIPage(this._pointOfInterestController, {Key key, this.onCreate})
@@ -24,11 +25,11 @@ class CreatePOIPage extends StatefulWidget {
 }
 
 class _CreatePOIPageState extends GeneralPageViewState {
-  _CreatePOIPageState(MockPointOfInterestController pointOfInterestController) {
+  _CreatePOIPageState(PointOfInterestController pointOfInterestController) {
     _pointOfInterestController = pointOfInterestController;
   }
 
-  MockPointOfInterestController _pointOfInterestController;
+  PointOfInterestController _pointOfInterestController;
 
   final _formKey = GlobalKey<FormState>();
   final _scrollKey = GlobalKey<ScaffoldState>();

@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:uni/controller/poi/poi_controller_interface.dart';
+import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:uni/model/entities/live/poi_type.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/point_group.dart';
 
-class PointOfInterestController implements PointOfInterestControllerInterface {
+class PointOfInterestController extends MockPointOfInterestController {
   @override
   Future<List<int>> getFloorLimits() async {
     final Response res = await get(Uri.parse(
@@ -88,14 +89,28 @@ class PointOfInterestController implements PointOfInterestControllerInterface {
 
   @override
   Future<bool> createPOI(
-      String name, LatLng pos, int floor, PointOfInterestType type) {
-    // TODO: implement createPOI
-    throw UnimplementedError();
-  }
+      String name, LatLng pos, int floor, PointOfInterestType type) async {
+    final headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
 
-  @override
-  Future<List<PointOfInterestType>> getTypesPOI() {
-    // TODO: implement getTypesPOI
-    throw UnimplementedError();
+    final body = {
+      'floor': floor,
+      'location': {'latitude': pos.latitude, 'longitude': pos.longitude},
+      'name': name
+    };
+
+    final Response res = await post(
+      Uri.parse(
+          'https://us-central1-liveup-7c242.cloudfunctions.net/widgets/points/new'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (res.statusCode != 200) {
+      return false;
+    }
+
+    return true;
   }
 }
