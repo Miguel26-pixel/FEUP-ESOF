@@ -84,23 +84,26 @@ exports.seed = async (
     "base-duration-seconds": 600,
     "message": "This location is full",
     "name": "Full",
+    "icon": "58094",
   });
 
   const alertType1 = await alertTypeCollection.add({
     "base-duration-seconds": 600,
     "message": "This location is empty",
     "name": "Empty",
+    "icon": "58513",
   });
 
   const alertType2 = await alertTypeCollection.add({
     "base-duration-seconds": 600,
     "message": "This location is not working properly",
     "name": "Broken",
+    "icon": "58666",
   });
 
   const alert0 = await alertsCollection.add({
     "finish-time": firestore.Timestamp.fromDate(
-        new Date("25 May 2022 12:00:00 UTC+1")),
+        new Date("25 May 2023 12:00:00 UTC+1")),
     "start-time": firestore.Timestamp.fromDate(
         new Date("11 May 2022 12:00:00 UTC+1")),
     "type": alertType0,
@@ -108,7 +111,7 @@ exports.seed = async (
 
   const alert1 = await alertsCollection.add({
     "finish-time": firestore.Timestamp.fromDate(
-        new Date("25 May 2022 12:00:00 UTC+1")),
+        new Date("25 May 2023 12:00:00 UTC+1")),
     "start-time": firestore.Timestamp.fromDate(
         new Date("11 May 2022 12:00:00 UTC+1")),
     "type": alertType1,
@@ -116,7 +119,7 @@ exports.seed = async (
 
   const alert3 = await alertsCollection.add({
     "finish-time": firestore.Timestamp.fromDate(
-        new Date("25 May 2022 12:00:00 UTC+1")),
+        new Date("25 May 2023 12:00:00 UTC+1")),
     "start-time": firestore.Timestamp.fromDate(
         new Date("11 May 2022 12:00:00 UTC+1")),
     "type": alertType2,
