@@ -6,6 +6,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry/sentry.dart';
 import 'package:redux/redux.dart';
+import 'package:uni/controller/alert/alert_controller.dart';
+import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/controller/middleware.dart';
 import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:uni/controller/poi/point_controller.dart';
@@ -67,11 +69,12 @@ class MyAppState extends State<MyApp> {
   MyAppState({@required this.state}) {}
 
   final Store<AppState> state;
+  final PointOfInterestController pointOfInterestController =
+      PointOfInterestController();
+  final AlertControllerInterface alertController = AlertController();
 
   @override
   Widget build(BuildContext context) {
-    final PointOfInterestController pointOfInterestController =
-        PointOfInterestController();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -99,7 +102,11 @@ class MyAppState extends State<MyApp> {
                     page: BusStopNextArrivalsPage(), settings: settings);
               case '/' + Constants.navLive:
                 return PageTransition.makePageTransition(
-                    page: MapPage(), settings: settings);
+                    page: MapPage(
+                      alertController: alertController,
+                      pointOfInterestController: pointOfInterestController,
+                    ),
+                    settings: settings);
               case '/' + Constants.navAdmin:
                 return PageTransition.makePageTransition(
                     page: AdminDashboardPage(), settings: settings);

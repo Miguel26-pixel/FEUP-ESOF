@@ -5,13 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:tuple/tuple.dart';
+import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/controller/alert/alert_mock_controller.dart';
 import 'package:uni/model/entities/live/alert.dart';
 import 'package:uni/model/entities/live/alert_type.dart';
+import 'package:uni/model/entities/live/general_alert.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
 
-class AlertController extends AlertMockController {
+class AlertController implements AlertControllerInterface {
   DateTime parseDate(dynamic dataObj) {
     final seconds = dataObj['_seconds'];
     final nanoseconds = dataObj['_nanoseconds'];
@@ -138,5 +140,55 @@ class AlertController extends AlertMockController {
     final decoded = jsonDecode(res.body);
 
     return decoded['deleted'];
+  }
+
+  @override
+  Future<Tuple2<bool, String>> createAlert(
+      PointOfInterest pointOfInterest, AlertType alert) {
+    // TODO: implement createAlert
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<GeneralAlert> getAlert(String id) {
+    // TODO: implement getAlert
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AlertType> getAlertType(String id) {
+    // TODO: implement getAlertType
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<AlertType>> getAlertTypes() async {
+    final Response res = await get(Uri.parse(
+        'https://us-central1-liveup-7c242.cloudfunctions.net/widgets//alert/types'));
+
+    if (res.statusCode != 200) {
+      throw Exception('Network error');
+    }
+
+    final decoded = jsonDecode(res.body);
+
+    final List<AlertType> alertTypes =
+        decoded['data'].map<AlertType>((element) {
+      final name = element['name'];
+      final duration = Duration(seconds: element['base-duration-seconds']);
+      final message = element['message'];
+      final icon = int.parse(element['icon']);
+
+      return AlertType('', name, message, duration,
+          IconData(icon, fontFamily: 'MaterialIcons'));
+    }).toList();
+
+    return alertTypes;
+  }
+
+  @override
+  Future<Map<String, AlertType>> getAllAlertTypes() {
+    // TODO: implement getAllAlertTypes
+    throw UnimplementedError();
   }
 }
