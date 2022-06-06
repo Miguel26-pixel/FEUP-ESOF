@@ -39,12 +39,38 @@ seed(
     groupsCollection);
 
 app.get("/points", async (req, res) => {
-    const locationRaw = [req.query.latitude, req.query.longitude] || DEFAULT_POSITION;
-    const floor = parseInt(req.query.floor) || 0;
+    let latitude, longitude;
+
+    if(req.query.hasOwnProperty("latitude")) {
+        latitude = parseFloat(req.query.latitude);
+
+        if(isNaN(latitude)) {
+            latitude = DEFAULT_POSITION[0];
+        }
+    } else {
+        latitude = DEFAULT_POSITION[0];
+    }
+
+    if(req.query.hasOwnProperty("longitude")) {
+        longitude = parseFloat(req.query.longitude);
+
+        if(isNaN(longitude)) {
+            longitude = DEFAULT_POSITION[1];
+        }
+    } else {
+        longitude = DEFAULT_POSITION[1];
+    }
+
+    const locationRaw =  [latitude, longitude];
+    console.log(locationRaw);
+    let floor = parseInt(req.query.floor);
+    if(isNaN(floor)) {
+        floor = 0;
+    }
 
     const bounds = geofire.geohashQueryBounds([
-        locationRaw[0] || DEFAULT_POSITION[0],
-        locationRaw[1] || DEFAULT_POSITION[1],
+        locationRaw[0],
+        locationRaw[1],
     ], RADIUS_METERS);
 
     const pointsData = [];
@@ -122,19 +148,41 @@ app.get("/points/limits", async (req, res) => {
 
 // Think in some form of security measure
 app.post("/points/new", async (req, res) => {
+    if(!req.body.hasOwnProperty("location") || !req.body.hasOwnProperty("name") || !req.body.hasOwnProperty("floor")) {
+        return res.status(401).json({error: "Invalid arguments"});
+    }
+
+    if(!req.body.location.hasOwnProperty("latitude") || !req.body.location.hasOwnProperty("longitude")) {
+        return res.status(401).json({error: "Invalid arguments"});
+    }
+
     const {
         name,
         floor,
         location,
     } = req.body;
 
-    if (!name || floor === null || !location || !location.latitude || !location.longitude) {
+    if (name === "") {
         return res.status(401).json({error: "Invalid arguments"});
     }
 
+    const latitude = parseFloat(location.latitude);
+    const longitude = parseFloat(location.longitude);
+
+    if(isNaN(latitude) || isNaN(longitude)) {
+        return res.status(401).json({error: "Invalid arguments"});
+    }
+
+    const floor_int = parseInt(floor);
+
+    if(isNaN(floor_int)) {
+        return res.status(401).json({error: "Invalid arguments"});
+    }
+
+
     const bounds = geofire.geohashQueryBounds([
-        location.latitude,
-        location.longitude,
+        latitude,
+        longitude,
     ], 50);
 
     const pointsQueries = [];
@@ -167,14 +215,14 @@ app.post("/points/new", async (req, res) => {
         .flat()
         .filter(e => ((data) => geofire.distanceBetween(
             [data.position.latitude, data.position.longitude],
-            [location.latitude, location.longitude]) < GROUP_MAX_DIST)(e.data()));
+            [latitude, longitude]) < GROUP_MAX_DIST)(e.data()));
 
     let groupsData = (await Promise.all(groupsQueries))
         .map(q => q.docs)
         .flat()
         .filter(e => ((data) => geofire.distanceBetween(
             [data.position.latitude, data.position.longitude],
-            [location.latitude, location.longitude]) < GROUP_MAX_DIST)(e.data()));
+            [latitude, longitude]) < GROUP_MAX_DIST)(e.data()));
 
     if (groupsData.length > 0) {
         const pointRef = await pointsCollection.add({
@@ -191,9 +239,9 @@ app.post("/points/new", async (req, res) => {
             alerts: [],
         });
         await groupsCollection.add({
-            position: new firestore.GeoPoint(location.latitude, location.longitude),
-            geohash: geofire.geohashForLocation([location.latitude, location.longitude]),
-            floor,
+            position: new firestore.GeoPoint(latitude, longitude),
+            geohash: geofire.geohashForLocation([latitude, longitude]),
+            floor: floor_int,
             points: pointsData.map(point => {
                 point.ref.update({
                     geohash: firestore.FieldValue.delete(),
@@ -206,9 +254,9 @@ app.post("/points/new", async (req, res) => {
     } else {
         await pointsCollection.add({
             name,
-            floor,
-            position: new firestore.GeoPoint(location.latitude, location.longitude),
-            geohash: geofire.geohashForLocation([location.latitude, location.longitude]),
+            floor: floor_int,
+            position: new firestore.GeoPoint(latitude, longitude),
+            geohash: geofire.geohashForLocation([latitude, longitude]),
             alerts: []
         });
     }
@@ -347,12 +395,38 @@ app.post("/points/:id/alerts/new", async (req, res) => {
 });
 
 app.get("/alerts/spontaneous", async (req, res) => {
-    const locationRaw = [req.query.latitude, req.query.longitude] || DEFAULT_POSITION;
-    const floor = parseInt(req.query.floor) || 0;
+    let latitude, longitude;
+
+    if(req.query.hasOwnProperty("latitude")) {
+        latitude = parseFloat(req.query.latitude);
+
+        if(isNaN(latitude)) {
+            latitude = DEFAULT_POSITION[0];
+        }
+    } else {
+        latitude = DEFAULT_POSITION[0];
+    }
+
+    if(req.query.hasOwnProperty("longitude")) {
+        longitude = parseFloat(req.query.longitude);
+
+        if(isNaN(longitude)) {
+            longitude = DEFAULT_POSITION[1];
+        }
+    } else {
+        longitude = DEFAULT_POSITION[1];
+    }
+
+    const locationRaw =  [latitude, longitude];
+    console.log(locationRaw);
+    let floor = parseInt(req.query.floor);
+    if(isNaN(floor)) {
+        floor = 0;
+    }
 
     const bounds = geofire.geohashQueryBounds([
-        locationRaw[0] || DEFAULT_POSITION[0],
-        locationRaw[1] || DEFAULT_POSITION[1],
+        locationRaw[0],
+        locationRaw[1],
     ], RADIUS_METERS);
 
     const spontaneousAlertsSnapshots  = [];
@@ -387,21 +461,42 @@ app.get("/alerts/spontaneous", async (req, res) => {
 })
 
 app.post("/alerts/spontaneous/new", async (req, res) => {
+    if(!req.body.hasOwnProperty("location") || !req.body.hasOwnProperty("floor") || !req.body.hasOwnProperty("message")) {
+        return res.status(401).json({error: "Invalid arguments"});
+    }
+
+    if(!req.body.location.hasOwnProperty("latitude") || !req.body.location.hasOwnProperty("longitude")) {
+        return res.status(401).json({error: "Invalid arguments"});
+    }
+
     const {
-        floor,
         message,
+        floor,
         location,
     } = req.body;
-    
-    if (!message || floor === null || !location?.latitude || !location?.longitude) {
+
+    if (message === "") {
+        return res.status(401).json({error: "Invalid arguments"});
+    }
+
+    const latitude = parseFloat(location.latitude);
+    const longitude = parseFloat(location.longitude);
+
+    if(isNaN(latitude) || isNaN(longitude)) {
+        return res.status(401).json({error: "Invalid arguments"});
+    }
+
+    const floor_int = parseInt(floor);
+
+    if(isNaN(floor_int)) {
         return res.status(401).json({error: "Invalid arguments"});
     }
 
     await spontaneousCollection.add({
         message,
-        floor,
-        position: new firestore.GeoPoint(location.latitude, location.longitude),
-        geohash: geofire.geohashForLocation([location.latitude, location.longitude]),
+        floor: floor_int,
+        position: new firestore.GeoPoint(latitude, longitude),
+        geohash: geofire.geohashForLocation([latitude, longitude]),
         "start-time": firestore.Timestamp.fromDate(new Date(Date.now())),
         "finish-time": firestore.Timestamp.fromDate(new Date(Date.now() + SPONTANEOUS_LIFETIME * 1000)),
     });
