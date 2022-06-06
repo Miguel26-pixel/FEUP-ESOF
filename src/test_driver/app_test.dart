@@ -15,6 +15,10 @@ Future<void> main() {
     ..hooks = []
     ..stepDefinitions = [
       givenOpenSideDrawer(),
+      whenTapWarning(),
+      thenViewSAlertPage(),
+      thenViewLocationIcon(),
+      thenViewWarningIcon(),
       thenViewLocationIcon(),
     ]
     ..customStepParameterDefinitions = []
