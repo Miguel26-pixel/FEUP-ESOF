@@ -40,7 +40,7 @@ class AlertController extends AlertMockController {
       final typeName = typeElement['name'];
       final typeDuration = typeElement['base-duration-seconds'];
       final typeId = typeElement['id'];
-      final typeIcon = typeElement['icon'];
+      final typeIcon = int.parse(typeElement['icon']);
       final AlertType alertType = AlertType(
           typeId,
           typeName,
