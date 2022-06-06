@@ -461,7 +461,7 @@ app.get("/alerts/spontaneous", async (req, res) => {
 })
 
 app.post("/alerts/spontaneous/new", async (req, res) => {
-    if(!req.body.hasOwnProperty("location") || !req.body.hasOwnProperty("name") || !req.body.hasOwnProperty("message")) {
+    if(!req.body.hasOwnProperty("location") || !req.body.hasOwnProperty("floor") || !req.body.hasOwnProperty("message")) {
         return res.status(401).json({error: "Invalid arguments"});
     }
 
@@ -489,10 +489,6 @@ app.post("/alerts/spontaneous/new", async (req, res) => {
     const floor_int = parseInt(floor);
 
     if(isNaN(floor_int)) {
-        return res.status(401).json({error: "Invalid arguments"});
-    }
-
-    if (!message || floor === null || !location?.latitude || !location?.longitude) {
         return res.status(401).json({error: "Invalid arguments"});
     }
 
