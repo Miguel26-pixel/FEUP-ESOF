@@ -16,18 +16,10 @@ class AlertMockController implements AlertControllerInterface {
         const Duration(days: 1), Icons.people_outline),
     '1': AlertType('1', 'Noisy', 'This Location is Noisy',
         const Duration(days: 1), Icons.volume_up_outlined),
-    '2': AlertType('2', 'Alert2', 'This Location is Full',
+    '2': AlertType('3', 'Cleaning', 'This Location is being cleaned',
         const Duration(days: 1), Icons.people_outline),
-    '3': AlertType('3', 'Alert3', 'This Location is Noisy',
-        const Duration(days: 1), Icons.volume_up_outlined),
-    '4': AlertType('4', 'sdcac', 'This Location is Full',
-        const Duration(days: 1), Icons.people_outline),
-    '5': AlertType('5', 'mdclksam', 'This Location is Noisy',
-        const Duration(days: 1), Icons.volume_up_outlined),
-    '6': AlertType('6', 'ajkdncdankjasncdkj', 'This Location is Full',
-        const Duration(days: 1), Icons.people_outline),
-    '7': AlertType('7', 'Alert 7', 'This Location is Noisy',
-        const Duration(days: 1), Icons.volume_up_outlined),
+    '3': AlertType('4', 'Out of service', 'This Location is out of service',
+        const Duration(days: 1), Icons.people_outline)
   };
 
   static final _alerts = <String, Alert>{
@@ -107,6 +99,29 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
   @override
   Future<List<Alert>> getAlertsOfPoi(PointOfInterest poi) {
     return Future.value(poi.getAlertIds().map((e) => _alerts[e]).toList());
+  }
+
+  @override
+  Future<void> likeAlert(String alertId) async {
+    if (_spontaneousAlerts[alertId] != null) {
+      _spontaneousAlerts[alertId].finishTime.add(Duration(minutes: 2));
+    } else if (_alerts[alertId] != null) {
+      _alerts[alertId].addTime(2);
+    }
+  }
+
+  @override
+  Future<bool> dislikeAlert(String alertId) async {
+    if (_spontaneousAlerts[alertId] != null) {
+      _spontaneousAlerts[alertId].finishTime.subtract(Duration(minutes: 2));
+      _spontaneousAlerts.remove(alertId);
+      return Future.value(true);
+    } else if (_alerts[alertId] != null) {
+      _alerts[alertId].removeTime(2);
+      _alerts.remove(alertId);
+      return Future.value(true);
+    }
+    return Future.value(false);
   }
 
   @override
