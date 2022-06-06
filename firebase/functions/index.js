@@ -313,7 +313,10 @@ app.get("/alert/types", async (req, res) => {
   const alertData = await alertTypeCollection.get();
 
   return res.json({
-    data: alertData.docs.map((doc) => doc.data()),
+    data: alertData.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    })),
   });
 });
 
