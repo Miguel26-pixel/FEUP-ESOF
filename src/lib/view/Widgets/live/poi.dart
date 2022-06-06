@@ -41,11 +41,15 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            const Align(
-                alignment: Alignment.centerRight,
-                child: ValidationButtons(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                )),
+            Align(
+              alignment: Alignment.centerRight,
+              child: ValidationButtons(
+                mainAxisAlignment: MainAxisAlignment.end,
+                alertController: widget._alertController,
+                alertId: alerts[i].getId(),
+                isSpontaneous: false,
+              ),
+            ),
             Align(
               alignment: Alignment.center,
               child: Text(

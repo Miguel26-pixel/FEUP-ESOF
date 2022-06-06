@@ -11,6 +11,8 @@ abstract class AlertControllerInterface {
   Future<List<Alert>> getAlertsOfPoi(PointOfInterest poi);
   Future<GeneralAlert> getAlert(String id);
   Future<AlertType> getAlertType(String id);
+  Future<void> likeAlert(String alertId, bool spontaneous);
+  Future<bool> dislikeAlert(String alertId, bool spontaneous);
   Future<Tuple2> createSpontaneousAlert(
       String description, int floor, LatLng position);
 }

@@ -130,8 +130,10 @@ class _SpontaneousAlertPageState extends State<SpontaneousAlertPage> {
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: ValidationButtons(
-                alertController: widget.alertController,
-                spontaneousAlertId: widget._spontaneousAlert.getId()),
+              alertController: widget.alertController,
+              alertId: widget._spontaneousAlert.getId(),
+              isSpontaneous: true,
+            ),
           ),
         ],
       ),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:uni/controller/poi/poi_controller_interface.dart';
+import 'package:uni/model/entities/live/poi_type.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/point_group.dart';
 
@@ -48,7 +49,7 @@ class PointOfInterestController implements PointOfInterestControllerInterface {
       final id = element['id'];
 
       final PointOfInterest pointOfInterest =
-          PointOfInterest(id, name, position, floor);
+          PointOfInterest(id, name, position, floor, null);
       alertIds.forEach((element) {
         pointOfInterest.addAlert(id);
       });
@@ -70,7 +71,7 @@ class PointOfInterestController implements PointOfInterestControllerInterface {
         final id = element['id'];
 
         final PointOfInterest pointOfInterest =
-            PointOfInterest(id, name, position, floor);
+            PointOfInterest(id, name, position, floor, null);
         alertIds.forEach((element) {
           pointOfInterest.addAlert(id);
         });
@@ -83,5 +84,18 @@ class PointOfInterestController implements PointOfInterestControllerInterface {
 
     points.addAll(groups);
     return points;
+  }
+
+  @override
+  Future<bool> createPOI(
+      String name, LatLng pos, int floor, PointOfInterestType type) {
+    // TODO: implement createPOI
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<PointOfInterestType>> getTypesPOI() {
+    // TODO: implement getTypesPOI
+    throw UnimplementedError();
   }
 }

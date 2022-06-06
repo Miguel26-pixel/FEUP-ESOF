@@ -3,16 +3,19 @@ import 'package:uni/controller/alert/alert_controller_interface.dart';
 
 class ValidationButtons extends StatefulWidget {
   final MainAxisAlignment _mainAxisAlignment;
-  //final AlertControllerInterface _alertController;
-  //final String _spontaneousAlertId;
+  final AlertControllerInterface _alertController;
+  final String _alertId;
+  final bool _isSpontaneous;
   const ValidationButtons(
       {Key key,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       AlertControllerInterface alertController,
-      String spontaneousAlertId})
+      String alertId,
+      bool isSpontaneous})
       : _mainAxisAlignment = mainAxisAlignment,
-        //_alertController = alertController,
-        //_spontaneousAlertId = spontaneousAlertId,
+        _alertController = alertController,
+        _alertId = alertId,
+        _isSpontaneous = isSpontaneous,
         super(key: key);
 
   @override
@@ -20,6 +23,14 @@ class ValidationButtons extends StatefulWidget {
 }
 
 class _ValidationButtonsState extends State<ValidationButtons> {
+  bool _disabled;
+
+  @override
+  // ignore: must_call_super
+  void initState() {
+    _disabled = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -27,20 +38,36 @@ class _ValidationButtonsState extends State<ValidationButtons> {
       children: [
         IconButton(
           iconSize: 30,
-          onPressed: () => {},
-          //widget._alertController.likeAlert(widget._spontaneousAlertId),
-          icon: const Icon(
+          onPressed: !_disabled
+              ? () {
+                  setState(() {
+                    _disabled = true;
+                  });
+
+                  widget._alertController
+                      .likeAlert(widget._alertId, widget._isSpontaneous);
+                }
+              : null,
+          icon: Icon(
             Icons.check_circle,
-            color: Colors.green,
+            color: !_disabled ? Colors.green : Colors.grey,
           ),
         ),
         IconButton(
-          onPressed: () => {},
-          //widget._alertController.dislikeAlert(widget._spontaneousAlertId),
+          onPressed: !_disabled
+              ? () {
+                  setState(() {
+                    _disabled = true;
+                  });
+
+                  widget._alertController
+                      .dislikeAlert(widget._alertId, widget._isSpontaneous);
+                }
+              : null,
           iconSize: 30,
-          icon: const Icon(
+          icon: Icon(
             Icons.cancel,
-            color: Colors.red,
+            color: !_disabled ? Colors.red : Colors.grey,
           ),
         ),
       ],

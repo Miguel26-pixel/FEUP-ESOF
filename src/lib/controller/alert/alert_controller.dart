@@ -115,4 +115,28 @@ class AlertController extends AlertMockController {
 
     return alerts;
   }
+
+  @override
+  Future<void> likeAlert(String alertId, bool spontaneous) async {
+    final Response res = await post(Uri.parse(
+        'https://us-central1-liveup-7c242.cloudfunctions.net/widgets/alerts/${spontaneous ? "spontaneous/" : ""}${alertId}/accept'));
+
+    if (res.statusCode != 200) {
+      throw Exception('Network error');
+    }
+  }
+
+  @override
+  Future<bool> dislikeAlert(String alertId, bool spontaneous) async {
+    final Response res = await post(Uri.parse(
+        'https://us-central1-liveup-7c242.cloudfunctions.net/widgets/alerts/${spontaneous ? "spontaneous/" : ""}${alertId}/reject'));
+
+    if (res.statusCode != 200) {
+      throw Exception('Network error');
+    }
+
+    final decoded = jsonDecode(res.body);
+
+    return decoded['deleted'];
+  }
 }

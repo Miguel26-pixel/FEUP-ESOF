@@ -84,23 +84,26 @@ exports.seed = async (
     "base-duration-seconds": 600,
     "message": "This location is full",
     "name": "Full",
+    "icon": "58094",
   });
 
   const alertType1 = await alertTypeCollection.add({
     "base-duration-seconds": 600,
     "message": "This location is empty",
     "name": "Empty",
+    "icon": "58513",
   });
 
   const alertType2 = await alertTypeCollection.add({
     "base-duration-seconds": 600,
     "message": "This location is not working properly",
     "name": "Broken",
+    "icon": "58666",
   });
 
   const alert0 = await alertsCollection.add({
     "finish-time": firestore.Timestamp.fromDate(
-        new Date("25 May 2022 12:00:00 UTC+1")),
+        new Date("25 May 2023 12:00:00 UTC+1")),
     "start-time": firestore.Timestamp.fromDate(
         new Date("11 May 2022 12:00:00 UTC+1")),
     "type": alertType0,
@@ -108,7 +111,7 @@ exports.seed = async (
 
   const alert1 = await alertsCollection.add({
     "finish-time": firestore.Timestamp.fromDate(
-        new Date("25 May 2022 12:00:00 UTC+1")),
+        new Date("25 May 2023 12:00:00 UTC+1")),
     "start-time": firestore.Timestamp.fromDate(
         new Date("11 May 2022 12:00:00 UTC+1")),
     "type": alertType1,
@@ -116,7 +119,7 @@ exports.seed = async (
 
   const alert3 = await alertsCollection.add({
     "finish-time": firestore.Timestamp.fromDate(
-        new Date("25 May 2022 12:00:00 UTC+1")),
+        new Date("25 May 2023 12:00:00 UTC+1")),
     "start-time": firestore.Timestamp.fromDate(
         new Date("11 May 2022 12:00:00 UTC+1")),
     "type": alertType2,
@@ -180,7 +183,7 @@ exports.seed = async (
     "start-time": firestore.Timestamp.fromDate(
         new Date("11 May 2022 12:00:00 UTC+1")),
     "finish-time": firestore.Timestamp.fromDate(
-        new Date("25 May 2022 12:00:00 UTC+1")),
+        new Date("25 May 2023 12:00:00 UTC+1")),
     "message": "Spilt Cofee",
     "position": new firestore.GeoPoint(41.1775666, -8.5955153),
     "geohash": geofire.geohashForLocation([41.1775666, -8.5955153]),
@@ -192,7 +195,7 @@ exports.seed = async (
     "start-time": firestore.Timestamp.fromDate(
         new Date("11 May 2022 12:00:00 UTC+1")),
     "finish-time": firestore.Timestamp.fromDate(
-        new Date("25 May 2022 12:00:00 UTC+1")),
+        new Date("25 May 2023 12:00:00 UTC+1")),
     "message": "Spilt Cofee",
     "position": new firestore.GeoPoint(41.1775666, -8.5955153),
     "geohash": geofire.geohashForLocation([41.1775666, -8.5955153]),
@@ -203,7 +206,7 @@ exports.seed = async (
     "start-time": firestore.Timestamp.fromDate(
         new Date("11 May 2022 12:00:00 UTC+1")),
     "finish-time": firestore.Timestamp.fromDate(
-        new Date("25 May 2022 12:00:00 UTC+1")),
+        new Date("25 May 2023 12:00:00 UTC+1")),
     "message": "Spot in constructions",
     "position": new firestore.GeoPoint(41.1779666, -8.5955153),
     "geohash": geofire.geohashForLocation([41.1779666, -8.5955153]),
@@ -214,7 +217,7 @@ exports.seed = async (
     "start-time": firestore.Timestamp.fromDate(
         new Date("11 May 2022 12:00:00 UTC+1")),
     "finish-time": firestore.Timestamp.fromDate(
-        new Date("25 May 2022 12:00:00 UTC+1")),
+        new Date("25 May 2023 12:00:00 UTC+1")),
     "message": "Flooded street",
     "position": new firestore.GeoPoint(41.021195, -8.563309),
     "geohash": geofire.geohashForLocation([41.021195, -8.563309]),

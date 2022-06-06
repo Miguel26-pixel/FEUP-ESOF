@@ -7,6 +7,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry/sentry.dart';
 import 'package:redux/redux.dart';
 import 'package:uni/controller/middleware.dart';
+import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:uni/model/app_state.dart';
 import 'package:uni/redux/actions.dart';
 import 'package:uni/redux/reducers.dart';
@@ -18,6 +19,8 @@ import 'package:uni/view/Pages/exams_page_view.dart';
 import 'package:uni/view/Pages/home_page_view.dart';
 import 'package:uni/view/Pages/logout_route.dart';
 import 'package:uni/view/Pages/map_view.dart';
+import 'package:uni/view/Pages/admin_dashboard_view.dart';
+import 'package:uni/view/Pages/create_poi_view.dart';
 import 'package:uni/view/Pages/splash_page_view.dart';
 import 'package:uni/view/Pages/useful_contacts_card_page_view.dart';
 import 'package:uni/view/Widgets/page_transition.dart';
@@ -39,6 +42,7 @@ SentryEvent beforeSend(SentryEvent event) {
 
 Future<void> main() async {
   OnStartUp.onStart(state);
+
   runApp(MyApp());
 }
 
@@ -65,6 +69,8 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final MockPointOfInterestController pointOfInterestController =
+        MockPointOfInterestController();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -93,6 +99,13 @@ class MyAppState extends State<MyApp> {
               case '/' + Constants.navLive:
                 return PageTransition.makePageTransition(
                     page: MapPage(), settings: settings);
+              case '/' + Constants.navAdmin:
+                return PageTransition.makePageTransition(
+                    page: AdminDashboardPage(), settings: settings);
+              case '/' + Constants.navCreatePoi:
+                return PageTransition.makePageTransition(
+                    page: CreatePOIPage(pointOfInterestController),
+                    settings: settings);
               case '/' + Constants.navUsefulContacts:
                 return PageTransition.makePageTransition(
                     page: UsefulContactsCardView(), settings: settings);

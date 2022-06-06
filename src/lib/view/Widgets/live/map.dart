@@ -175,27 +175,35 @@ class _MapState extends State<Map> {
   @override
   Widget build(BuildContext context) {
     final List<Marker> markers = _pointsOfInterest
+        .asMap()
+        .entries
         .map(
           (e) => AlertPoiMarker(
+            key: Key('location-icon-' + e.key.toString()),
             context: context,
-            point: e.getPosition(),
+            point: e.value.getPosition(),
             pressedBuilder: ((context) =>
-                PointOfInterestPage(e, alertController)),
+                PointOfInterestPage(e.value, alertController)),
             iconData: Icons.room,
           ),
         )
         .toList();
 
     final List<Marker> alertMarkers = _spontaneousAlerts
+        .asMap()
+        .entries
         .map((e) => AlertPoiMarker(
+              key: Key('warning-icon-' + e.key.toString()),
               context: context,
               size: 40,
-              point: e.getPosition(),
+              point: e.value.getPosition(),
               pressedBuilder: ((context) => SpontaneousAlertPage(
-                  alertController,
-                  e,
-                  currentLocationController,
-                  _currentLocation)),
+                    alertController,
+                    e.value,
+                    currentLocationController,
+                    _currentLocation,
+                    key: Key('warning-' + e.key.toString() + '-page'),
+                  )),
               iconData: Icons.warning_rounded,
             ))
         .toList();
@@ -203,6 +211,7 @@ class _MapState extends State<Map> {
     markers.addAll(alertMarkers);
 
     final Widget mapComponent = FlutterMap(
+      key: Key('live-map'),
       mapController: _mapController,
       options: MapOptions(
         onPositionChanged: unfollowLocation,
@@ -325,6 +334,7 @@ class _MapState extends State<Map> {
     );
 
     return Scaffold(
+      key: Key('live-scaffold'),
       resizeToAvoidBottomInset: true,
       body: _floorsLoaded
           ? Stack(
