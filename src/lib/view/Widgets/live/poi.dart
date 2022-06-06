@@ -1,20 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:group_radio_button/group_radio_button.dart';
-import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/model/entities/live/alert.dart';
 import 'package:uni/model/entities/live/alert_type.dart';
-import 'package:uni/model/entities/live/poi_type.dart';
 import 'package:uni/view/Widgets/live/alert_type_selector.dart';
 import 'package:uni/view/Widgets/live/titled_bottom_modal.dart';
 import 'package:uni/view/Widgets/live/validation_buttons.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/point_group.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:uni/view/Widgets/type_selector.dart';
 
 class PointOfInterestPage extends StatefulWidget {
   final PointOfInterest _poi;
@@ -128,9 +121,6 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
     final String titleString = poi.getName();
     final Future<List<Alert>> alerts =
         widget._alertController.getAlertsOfPoi(poi);
-
-    final Future<Map<String, AlertType>> alertNames =
-        widget._alertController.getAllAlertTypes();
 
     final Widget _title = AutoSizeText(
       titleString.toUpperCase(),
@@ -284,43 +274,6 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
         }
       },
     );
-  }
-
-  Widget buildAlertTypesBox(
-      BuildContext context, Future<Map<String, AlertType>> alertNames) {
-    Widget selectAlertType(BuildContext context, List<String> alertTypeNames,
-        {bool bottomBorder = true}) {
-      return Container(
-          child: Row(children: <Widget>[
-        Padding(
-            padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
-            child: StatefulBuilder(builder: (context, setState) {
-              return Align(
-                alignment: Alignment.centerLeft,
-                child: RadioButtonGroup(
-                  labels: <String>[
-                    for (var alertTypeName in alertTypeNames) alertTypeName,
-                  ],
-                  onSelected: (String selected) => print(selected),
-                ),
-              );
-            })),
-      ]));
-    }
-
-    return FutureBuilder<Map<String, AlertType>>(
-        future: alertNames,
-        builder: (context, AsyncSnapshot<Map<String, AlertType>> snapshot) {
-          if (snapshot.hasData) {
-            List<String> alertTypeNames = [];
-            for (var alertType in snapshot.data.values) {
-              alertTypeNames.add(alertType.getName());
-            }
-            return selectAlertType(context, alertTypeNames);
-          } else {
-            return SizedBox();
-          }
-        });
   }
 
   Widget buildContent(BuildContext context, List<Alert> alerts) {

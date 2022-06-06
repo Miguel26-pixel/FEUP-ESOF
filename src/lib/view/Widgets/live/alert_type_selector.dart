@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:uni/model/entities/live/alert_type.dart';
-import 'package:uni/model/entities/live/poi_type.dart';
 
 class AlertTypeSelector extends StatefulWidget {
   AlertTypeSelector({
