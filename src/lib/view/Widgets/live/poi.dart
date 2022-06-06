@@ -11,8 +11,8 @@ import 'package:uni/model/entities/live/point_group.dart';
 
 class PointOfInterestPage extends StatefulWidget {
   final PointOfInterest _poi;
-  final AlertControllerInterface _alertController;
-  const PointOfInterestPage(final this._poi, final this._alertController,
+  final AlertControllerInterface alertController;
+  const PointOfInterestPage(final this._poi, final this.alertController,
       {Key key})
       : super(key: key);
 
@@ -47,11 +47,15 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            const Align(
-                alignment: Alignment.centerRight,
-                child: ValidationButtons(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                )),
+            Align(
+              alignment: Alignment.centerRight,
+              child: ValidationButtons(
+                mainAxisAlignment: MainAxisAlignment.end,
+                alertController: widget.alertController,
+                alertId: alerts[i].getId(),
+                isSpontaneous: false,
+              ),
+            ),
             Align(
               alignment: Alignment.center,
               child: Text(
@@ -82,7 +86,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
   }
 
   void getPOITypes() async {
-    final temp = await widget._alertController.getAlertTypes();
+    final temp = await widget.alertController.getAlertTypes();
 
     setState(() {
       alertTypes = temp;
@@ -94,14 +98,14 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
     Navigator.of(context).pop();
   }
 
-  void submitAlert() async {
+  void submitAlert(PointOfInterest poi) async {
     if (_formKey.currentState.validate()) {
       if (selectedType == -1) {
         return;
       }
 
-      final result = await widget._alertController
-          .createAlert(widget._poi, alertTypes[selectedType]);
+      final result = await widget.alertController
+          .createAlert(poi, alertTypes[selectedType]);
       Navigator.of(context, rootNavigator: true).pop();
       Navigator.of(context, rootNavigator: true).pop();
       if (result.item1 == true) {
@@ -120,7 +124,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
       BuildContext context, PointOfInterest poi, bool multiple) {
     final String titleString = poi.getName();
     final Future<List<Alert>> alerts =
-        widget._alertController.getAlertsOfPoi(poi);
+        widget.alertController.getAlertsOfPoi(poi);
 
     final Widget _title = AutoSizeText(
       titleString.toUpperCase(),
@@ -157,7 +161,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
               padding: EdgeInsets.only(bottom: 20),
               child: ElevatedButton(
                 onPressed: () {
-                  submitAlert();
+                  submitAlert(poi);
                 },
                 child: Text(
                   'Confirm',

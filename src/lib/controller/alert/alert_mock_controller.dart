@@ -72,7 +72,8 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
   };
 
   @override
-  Future<List<SpontaneousAlert>> getNearbySpontaneousAlerts(int floor) {
+  Future<List<SpontaneousAlert>> getNearbySpontaneousAlerts(
+      int floor, LatLng _) {
     return Future.value(
       _spontaneousAlerts.values
           .where(
@@ -102,7 +103,7 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
   }
 
   @override
-  Future<void> likeAlert(String alertId) async {
+  Future<void> likeAlert(String alertId, bool _) async {
     if (_spontaneousAlerts[alertId] != null) {
       _spontaneousAlerts[alertId].finishTime.add(Duration(minutes: 2));
     } else if (_alerts[alertId] != null) {
@@ -111,7 +112,7 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
   }
 
   @override
-  Future<bool> dislikeAlert(String alertId) async {
+  Future<bool> dislikeAlert(String alertId, bool _) async {
     if (_spontaneousAlerts[alertId] != null) {
       _spontaneousAlerts[alertId].finishTime.subtract(Duration(minutes: 2));
       _spontaneousAlerts.remove(alertId);

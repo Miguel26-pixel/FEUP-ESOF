@@ -6,7 +6,8 @@ import 'package:uni/model/entities/live/general_alert.dart';
 import 'package:uni/model/entities/live/point.dart';
 
 abstract class AlertControllerInterface {
-  Future<List<GeneralAlert>> getNearbySpontaneousAlerts(int floor);
+  Future<List<GeneralAlert>> getNearbySpontaneousAlerts(
+      int floor, LatLng center);
   Future<List<Alert>> getAlertsOfPoi(PointOfInterest poi);
   Future<GeneralAlert> getAlert(String id);
   Future<AlertType> getAlertType(String id);
@@ -14,8 +15,8 @@ abstract class AlertControllerInterface {
     PointOfInterest pointOfInterest,
     AlertType alert,
   );
-  Future<void> likeAlert(String alertId);
-  Future<bool> dislikeAlert(String alertId);
+  Future<void> likeAlert(String alertId, bool spontaneous);
+  Future<bool> dislikeAlert(String alertId, bool spontaneous);
   Future<Tuple2> createSpontaneousAlert(
       String description, int floor, LatLng position);
   Future<Map<String, AlertType>> getAllAlertTypes();

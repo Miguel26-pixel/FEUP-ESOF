@@ -6,10 +6,11 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry/sentry.dart';
 import 'package:redux/redux.dart';
+import 'package:uni/controller/alert/alert_controller.dart';
+import 'package:uni/controller/alert/alert_controller_interface.dart';
 import 'package:uni/controller/middleware.dart';
-import 'package:uni/controller/poi/poi_mock_controller.dart';
+import 'package:uni/controller/poi/point_controller.dart';
 import 'package:uni/model/app_state.dart';
-import 'package:uni/redux/actions.dart';
 import 'package:uni/redux/reducers.dart';
 import 'package:uni/utils/constants.dart' as Constants;
 import 'package:uni/view/Pages/about_page_view.dart';
@@ -66,11 +67,12 @@ class MyAppState extends State<MyApp> {
   MyAppState({@required this.state}) {}
 
   final Store<AppState> state;
+  final PointOfInterestController pointOfInterestController =
+      PointOfInterestController();
+  final AlertControllerInterface alertController = AlertController();
 
   @override
   Widget build(BuildContext context) {
-    final MockPointOfInterestController pointOfInterestController =
-        MockPointOfInterestController();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -98,7 +100,11 @@ class MyAppState extends State<MyApp> {
                     page: BusStopNextArrivalsPage(), settings: settings);
               case '/' + Constants.navLive:
                 return PageTransition.makePageTransition(
-                    page: MapPage(), settings: settings);
+                    page: MapPage(
+                      alertController: alertController,
+                      pointOfInterestController: pointOfInterestController,
+                    ),
+                    settings: settings);
               case '/' + Constants.navAdmin:
                 return PageTransition.makePageTransition(
                     page: AdminDashboardPage(), settings: settings);
@@ -127,7 +133,7 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(seconds: 60),
-        (Timer t) => state.dispatch(SetCurrentTimeAction(DateTime.now())));
+    // Timer.periodic(Duration(seconds: 60),
+    //     (Timer t) => state.dispatch(SetCurrentTimeAction(DateTime.now())));
   }
 }
