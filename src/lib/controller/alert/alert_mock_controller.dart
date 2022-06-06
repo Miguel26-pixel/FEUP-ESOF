@@ -16,6 +16,18 @@ class AlertMockController implements AlertControllerInterface {
         const Duration(days: 1), Icons.people_outline),
     '1': AlertType('1', 'Noisy', 'This Location is Noisy',
         const Duration(days: 1), Icons.volume_up_outlined),
+    '2': AlertType('2', 'Alert2', 'This Location is Full',
+        const Duration(days: 1), Icons.people_outline),
+    '3': AlertType('3', 'Alert3', 'This Location is Noisy',
+        const Duration(days: 1), Icons.volume_up_outlined),
+    '4': AlertType('4', 'sdcac', 'This Location is Full',
+        const Duration(days: 1), Icons.people_outline),
+    '5': AlertType('5', 'mdclksam', 'This Location is Noisy',
+        const Duration(days: 1), Icons.volume_up_outlined),
+    '6': AlertType('6', 'ajkdncdankjasncdkj', 'This Location is Full',
+        const Duration(days: 1), Icons.people_outline),
+    '7': AlertType('7', 'Alert 7', 'This Location is Noisy',
+        const Duration(days: 1), Icons.volume_up_outlined),
   };
 
   static final _alerts = <String, Alert>{
@@ -114,5 +126,10 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
     _alertCounter++;
 
     return Future.value(Tuple2(true, ''));
+  }
+
+  @override
+  Future <Map<String, AlertType>> getAllAlertTypes() {
+    return Future.value(_alertTypes);
   }
 }

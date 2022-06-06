@@ -12,4 +12,5 @@ abstract class AlertControllerInterface {
   Future<AlertType> getAlertType(String id);
   Future<Tuple2> createSpontaneousAlert(
       String description, int floor, LatLng position);
+  Future <Map<String, AlertType>> getAllAlertTypes();
 }
