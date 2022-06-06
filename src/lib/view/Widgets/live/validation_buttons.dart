@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
 
@@ -22,10 +20,14 @@ class ValidationButtons extends StatefulWidget {
 }
 
 class _ValidationButtonsState extends State<ValidationButtons> {
-  bool disabled = false;
+  bool _disabled;
+
+  @override
+  // ignore: must_call_super
   void initState() {
-    disabled = false;
+    _disabled = false;
   }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -33,24 +35,34 @@ class _ValidationButtonsState extends State<ValidationButtons> {
       children: [
         IconButton(
           iconSize: 30,
-          onPressed: () => disabled ? widget._alertController
-              .likeAlert(widget._alertId) .then( (value) => {
-                  setState(() => {disabled = true})
-          }) : null,
-          icon: const Icon(
+          onPressed: !_disabled
+              ? () {
+                  setState(() {
+                    _disabled = true;
+                  });
+
+                  widget._alertController.likeAlert(widget._alertId);
+                }
+              : null,
+          icon: Icon(
             Icons.check_circle,
-            color: Colors.green,
+            color: !_disabled ? Colors.green : Colors.grey,
           ),
         ),
         IconButton(
-          onPressed: () => widget._alertController
-              .dislikeAlert(widget._alertId) .then( (value) => {
-                if(value == true)
-          }),
+          onPressed: !_disabled
+              ? () {
+                  setState(() {
+                    _disabled = true;
+                  });
+
+                  widget._alertController.dislikeAlert(widget._alertId);
+                }
+              : null,
           iconSize: 30,
-          icon: const Icon(
+          icon: Icon(
             Icons.cancel,
-            color: Colors.red,
+            color: !_disabled ? Colors.red : Colors.grey,
           ),
         ),
       ],

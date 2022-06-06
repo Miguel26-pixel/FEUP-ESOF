@@ -101,37 +101,28 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
     return Future.value(poi.getAlertIds().map((e) => _alerts[e]).toList());
   }
 
-
-
   @override
-  Future<void> likeAlert(String alertId) {
+  Future<void> likeAlert(String alertId) async {
     if (_spontaneousAlerts[alertId] != null) {
-      _spontaneousAlerts[alertId].finishTime
-          .add(Duration(minutes:2));
-    }
-    else if (_alerts[alertId] != null) {
+      _spontaneousAlerts[alertId].finishTime.add(Duration(minutes: 2));
+    } else if (_alerts[alertId] != null) {
       _alerts[alertId].addTime(2);
     }
   }
 
-
-
   @override
-  Future<bool> dislikeAlert(String alertId) {
+  Future<bool> dislikeAlert(String alertId) async {
     if (_spontaneousAlerts[alertId] != null) {
-      _spontaneousAlerts[alertId].finishTime
-          .subtract(Duration(minutes: 2));
+      _spontaneousAlerts[alertId].finishTime.subtract(Duration(minutes: 2));
       _spontaneousAlerts.remove(alertId);
       return Future.value(true);
-    }
-    else if (_alerts[alertId] != null) {
+    } else if (_alerts[alertId] != null) {
       _alerts[alertId].removeTime(2);
       _alerts.remove(alertId);
       return Future.value(true);
     }
     return Future.value(false);
   }
-
 
   @override
   Future<Tuple2<bool, String>> createSpontaneousAlert(
@@ -150,6 +141,5 @@ This alert shouldn't appear!""", // maybe this filtering should be done by the c
     _alertCounter++;
 
     return Future.value(Tuple2(true, ''));
-
   }
 }
