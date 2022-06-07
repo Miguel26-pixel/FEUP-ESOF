@@ -16,8 +16,14 @@ Future<void> main() {
     ..stepDefinitions = [
       givenOpenSideDrawer(),
       whenTapWarning(),
+      whenTapNoAlerts(),
+      whenTapWithAlerts(),
       whenTapLocation(),
+      whenTapSpontButton(),
+      thenViewSpontCreate(),
+      thenViewAllAlertsPage(),
       thenViewSAlertPage(),
+      thenViewPoiPage(),
       thenViewLocationIcon(),
       thenViewWarningIcon(),
       thenViewLocationIcon(),
@@ -26,7 +32,11 @@ Future<void> main() {
       createAlertChooseType(),
       whenTapConfirmCreateAlert(),
       thenViewSuccessAlertCreated(),
+      thenViewAlertsPage(),
+      thenViewNoAlertsPage(),
+      thenViewPoiPage(),
     ]
+    ..defaultTimeout = Duration(seconds: 30)
     ..customStepParameterDefinitions = []
     ..restartAppBetweenScenarios = true
     ..targetAppPath = 'test_driver/app.dart';
