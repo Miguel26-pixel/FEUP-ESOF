@@ -18,19 +18,27 @@ import 'package:uni/view/Widgets/live/spontaneous_alert.dart';
 import 'alert_poi_marker.dart';
 
 class Map extends StatefulWidget {
-  const Map({Key key, this.alertController, this.pointOfInterestController})
+  const Map(
+      {Key key,
+      this.alertController,
+      this.pointOfInterestController,
+      this.currentLocationController})
       : super(key: key);
 
   final PointOfInterestControllerInterface pointOfInterestController;
   final AlertControllerInterface alertController;
+  final CurrentLocationController currentLocationController;
 
   @override
-  State<Map> createState() => _MapState();
+  State<Map> createState() => _MapState(
+        currentLocationController: currentLocationController,
+      );
 }
 
 class _MapState extends State<Map> {
-  CurrentLocationController currentLocationController =
-      CurrentLocationController();
+  _MapState({this.currentLocationController});
+
+  final CurrentLocationController currentLocationController;
 
   final double _initialZoom = 18.3;
 
