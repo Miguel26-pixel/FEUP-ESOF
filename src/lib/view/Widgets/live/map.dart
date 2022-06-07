@@ -180,20 +180,21 @@ class _MapState extends State<Map> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Marker> markers = _pointsOfInterest
-        .asMap()
-        .entries
-        .map(
-          (e) => AlertPoiMarker(
-            key: Key('location-icon-' + e.key.toString()),
-            context: context,
-            point: e.value.getPosition(),
-            pressedBuilder: ((context) =>
-                PointOfInterestPage(e.value, widget.alertController)),
-            iconData: Icons.room,
-          ),
-        )
-        .toList();
+    final List<Marker> markers = _pointsOfInterest.asMap().entries.map((e) {
+      return AlertPoiMarker(
+        key: Key('location-icon-' + e.value.getId()),
+        context: context,
+        point: e.value.getPosition(),
+        pressedBuilder: ((context) {
+          return PointOfInterestPage(
+            e.value,
+            widget.alertController,
+            key: Key('poi-page-' + e.value.getId() + '-page'),
+          );
+        }),
+        iconData: Icons.room,
+      );
+    }).toList();
 
     final List<Marker> alertMarkers = _spontaneousAlerts
         .asMap()
@@ -307,6 +308,7 @@ class _MapState extends State<Map> {
       child: Container(
         margin: EdgeInsets.only(bottom: 20, right: 20),
         child: FloatingActionButton(
+          key: Key('create-spont-button'),
           child: Icon(Icons.add),
           onPressed: () => showModalBottomSheet(
             context: context,
@@ -330,6 +332,7 @@ class _MapState extends State<Map> {
                     currentLocationController,
                     _currentLocation,
                     onCreate: () => setState(() {}),
+                    key: Key('create-alert-page'),
                   ),
                 ],
               ),

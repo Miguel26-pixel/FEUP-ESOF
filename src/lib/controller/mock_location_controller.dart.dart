@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
-import 'package:uni/assets/constants/map.dart';
 
 import 'current_location.dart';
 
@@ -23,7 +22,7 @@ class MockCurrentLocationController extends CurrentLocationController {
 
   @override
   Future<LatLng> getCurrentLocation() async {
-    return Future.value(FEUP_POS);
+    return Future.value(LatLng(41.17763561079476, -8.595533340337024));
   }
 
   @override

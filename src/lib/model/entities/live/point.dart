@@ -6,7 +6,6 @@ class PointOfInterest {
   final LatLng _position;
   final int _floor;
   final PointOfInterestType _type;
-  final List<String> _alerts = [];
 
   PointOfInterest(
       this._id, this._name, this._position, this._floor, this._type);
@@ -18,7 +17,7 @@ class PointOfInterest {
   }
 
   void addAlert(String alertId) {
-    _alerts.add(alertId);
+    _alertIds.add(alertId);
   }
 
   String getName() {
