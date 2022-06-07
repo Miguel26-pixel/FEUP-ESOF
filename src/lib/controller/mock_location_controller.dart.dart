@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
-import 'package:uni/assets/constants/map.dart';
 
 import 'current_location.dart';
 

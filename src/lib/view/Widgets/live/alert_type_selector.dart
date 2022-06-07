@@ -48,6 +48,7 @@ class _AlertTypeSelectorState extends State<AlertTypeSelector> {
             renderBorder: false,
             children: [
               Column(
+                key: Key('alert-type-${index.toString()}'),
                 children: [
                   Icon(
                     widget.types[index].getIconData(),

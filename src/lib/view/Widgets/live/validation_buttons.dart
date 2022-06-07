@@ -37,6 +37,7 @@ class _ValidationButtonsState extends State<ValidationButtons> {
       mainAxisAlignment: widget._mainAxisAlignment,
       children: [
         IconButton(
+          key: widget._isSpontaneous ? Key('confirm-spontaneous') : null,
           iconSize: 30,
           onPressed: !_disabled
               ? () {

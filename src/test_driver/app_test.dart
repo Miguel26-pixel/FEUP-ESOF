@@ -21,7 +21,11 @@ Future<void> main() {
       thenViewLocationIcon(),
       thenViewWarningIcon(),
       thenViewLocationIcon(),
-      thenViewAlertsPage()
+      thenViewAlertsPage(),
+      whenTapCreateAlert(),
+      createAlertChooseType(),
+      whenTapConfirmCreateAlert(),
+      thenViewSuccessAlertCreated(),
     ]
     ..customStepParameterDefinitions = []
     ..restartAppBetweenScenarios = true

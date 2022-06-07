@@ -161,6 +161,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
             Padding(
               padding: EdgeInsets.only(bottom: 20),
               child: ElevatedButton(
+                key: Key('confirm-button'),
                 onPressed: () {
                   submitAlert(poi);
                 },
@@ -184,6 +185,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
 
     Widget buildCreateAlertButton(BuildContext context) {
       final button = OutlinedButton(
+        key: Key('create-alert-btn'),
         onPressed: () {
           showDialog(
             context: context,
