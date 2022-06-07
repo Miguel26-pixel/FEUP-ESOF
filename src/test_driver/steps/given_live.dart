@@ -48,6 +48,17 @@ StepDefinitionGeneric thenViewWarningIcon() {
   }));
 }
 
+StepDefinitionGeneric thenViewSuccessAlertCreated() {
+  return then<FlutterWorld>('I create the alert successfully',
+      ((context) async {
+    final location = find.byValueKey('create-alert-success');
+    context.expectA(
+      await FlutterDriverUtils.isPresent(context.world.driver, location),
+      true,
+    );
+  }));
+}
+
 StepDefinitionGeneric whenTapLocation() {
   final location = find.byValueKey('location-icon-0');
 
@@ -79,6 +90,27 @@ StepDefinitionGeneric whenTapWithAlerts() {
 StepDefinitionGeneric whenTapWarning() {
   return when<FlutterWorld>('I tap a warning icon', ((context) async {
     final location = find.byValueKey('warning-icon-0');
+    await FlutterDriverUtils.tap(context.world.driver, location);
+  }));
+}
+
+StepDefinitionGeneric whenTapCreateAlert() {
+  return when<FlutterWorld>('I tap the create alert button', ((context) async {
+    final location = find.byValueKey('create-alert-btn');
+    await FlutterDriverUtils.tap(context.world.driver, location);
+  }));
+}
+
+StepDefinitionGeneric createAlertChooseType() {
+  return when<FlutterWorld>('I choose an alert type', ((context) async {
+    final location = find.byValueKey('alert-type-1');
+    await FlutterDriverUtils.tap(context.world.driver, location);
+  }));
+}
+
+StepDefinitionGeneric whenTapConfirmCreateAlert() {
+  return when<FlutterWorld>('I tap the confirm button', ((context) async {
+    final location = find.byValueKey('confirm-button');
     await FlutterDriverUtils.tap(context.world.driver, location);
   }));
 }
