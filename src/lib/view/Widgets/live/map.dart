@@ -178,8 +178,11 @@ class _MapState extends State<Map> {
             key: Key('location-icon-' + e.key.toString()),
             context: context,
             point: e.value.getPosition(),
-            pressedBuilder: ((context) =>
-                PointOfInterestPage(e.value, alertController)),
+            pressedBuilder: ((context) => PointOfInterestPage(
+                  e.value,
+                  alertController,
+                  key: Key('poi-page-' + e.key.toString()),
+                )),
             iconData: Icons.room,
           ),
         )

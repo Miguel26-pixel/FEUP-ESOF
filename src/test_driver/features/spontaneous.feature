@@ -1,4 +1,4 @@
-Feature: View Spontaneous Alert
+Feature: Spontaneous Alert
     Scenario: View Spontaneous Alert
         Given I open the side drawer
         And I tap the "Live@UP" button

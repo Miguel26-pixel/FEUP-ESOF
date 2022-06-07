@@ -16,11 +16,14 @@ Future<void> main() {
     ..stepDefinitions = [
       givenOpenSideDrawer(),
       whenTapWarning(),
+      whenTapLocation(),
       thenViewSAlertPage(),
+      thenViewPoiPage(),
       thenViewLocationIcon(),
       thenViewWarningIcon(),
       thenViewLocationIcon(),
     ]
+    ..defaultTimeout = Duration(seconds: 30)
     ..customStepParameterDefinitions = []
     ..restartAppBetweenScenarios = true
     ..targetAppPath = 'test_driver/app.dart';

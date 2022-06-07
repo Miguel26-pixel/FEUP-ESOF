@@ -4,16 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:uni/controller/poi/poi_controller_interface.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/poi_type.dart';
-import 'package:uni/model/entities/live/alert.dart';
-import 'package:uni/model/entities/live/alert_type.dart';
 
 import 'package:uni/model/entities/live/point_group.dart';
 
 class MockPointOfInterestController
     implements PointOfInterestControllerInterface {
   static bool _init = false;
-
-  List<AlertType> _alertTypes = [];
 
   static List<PointOfInterestType> _poiTypes = [];
 
@@ -38,66 +34,55 @@ class MockPointOfInterestController
 
   MockPointOfInterestController() {
     if (!_init) {
-      _alertTypes = [
-        AlertType('1', 'Noisy', 'This Location is Noisy',
-            const Duration(days: 1), Icons.volume_up_outlined),
-        AlertType('2', 'Full', 'This Location is Full', const Duration(days: 1),
-            Icons.people_outline),
-        AlertType('3', 'Cleaning', 'This Location is being cleaned',
-            const Duration(days: 1), Icons.people_outline),
-        AlertType('4', 'Out of service', 'This Location is out of service',
-            const Duration(days: 1), Icons.people_outline)
-      ];
-
       _poiTypes = [
         PointOfInterestType(
             'Food',
             [
-              _alertTypes[0].getId(),
-              _alertTypes[1].getId(),
-              _alertTypes[2].getId(),
-              _alertTypes[3].getId(),
+              '0',
+              '1',
+              '2',
+              '3',
             ],
             Icons.restaurant),
         PointOfInterestType(
             'Study',
-            [_alertTypes[0].getId(), _alertTypes[1].getId()],
+            [
+              '0',
+              '1',
+            ],
             Icons.school_rounded),
         PointOfInterestType(
             'Vending',
-            [_alertTypes[1].getId(), _alertTypes[3].getId()],
+            [
+              '1',
+              '3',
+            ],
             Icons.local_convenience_store_rounded),
-        PointOfInterestType(
-            'Parking', [_alertTypes[1].getId()], Icons.local_parking_rounded),
+        PointOfInterestType('Parking', ['1'], Icons.local_parking_rounded),
         PointOfInterestType(
             'Printing',
-            [_alertTypes[1].getId(), _alertTypes[3].getId()],
+            [
+              '1',
+              '3',
+            ],
             Icons.local_print_shop_rounded),
         PointOfInterestType(
             'Material',
-            [_alertTypes[1].getId(), _alertTypes[3].getId()],
+            [
+              '1',
+              '3',
+            ],
             Icons.library_books_rounded),
         PointOfInterestType(
             'Other',
             [
-              _alertTypes[0].getId(),
-              _alertTypes[1].getId(),
-              _alertTypes[2].getId(),
-              _alertTypes[3].getId(),
+              '0',
+              '1',
+              '2',
+              '3',
             ],
             Icons.devices_other_rounded)
       ];
-
-      final Alert alert1 = Alert('1', DateTime.now(),
-          DateTime.now().add(const Duration(days: 1)), _alertTypes[0]);
-
-      final Alert alert2 = Alert(
-          '2',
-          DateTime.now().subtract(
-            const Duration(minutes: 1),
-          ),
-          DateTime.now().add(const Duration(hours: 1)),
-          _alertTypes[1]);
 
       _elements = {
         '0': PointOfInterest('0', 'Bar da biblioteca',
@@ -168,8 +153,8 @@ class MockPointOfInterestController
             _poiTypes[2]),
       };
 
-      _elements['0'].addAlert(alert1.getId());
-      _elements['0'].addAlert(alert2.getId());
+      _elements['0'].addAlert('2');
+      _elements['0'].addAlert('3');
 
       _init = !_init;
     }
