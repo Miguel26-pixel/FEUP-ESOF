@@ -8,7 +8,9 @@ import 'package:sentry/sentry.dart';
 import 'package:redux/redux.dart';
 import 'package:uni/controller/alert/alert_controller.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
+import 'package:uni/controller/current_location.dart';
 import 'package:uni/controller/middleware.dart';
+import 'package:uni/controller/poi/poi_controller_interface.dart';
 import 'package:uni/controller/poi/point_controller.dart';
 import 'package:uni/model/app_state.dart';
 import 'package:uni/redux/reducers.dart';
@@ -52,9 +54,21 @@ Future<void> main() async {
 /// This class is necessary to track the app's state for
 /// the current execution
 class MyApp extends StatefulWidget {
+  const MyApp(
+      {this.alertController,
+      this.pointOfInterestController,
+      this.currentLocationController});
+
+  final AlertControllerInterface alertController;
+  final PointOfInterestControllerInterface pointOfInterestController;
+  final CurrentLocationController currentLocationController;
+
   @override
   State<StatefulWidget> createState() {
     return MyAppState(
+        alertController: alertController,
+        pointOfInterestController: pointOfInterestController,
+        currentLocationController: currentLocationController,
         state: Store<AppState>(appReducers,
             /* Function defined in the reducers file */
             initialState: AppState(null),
@@ -64,12 +78,26 @@ class MyApp extends StatefulWidget {
 
 /// Manages the app depending on its current state
 class MyAppState extends State<MyApp> {
-  MyAppState({@required this.state}) {}
+  MyAppState(
+      {@required this.state,
+      this.alertController,
+      this.pointOfInterestController,
+      this.currentLocationController}) {
+    if (this.alertController == null) {
+      this.alertController = AlertController();
+    }
+    if (this.pointOfInterestController == null) {
+      this.pointOfInterestController = PointOfInterestController();
+    }
+    if (this.currentLocationController == null) {
+      this.currentLocationController = CurrentLocationController();
+    }
+  }
 
   final Store<AppState> state;
-  final PointOfInterestController pointOfInterestController =
-      PointOfInterestController();
-  final AlertControllerInterface alertController = AlertController();
+  PointOfInterestControllerInterface pointOfInterestController;
+  AlertControllerInterface alertController;
+  CurrentLocationController currentLocationController;
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +129,9 @@ class MyAppState extends State<MyApp> {
               case '/' + Constants.navLive:
                 return PageTransition.makePageTransition(
                     page: MapPage(
-                      alertController: alertController,
-                      pointOfInterestController: pointOfInterestController,
-                    ),
+                        alertController: alertController,
+                        pointOfInterestController: pointOfInterestController,
+                        currentLocationController: currentLocationController),
                     settings: settings);
               case '/' + Constants.navAdmin:
                 return PageTransition.makePageTransition(
