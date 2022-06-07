@@ -16,10 +16,12 @@ Future<void> main() {
     ..stepDefinitions = [
       givenOpenSideDrawer(),
       whenTapWarning(),
+      whenTapLocation(),
       thenViewSAlertPage(),
       thenViewLocationIcon(),
       thenViewWarningIcon(),
       thenViewLocationIcon(),
+      thenViewAlertsPage()
     ]
     ..customStepParameterDefinitions = []
     ..restartAppBetweenScenarios = true

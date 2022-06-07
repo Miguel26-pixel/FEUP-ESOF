@@ -30,6 +30,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
     final AlertType alertType = alerts[i].getAlertType();
 
     return Container(
+        key: Key('alert-${i}-item'),
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
         width: 200,
         margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -283,6 +284,7 @@ class _PointOfInterestPageState extends State<PointOfInterestPage> {
   Widget buildContent(BuildContext context, List<Alert> alerts) {
     return alerts.isEmpty
         ? Center(
+            key: Key('no-alerts'),
             child: SizedBox(
               width: 200,
               child: Text(

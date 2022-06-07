@@ -23,7 +23,7 @@ class MockCurrentLocationController extends CurrentLocationController {
 
   @override
   Future<LatLng> getCurrentLocation() async {
-    return Future.value(FEUP_POS);
+    return Future.value(LatLng(41.17763561079476, -8.595533340337024));
   }
 
   @override

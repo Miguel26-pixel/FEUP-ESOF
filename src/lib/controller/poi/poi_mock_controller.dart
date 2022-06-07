@@ -101,7 +101,7 @@ class MockPointOfInterestController
 
       _elements = {
         '0': PointOfInterest('0', 'Bar da biblioteca',
-            LatLng(41.1774666, -8.5950153), 0, _poiTypes[0]),
+            LatLng(41.1779666, -8.5955153), 0, _poiTypes[0]),
         '1': PointOfInterest('1', 'Cantina da Faculdade de Engenharia',
             LatLng(41.176243, -8.595501), 0, _poiTypes[0]),
         '2': PointOfInterest('2', 'Grill da Faculdade de Engenharia',
