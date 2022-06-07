@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:tuple/tuple.dart';
@@ -57,7 +59,7 @@ class AlertMockController implements AlertControllerInterface {
       DateTime.now().subtract(const Duration(minutes: 10)),
       DateTime.now().add(const Duration(hours: 1)),
       'Really Long Message, Yeah you should probably look into this now :)',
-      LatLng(41.1779666, -8.5955153),
+      LatLng(42.1779666, -8.5955153),
       0,
     ),
     '4': SpontaneousAlert(

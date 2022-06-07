@@ -29,18 +29,38 @@ StepDefinitionGeneric thenViewWarningIcon() {
   }));
 }
 
-StepDefinitionGeneric whenTapWarning() {
-  return when<FlutterWorld>('I tap a warning icon', ((context) async {
-    final location = find.byValueKey('warning-icon-0');
+StepDefinitionGeneric whenTapLocation() {
+  final location = find.byValueKey('location-icon-0');
+
+  return when<FlutterWorld>('I tap a location icon', ((context) async {
     await FlutterDriverUtils.tap(context.world.driver, location);
   }));
 }
 
-StepDefinitionGeneric whenTapLocation() {
-  return when<FlutterWorld>('I tap a location icon', ((context) async {
-    final location = find.byValueKey('location-icon-0');
-    await FlutterDriverUtils.tap(context.world.driver, location,
-        timeout: Duration(seconds: 20));
+StepDefinitionGeneric whenTapNoAlerts() {
+  final location2 = find.byValueKey('location-icon-1');
+
+  return when<FlutterWorld>(
+      'I tap a location icon of a point of interest with no alerts',
+      ((context) async {
+    await FlutterDriverUtils.tap(context.world.driver, location2);
+  }));
+}
+
+StepDefinitionGeneric whenTapWithAlerts() {
+  final location2 = find.byValueKey('location-icon-0');
+
+  return when<FlutterWorld>(
+      'I tap a location icon of a point of interest with alerts',
+      ((context) async {
+    await FlutterDriverUtils.tap(context.world.driver, location2);
+  }));
+}
+
+StepDefinitionGeneric whenTapWarning() {
+  return when<FlutterWorld>('I tap a warning icon', ((context) async {
+    final location = find.byValueKey('warning-icon-0');
+    await FlutterDriverUtils.tap(context.world.driver, location);
   }));
 }
 
@@ -59,6 +79,43 @@ StepDefinitionGeneric thenViewPoiPage() {
   return then<FlutterWorld>('I view the Point of Interest Page',
       ((context) async {
     final location = find.byValueKey('poi-page-0-page');
+    context.expectA(
+      await FlutterDriverUtils.isPresent(context.world.driver, location),
+      true,
+    );
+  }));
+}
+
+StepDefinitionGeneric thenViewNoAlertsPage() {
+  return then<FlutterWorld>('I view a no alerts page', ((context) async {
+    final location = find.byValueKey('no-alerts');
+    context.expectA(
+      await FlutterDriverUtils.isPresent(context.world.driver, location),
+      true,
+    );
+  }));
+}
+
+StepDefinitionGeneric thenViewAlertsPage() {
+  return then<FlutterWorld>('I view the alerts of the point of interest',
+      ((context) async {
+    final location = find.byValueKey('alert-0-item');
+    final location2 = find.byValueKey('alert-1-item');
+    context.expectA(
+      await FlutterDriverUtils.isPresent(context.world.driver, location),
+      true,
+    );
+    context.expectA(
+      await FlutterDriverUtils.isPresent(context.world.driver, location2),
+      true,
+    );
+  }));
+}
+
+StepDefinitionGeneric thenViewAllAlertsPage() {
+  return then<FlutterWorld>('I view all of the available alerts',
+      ((context) async {
+    final location = find.byValueKey('no-alerts');
     context.expectA(
       await FlutterDriverUtils.isPresent(context.world.driver, location),
       true,

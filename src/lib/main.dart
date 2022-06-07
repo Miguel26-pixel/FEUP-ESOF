@@ -8,9 +8,11 @@ import 'package:sentry/sentry.dart';
 import 'package:redux/redux.dart';
 import 'package:uni/controller/alert/alert_controller.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
+import 'package:uni/controller/alert/alert_mock_controller.dart';
 import 'package:uni/controller/current_location.dart';
 import 'package:uni/controller/middleware.dart';
 import 'package:uni/controller/poi/poi_controller_interface.dart';
+import 'package:uni/controller/poi/poi_mock_controller.dart';
 import 'package:uni/controller/poi/point_controller.dart';
 import 'package:uni/model/app_state.dart';
 import 'package:uni/redux/reducers.dart';
@@ -84,10 +86,10 @@ class MyAppState extends State<MyApp> {
       this.pointOfInterestController,
       this.currentLocationController}) {
     if (this.alertController == null) {
-      this.alertController = AlertController();
+      this.alertController = AlertMockController();
     }
     if (this.pointOfInterestController == null) {
-      this.pointOfInterestController = PointOfInterestController();
+      this.pointOfInterestController = MockPointOfInterestController();
     }
     if (this.currentLocationController == null) {
       this.currentLocationController = CurrentLocationController();
