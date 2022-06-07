@@ -6,10 +6,13 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry/sentry.dart';
 import 'package:redux/redux.dart';
+import 'package:uni/controller/alert/alert_controller.dart';
+import 'package:uni/controller/alert/alert_controller_interface.dart';
+import 'package:uni/controller/current_location.dart';
 import 'package:uni/controller/middleware.dart';
-import 'package:uni/controller/poi/poi_mock_controller.dart';
+import 'package:uni/controller/poi/poi_controller_interface.dart';
+import 'package:uni/controller/poi/point_controller.dart';
 import 'package:uni/model/app_state.dart';
-import 'package:uni/redux/actions.dart';
 import 'package:uni/redux/reducers.dart';
 import 'package:uni/utils/constants.dart' as Constants;
 import 'package:uni/view/Pages/about_page_view.dart';
@@ -51,9 +54,21 @@ Future<void> main() async {
 /// This class is necessary to track the app's state for
 /// the current execution
 class MyApp extends StatefulWidget {
+  const MyApp(
+      {this.alertController,
+      this.pointOfInterestController,
+      this.currentLocationController});
+
+  final AlertControllerInterface alertController;
+  final PointOfInterestControllerInterface pointOfInterestController;
+  final CurrentLocationController currentLocationController;
+
   @override
   State<StatefulWidget> createState() {
     return MyAppState(
+        alertController: alertController,
+        pointOfInterestController: pointOfInterestController,
+        currentLocationController: currentLocationController,
         state: Store<AppState>(appReducers,
             /* Function defined in the reducers file */
             initialState: AppState(null),
@@ -63,14 +78,29 @@ class MyApp extends StatefulWidget {
 
 /// Manages the app depending on its current state
 class MyAppState extends State<MyApp> {
-  MyAppState({@required this.state}) {}
+  MyAppState(
+      {@required this.state,
+      this.alertController,
+      this.pointOfInterestController,
+      this.currentLocationController}) {
+    if (this.alertController == null) {
+      this.alertController = AlertController();
+    }
+    if (this.pointOfInterestController == null) {
+      this.pointOfInterestController = PointOfInterestController();
+    }
+    if (this.currentLocationController == null) {
+      this.currentLocationController = CurrentLocationController();
+    }
+  }
 
   final Store<AppState> state;
+  PointOfInterestControllerInterface pointOfInterestController;
+  AlertControllerInterface alertController;
+  CurrentLocationController currentLocationController;
 
   @override
   Widget build(BuildContext context) {
-    final MockPointOfInterestController pointOfInterestController =
-        MockPointOfInterestController();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -98,7 +128,11 @@ class MyAppState extends State<MyApp> {
                     page: BusStopNextArrivalsPage(), settings: settings);
               case '/' + Constants.navLive:
                 return PageTransition.makePageTransition(
-                    page: MapPage(), settings: settings);
+                    page: MapPage(
+                        alertController: alertController,
+                        pointOfInterestController: pointOfInterestController,
+                        currentLocationController: currentLocationController),
+                    settings: settings);
               case '/' + Constants.navAdmin:
                 return PageTransition.makePageTransition(
                     page: AdminDashboardPage(), settings: settings);
@@ -127,7 +161,7 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(seconds: 60),
-        (Timer t) => state.dispatch(SetCurrentTimeAction(DateTime.now())));
+    // Timer.periodic(Duration(seconds: 60),
+    //     (Timer t) => state.dispatch(SetCurrentTimeAction(DateTime.now())));
   }
 }

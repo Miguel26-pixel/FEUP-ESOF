@@ -5,14 +5,17 @@ class ValidationButtons extends StatefulWidget {
   final MainAxisAlignment _mainAxisAlignment;
   final AlertControllerInterface _alertController;
   final String _alertId;
+  final bool _isSpontaneous;
   const ValidationButtons(
       {Key key,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       AlertControllerInterface alertController,
-      String alertId})
+      String alertId,
+      bool isSpontaneous})
       : _mainAxisAlignment = mainAxisAlignment,
         _alertController = alertController,
         _alertId = alertId,
+        _isSpontaneous = isSpontaneous,
         super(key: key);
 
   @override
@@ -41,7 +44,8 @@ class _ValidationButtonsState extends State<ValidationButtons> {
                     _disabled = true;
                   });
 
-                  widget._alertController.likeAlert(widget._alertId);
+                  widget._alertController
+                      .likeAlert(widget._alertId, widget._isSpontaneous);
                 }
               : null,
           icon: Icon(
@@ -56,7 +60,8 @@ class _ValidationButtonsState extends State<ValidationButtons> {
                     _disabled = true;
                   });
 
-                  widget._alertController.dislikeAlert(widget._alertId);
+                  widget._alertController
+                      .dislikeAlert(widget._alertId, widget._isSpontaneous);
                 }
               : null,
           iconSize: 30,

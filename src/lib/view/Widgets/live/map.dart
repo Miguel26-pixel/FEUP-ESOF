@@ -6,9 +6,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:uni/assets/constants/map.dart';
 import 'package:uni/controller/alert/alert_controller_interface.dart';
-import 'package:uni/controller/alert/alert_mock_controller.dart';
 import 'package:uni/controller/current_location.dart';
-import 'package:uni/controller/poi/poi_mock_controller.dart';
+import 'package:uni/controller/poi/poi_controller_interface.dart';
 import 'package:uni/model/entities/live/point.dart';
 import 'package:uni/model/entities/live/spontaneous_alert.dart';
 import 'package:uni/view/Widgets/live/create_spontaneous_alert.dart';
@@ -19,18 +18,27 @@ import 'package:uni/view/Widgets/live/spontaneous_alert.dart';
 import 'alert_poi_marker.dart';
 
 class Map extends StatefulWidget {
-  const Map({Key key}) : super(key: key);
+  const Map(
+      {Key key,
+      this.alertController,
+      this.pointOfInterestController,
+      this.currentLocationController})
+      : super(key: key);
+
+  final PointOfInterestControllerInterface pointOfInterestController;
+  final AlertControllerInterface alertController;
+  final CurrentLocationController currentLocationController;
 
   @override
-  State<Map> createState() => _MapState();
+  State<Map> createState() => _MapState(
+        currentLocationController: currentLocationController,
+      );
 }
 
 class _MapState extends State<Map> {
-  CurrentLocationController currentLocationController =
-      CurrentLocationController();
-  MockPointOfInterestController pointOfInterestController =
-      MockPointOfInterestController();
-  AlertControllerInterface alertController = AlertMockController();
+  _MapState({this.currentLocationController});
+
+  final CurrentLocationController currentLocationController;
 
   final double _initialZoom = 18.3;
 
@@ -98,16 +106,16 @@ class _MapState extends State<Map> {
   }
 
   void searchPOI() {
-    pointOfInterestController
-        .getNearbyPOI(_currentFloor)
+    widget.pointOfInterestController
+        .getNearbyPOI(_currentFloor, _mapController.center)
         .then((value) => setState(() {
               _pointsOfInterest = value;
             }));
   }
 
   void searchAlerts() {
-    alertController
-        .getNearbySpontaneousAlerts(_currentFloor)
+    widget.alertController
+        .getNearbySpontaneousAlerts(_currentFloor, _mapController.center)
         .then((value) => setState(() {
               _spontaneousAlerts = [];
               for (var alert in value) {
@@ -124,7 +132,7 @@ class _MapState extends State<Map> {
     _locationLoaded = false;
     _floorsLoaded = false;
 
-    pointOfInterestController.getFloorLimits().then((value) {
+    widget.pointOfInterestController.getFloorLimits().then((value) {
       setState(() {
         _minFloor = value[0];
         _maxFloor = value[1];
@@ -132,12 +140,17 @@ class _MapState extends State<Map> {
       });
     });
 
-    currentLocationController.getCurrentLocation().then((value) {
-      setState(() {
-        _currentLocation = value;
-        _locationLoaded = value != null;
-      });
-    });
+    _mapController.onReady?.then((_) => {
+          currentLocationController.getCurrentLocation().then((value) {
+            setState(() {
+              _currentLocation = value;
+              _locationLoaded = value != null;
+            });
+
+            searchPOI();
+            searchAlerts();
+          })
+        });
 
     currentLocationController.subscribeLocationUpdate((value) {
       setState(
@@ -152,9 +165,6 @@ class _MapState extends State<Map> {
         setMapCenter(_currentLocation);
       }
     }).then((value) => _subscription = value);
-
-    searchPOI();
-    searchAlerts();
 
     super.initState();
   }
@@ -180,7 +190,7 @@ class _MapState extends State<Map> {
             point: e.value.getPosition(),
             pressedBuilder: ((context) => PointOfInterestPage(
                   e.value,
-                  alertController,
+                  widget.alertController,
                   key: Key('poi-page-' + e.key.toString()),
                 )),
             iconData: Icons.room,
@@ -197,7 +207,7 @@ class _MapState extends State<Map> {
               size: 40,
               point: e.value.getPosition(),
               pressedBuilder: ((context) => SpontaneousAlertPage(
-                    alertController,
+                    widget.alertController,
                     e.value,
                     currentLocationController,
                     _currentLocation,
@@ -318,8 +328,8 @@ class _MapState extends State<Map> {
                     ),
                   ),
                   CreateSpontaneousAlert(
-                    alertController,
-                    pointOfInterestController,
+                    widget.alertController,
+                    widget.pointOfInterestController,
                     currentLocationController,
                     _currentLocation,
                     onCreate: () => setState(() {}),

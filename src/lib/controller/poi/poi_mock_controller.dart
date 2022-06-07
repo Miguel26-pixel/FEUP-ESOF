@@ -166,7 +166,7 @@ class MockPointOfInterestController
   }
 
   @override
-  Future<List<PointOfInterest>> getNearbyPOI(int floor) {
+  Future<List<PointOfInterest>> getNearbyPOI(int floor, LatLng _) {
     final List<PointOfInterestGroup> groups =
         _groups.values.where((element) => element.getFloor() == floor).toList();
     final Set<String> loadedIDs = groups
