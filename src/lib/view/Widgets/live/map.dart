@@ -181,13 +181,11 @@ class _MapState extends State<Map> {
   @override
   Widget build(BuildContext context) {
     final List<Marker> markers = _pointsOfInterest.asMap().entries.map((e) {
-      //print('location-icon-' + e.value.getId());
       return AlertPoiMarker(
         key: Key('location-icon-' + e.value.getId()),
         context: context,
         point: e.value.getPosition(),
         pressedBuilder: ((context) {
-          //print('poi-page-' + e.value.getId() + '-page');
           return PointOfInterestPage(
             e.value,
             widget.alertController,
@@ -310,6 +308,7 @@ class _MapState extends State<Map> {
       child: Container(
         margin: EdgeInsets.only(bottom: 20, right: 20),
         child: FloatingActionButton(
+          key: Key('create-spont-button'),
           child: Icon(Icons.add),
           onPressed: () => showModalBottomSheet(
             context: context,
@@ -333,6 +332,7 @@ class _MapState extends State<Map> {
                     currentLocationController,
                     _currentLocation,
                     onCreate: () => setState(() {}),
+                    key: Key('create-alert-page'),
                   ),
                 ],
               ),

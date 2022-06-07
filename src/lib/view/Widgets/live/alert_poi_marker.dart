@@ -25,7 +25,6 @@ class AlertPoiMarker extends Marker {
                       iconData,
                     ),
                     onPressed: () {
-                      print(key);
                       showModalBottomSheet(
                         context: context,
                         backgroundColor: Colors.transparent,

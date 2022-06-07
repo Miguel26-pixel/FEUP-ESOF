@@ -9,9 +9,28 @@ StepDefinitionGeneric givenOpenSideDrawer() {
   });
 }
 
+StepDefinitionGeneric whenTapSpontButton() {
+  return given<FlutterWorld>('I tap the create spontaneous button',
+      (context) async {
+    final location = find.byValueKey('create-spont-button');
+    await FlutterDriverUtils.tap(context.world.driver, location);
+  });
+}
+
 StepDefinitionGeneric thenViewLocationIcon() {
   return then<FlutterWorld>('I view a location icon', ((context) async {
     final location = find.byValueKey('location-icon-0');
+    context.expectA(
+      await FlutterDriverUtils.isPresent(context.world.driver, location),
+      true,
+    );
+  }));
+}
+
+StepDefinitionGeneric thenViewSpontCreate() {
+  return then<FlutterWorld>('I view the Create Spontaneous Alert Page',
+      ((context) async {
+    final location = find.byValueKey('create-alert-page');
     context.expectA(
       await FlutterDriverUtils.isPresent(context.world.driver, location),
       true,

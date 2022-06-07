@@ -19,6 +19,8 @@ Future<void> main() {
       whenTapNoAlerts(),
       whenTapWithAlerts(),
       whenTapLocation(),
+      whenTapSpontButton(),
+      thenViewSpontCreate(),
       thenViewAllAlertsPage(),
       thenViewSAlertPage(),
       thenViewPoiPage(),

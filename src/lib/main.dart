@@ -86,10 +86,10 @@ class MyAppState extends State<MyApp> {
       this.pointOfInterestController,
       this.currentLocationController}) {
     if (this.alertController == null) {
-      this.alertController = AlertMockController();
+      this.alertController = AlertController();
     }
     if (this.pointOfInterestController == null) {
-      this.pointOfInterestController = MockPointOfInterestController();
+      this.pointOfInterestController = PointOfInterestController();
     }
     if (this.currentLocationController == null) {
       this.currentLocationController = CurrentLocationController();
