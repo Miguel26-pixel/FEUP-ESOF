@@ -51,3 +51,31 @@ State management is sometimes confusing, leading to weird bugs in the app that t
 ### Board
 
 ![image](/images/iteration2.png)
+
+# Milestone 3
+
+## Release
+
+This version is released under [here](https://github.com/LEIC-ES-2021-22/3LEIC09T2/releases/tag/v1.0).
+
+## Retrospective Meeting
+
+### What went well
+
+The project had a breaktrough, implementing the remaining features required to have a finished and functional MVP.
+
+In this iteration we added aditional important features and replaced all of the mock controllers with the API.
+
+In this iteration the features were reviewed and merged before the end of the iteration.
+
+### What should we do differently
+
+We shoul've writen more tests to guarantee the robustness of the app.
+
+### What still puzzles the team
+
+We had some difficulties understanding some particularities of gherkin tests.
+
+### Board
+
+![image](/images/iteration3.png)
