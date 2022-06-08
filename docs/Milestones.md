@@ -70,7 +70,7 @@ In this iteration the features were reviewed and merged before the end of the it
 
 ### What should we do differently
 
-We shoul've writen more tests to guarantee the robustness of the app.
+We should've writen more tests to guarantee the robustness of the app.
 
 ### What still puzzles the team
 
